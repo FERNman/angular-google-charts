@@ -1,0 +1,22 @@
+.axis {
+  stroke: #444444;
+  stroke-width: 1;
+  stroke-linecap: round;
+}
+
+.bar {
+  stroke-width: 20;
+}
+
+.helper-line {
+  stroke: #aaaaaa;
+  stroke-width: 0.5;
+}
+
+text {
+  font-family: Roboto, Arial, Helvetica, sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  fill: #6b6b6b;
+  text-anchor: middle;
+}

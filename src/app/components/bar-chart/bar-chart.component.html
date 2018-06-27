@@ -1,0 +1,33 @@
+<svg
+  [style.width.px]="width" [style.height.px]="height">
+  <line
+    [attr.x1]="offset" [attr.y1]="height - offset"
+    [attr.x2]="offset" y2="0" class="axis"></line>
+  <line
+    [attr.x1]="offset" [attr.y1]="height - offset"
+    [attr.x2]="width" [attr.y2]="height - offset" class="axis"></line>
+
+  <g *ngFor="let entry of yEntries; let i = index">
+    <text [attr.x]="offset / 2 - 5" [attr.y]="height - i * yDistance - offset + 4">
+      {{entry}}
+    </text>
+    <line
+      *ngIf="displayHelperLines"
+      [attr.x1]="offset" [attr.x2]="width"
+      [attr.y1]="height - i * yDistance - offset" [attr.y2]="height - i * yDistance - offset"
+      class="helper-line">
+    </line>
+  </g>
+
+  <g *ngFor="let entry of xEntries; let i = index">
+    <text [attr.x]="i * xDistance + offset * 4" [attr.y]="height - offset / 2 + 7">
+      {{entry}}
+    </text>
+    <line
+      [attr.x1]="i * xDistance + offset * 4" [attr.x2]="i * xDistance + offset * 4"
+      [attr.y1]="height - offset" [attr.y2]="height - offset - data[entry] * ((height - offset * 2) / maxYEntry)"
+      [attr.stroke]="color" class="bar">
+      <title>{{entry}}: {{data[entry]}}</title>
+    </line>
+  </g>
+</svg>

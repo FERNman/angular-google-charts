@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SteppedAreaChartComponent } from './stepped-area-chart.component';
+import { GoogleChartComponent } from './google-chart.component';
 
-describe('SteppedAreaChartComponent', () => {
-  let component: SteppedAreaChartComponent;
-  let fixture: ComponentFixture<SteppedAreaChartComponent>;
+describe('ChartComponent', () => {
+  let component: GoogleChartComponent;
+  let fixture: ComponentFixture<GoogleChartComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SteppedAreaChartComponent ]
+      declarations: [ GoogleChartComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SteppedAreaChartComponent);
+    fixture = TestBed.createComponent(GoogleChartComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,12 +1,7 @@
 <h1 class="mat-display-1">Hallo</h1>
-<pie-chart title="Pie Chart" width="600" [data]="pieData" [dataTitles]="pieDataTitles"></pie-chart>
-<bar-chart title="Bar Chart" width="600" [data]="barData" [dataTitles]="barDataTitles"></bar-chart>
-<column-chart title="Column Chart" width="600" [data]="barData" [dataTitles]="barDataTitles"></column-chart>
-<area-chart title="Area Chart" width="600" [data]="areaData" [dataTitles]="areaDataTitles"></area-chart>
-<line-chart title="Line Chart" width="600" [data]="areaData" [dataTitles]="areaDataTitles"></line-chart>
-<bubble-chart title="Bubble Chart" width="600" [data]="bubbleData" [dataTitles]="bubbleDataTitles"></bubble-chart>
-<candlestick-chart title="Candlestick Chart" width="600" [data]="candlestickData"></candlestick-chart>
-<combo-chart title="Combo Chart" width="600" [data]="comboData" [dataTitles]="comboDataTitles" [options]="comboOptions"></combo-chart>
-<histogram title="Histogram" width="600" [data]="histogramData" [dataTitles]="histogramDataTitles"></histogram>
-<scatter-chart title="Scatter Chart" width="600" [data]="scatterData" [dataTitles]="scatterDataTitles"></scatter-chart>
-<generic-chart title="Generic Chart" type="PieChart" [data]="pieData" [dataTitles]="pieDataTitles"></generic-chart>
+<google-chart
+  title="Generic Chart"
+  type="PieChart"
+  [data]="pieData"
+  [dataTitles]="pieDataTitles">
+</google-chart>

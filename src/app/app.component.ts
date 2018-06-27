@@ -3,18 +3,45 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styles: [':host > *:not(h1) { display: inline-block !important; }']
 })
 export class AppComponent {
-  pieDataTitles = ['Name', 'Alter'];
+  charts: Array<{
+    title: string,
+    type: string,
+    data: Array<Array<string | number | {}>>,
+    roles: Array<{type: string, role: string}>,
+    dataTitles?: Array<string>,
+  }> = [];
 
-  pieData = [
-    ['test', 1],
-    ['hallo', 3],
-    ['nobody', 5],
-    ['tryhard', 12],
-    ['bad', 2]
-  ];
+  constructor() {
+    this.charts.push({
+      title: 'Pie Chart',
+      type: 'PieChart',
+      dataTitles: ['Task', 'Hours per Day'],
+      data: [
+        ['Work',     11],
+        ['Eat',      2],
+        ['Commute',  2],
+        ['Watch TV', 2],
+        ['Sleep',    7]
+      ],
+      roles: []
+    });
+
+    this.charts.push({
+      title: 'Bar Chart',
+      type: 'BarChart',
+      dataTitles: ['Element', 'Density'],
+      roles: [{ role: 'style', type: 'string' }],
+      data: [
+        ['Copper', 8.94, '#b87333'],            // RGB value
+        ['Silver', 10.49, 'silver'],            // English color name
+        ['Gold', 19.30, 'gold'],
+        ['Platinum', 21.45, 'color: #e5e4e2' ], // CSS-style declaration
+      ]
+    });
+  }
 
   barDataTitles = ['Name', 'Alter 2010', 'Alter 2012', 'Alter 2015'];
 

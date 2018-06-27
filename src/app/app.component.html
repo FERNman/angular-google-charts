@@ -1,7 +1,10 @@
 <h1 class="mat-display-1">Hallo</h1>
-<google-chart
-  title="Generic Chart"
-  type="PieChart"
-  [data]="pieData"
-  [dataTitles]="pieDataTitles">
-</google-chart>
+<div *ngFor="let chart of charts">
+  <google-chart width="600"
+    [title]="chart.title"
+    [type]="chart.type"
+    [data]="chart.data"
+    [dataTitles]="chart.dataTitles"
+    [roles]="chart.roles">
+  </google-chart>
+</div>

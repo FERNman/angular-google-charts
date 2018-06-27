@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ElementRef, Input, ChangeDetectionStrategy, OnChanges } from '@angular/core';
 import { ScriptLoaderService } from '../../services/script-loader.service';
 
 @Component({
@@ -7,7 +7,7 @@ import { ScriptLoaderService } from '../../services/script-loader.service';
   styles: [':host { width: fit-content; display: block; }'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GoogleChartComponent implements OnInit {
+export class GoogleChartComponent implements OnInit, OnChanges {
 
   @Input()
   data: Array<Array<string | number>>;
@@ -42,8 +42,15 @@ export class GoogleChartComponent implements OnInit {
 
   ngOnInit() {
     this.loaderService.onLoad.subscribe(() => {
-      this.createChart(this.element.nativeElement);
+      this.createChart();
     });
+  }
+
+  ngOnChanges() {
+    // If the wrapper is still undefined, the loader service is working
+    if (this.wrapper) {
+      this.updateChart();
+    }
   }
 
   protected parseOptions() {
@@ -55,16 +62,19 @@ export class GoogleChartComponent implements OnInit {
     };
   }
 
-  private createChart(element: HTMLElement) {
-    this.wrapper = new google.visualization.ChartWrapper({
-      chartType: this.type,
-      dataTable: [
-        [...this.dataTitles, ...this.roles],
-        ...this.data
-      ],
-      options: this.parseOptions()
-    });
+  private createChart() {
+    this.wrapper = new google.visualization.ChartWrapper();
+    this.updateChart();
+  }
 
-    this.wrapper.draw(element);
+  private updateChart() {
+    this.wrapper.setChartType(this.type);
+    this.wrapper.setDataTable([
+      [...this.dataTitles, ...this.roles],
+      ...this.data
+    ]);
+    this.wrapper.setOptions(this.options);
+
+    this.wrapper.draw(this.element.nativeElement);
   }
 }

@@ -3,7 +3,7 @@
 import { Component, OnInit, ElementRef, Input, ChangeDetectionStrategy, OnChanges, Output, EventEmitter } from '@angular/core';
 
 import { ScriptLoaderService } from '../../services/script-loader.service';
-import { ChartEvent } from '../../models/events.model';
+import { ChartEvent, ChartErrorEvent } from '../../models/events.model';
 
 @Component({
   selector: 'google-chart',
@@ -38,7 +38,7 @@ export class GoogleChartComponent implements OnInit, OnChanges {
   type: string;
 
   @Output()
-  error = new EventEmitter();
+  error = new EventEmitter<ChartErrorEvent>();
 
   @Output()
   ready = new EventEmitter();

@@ -12,6 +12,7 @@ export class AppComponent {
     data: Array<Array<string | number | {}>>,
     roles: Array<{type: string, role: string}>,
     dataTitles?: Array<string>,
+    options?: {}
   }> = [];
 
   constructor() {
@@ -41,66 +42,70 @@ export class AppComponent {
         ['Platinum', 21.45, 'color: #e5e4e2' ], // CSS-style declaration
       ]
     });
+
+    this.charts.push({
+      title: 'Area Chart',
+      type: 'AreaChart',
+      dataTitles: ['Year', 'Sales', 'Expenses'],
+      data: [
+        ['2013', 1000, 400],
+        ['2014', 1170, 460],
+        ['2015', 660, 1120],
+        ['2016', 1030, 540]
+      ],
+      roles: []
+    });
+
+    this.charts.push({
+      title: 'Bubble Chart',
+      type: 'BubbleChart',
+      dataTitles: ['ID', 'X', 'Y'],
+      data: [
+        ['Hallo',   80,  167],
+        ['',   79,  136],
+        ['',   78,  184],
+        ['',   72,  278],
+        ['',   81,  200],
+        ['',   72,  170],
+        ['',   68,  477]
+      ],
+      roles: []
+    });
+
+    this.charts.push({
+      title: 'Candlestick Chart',
+      type: 'CandlestickChart',
+      dataTitles: null,
+      data: [
+        ['Mon', 20, 28, 38, 45],
+        ['Tue', 31, 38, 55, 66],
+        ['Wed', 50, 55, 77, 80],
+        ['Thu', 77, 77, 66, 50],
+        ['Fri', 68, 66, 22, 15]
+      ],
+      roles: null
+    });
+
+    this.charts.push({
+      title: 'Combo Chart',
+      type: 'ComboChart',
+      dataTitles: ['Month', 'Bolivia', 'Ecuador', 'Madagascar', 'Papua New Guinea', 'Rwanda', 'Average'],
+      data: [
+        ['2004/05', 165, 938, 522, 998, 450, 614.6],
+        ['2005/06', 135, 1120, 599, 1268, 288, 682],
+        ['2006/07', 157, 1167, 587, 807, 397, 623],
+        ['2007/08', 139, 1110, 615, 968, 215, 609.4],
+        ['2008/09', 136, 691, 629, 1026, 366, 569.6]
+      ],
+      roles: [],
+      options: {
+        vAxis: {title: 'Cups'},
+        hAxis: {title: 'Month'},
+        seriesType: 'bars',
+        series: {5: {type: 'line'}}
+      }
+    });
   }
-
-  barDataTitles = ['Name', 'Alter 2010', 'Alter 2012', 'Alter 2015'];
-
-  barRoles = [{type: 'string', role: 'style'}];
-
-  barData = [
-    ['Gabriel', 12, 25, 32],
-    ['Johanna', 1, 4, 7],
-    ['Josef', 2, 5, 8],
-    ['Gerhard', 3, 6, 9],
-    ['Tobias', 4, 7, 9],
-    ['Hans Peter', 8, 9, 10]
-  ];
-
-  areaData = [
-    ['2013', 1000, 400],
-    ['2014', 1170, 460],
-    ['2015', 660, 1120],
-    ['2016', 1030, 540]
-  ];
-
-  areaDataTitles = ['Year', 'Sales', 'Expenses'];
-
-  bubbleDataTitles = ['ID', 'X', 'Y'];
-
-  bubbleData = [
-    ['Hallo',   80,  167],
-    ['',   79,  136],
-    ['',   78,  184],
-    ['',   72,  278],
-    ['',   81,  200],
-    ['',   72,  170],
-    ['',   68,  477]
-  ];
-
-  candlestickData = [
-    ['Mon', 20, 28, 38, 45],
-    ['Tue', 31, 38, 55, 66],
-    ['Wed', 50, 55, 77, 80],
-    ['Thu', 77, 77, 66, 50],
-    ['Fri', 68, 66, 22, 15]
-  ];
-
-  comboData = [
-    ['2004/05',  165,      938,         522,             998,           450,      614.6],
-    ['2005/06',  135,      1120,        599,             1268,          288,      682],
-    ['2006/07',  157,      1167,        587,             807,           397,      623],
-    ['2007/08',  139,      1110,        615,             968,           215,      609.4],
-    ['2008/09',  136,      691,         629,             1026,          366,      569.6]
-  ];
-
-  comboDataTitles = ['Month', 'Bolivia', 'Ecuador', 'Madagascar', 'Papua New Guinea', 'Rwanda', 'Average'];
-
-  comboOptions = {
-    vAxis: {title: 'Cups'},
-    hAxis: {title: 'Month'},
-    seriesType: 'bars',
-    series: {5: {type: 'line'}}
-  };
 
   histogramDataTitles = ['Dinosaur', 'Length'];
 

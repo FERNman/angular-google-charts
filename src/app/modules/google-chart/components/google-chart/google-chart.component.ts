@@ -1,6 +1,6 @@
-import { Component, OnInit, ElementRef, Input, ChangeDetectionStrategy, OnChanges, Output } from '@angular/core';
+import { Component, OnInit, ElementRef, Input, ChangeDetectionStrategy, OnChanges, Output, EventEmitter } from '@angular/core';
+
 import { ScriptLoaderService } from '../../services/script-loader.service';
-import { EventEmitter } from 'events';
 import { SelectedEvent } from '../../models/events.model';
 
 @Component({
@@ -36,18 +36,18 @@ export class GoogleChartComponent implements OnInit, OnChanges {
   type: string;
 
   @Output()
-  error = new EventEmitter();
+  error = new EventEmitter<ErrorEvent>();
 
   @Output()
   ready = new EventEmitter();
 
   @Output()
-  select = new EventEmitter();
+  select = new EventEmitter<SelectedEvent>();
 
-  private wrapper: any;
+  protected wrapper: any;
 
   constructor(
-    private element: ElementRef,
+    protected element: ElementRef,
     private loaderService: ScriptLoaderService
   ) { }
 
@@ -64,7 +64,7 @@ export class GoogleChartComponent implements OnInit, OnChanges {
     }
   }
 
-  protected parseOptions() {
+  protected get parsedOptions() {
     return {
       title: this.title,
       width: this.width,
@@ -73,13 +73,26 @@ export class GoogleChartComponent implements OnInit, OnChanges {
     };
   }
 
-  private createChart() {
+  protected get parsedData() {
+    let dataTable = [];
+    if (this.dataTitles) {
+      dataTable = [
+        [...this.dataTitles, ...this.roles],
+        ...this.data
+      ];
+    } else {
+      dataTable = this.data;
+    }
+    return dataTable;
+  }
+
+  protected createChart() {
     this.wrapper = new google.visualization.ChartWrapper();
     this.registerEvents();
     this.updateChart();
   }
 
-  private registerEvents() {
+  protected registerEvents() {
     google.visualization.events.addListener(this.wrapper, 'ready', () => this.ready.emit('Chart Ready'));
     google.visualization.events.addListener(this.wrapper, 'error', (error) => this.ready.emit(error));
     google.visualization.events.addListener(this.wrapper, 'select', () => {
@@ -88,13 +101,10 @@ export class GoogleChartComponent implements OnInit, OnChanges {
     });
   }
 
-  private updateChart() {
+  protected updateChart() {
     this.wrapper.setChartType(this.type);
-    this.wrapper.setDataTable([
-      [...this.dataTitles, ...this.roles],
-      ...this.data
-    ]);
-    this.wrapper.setOptions(this.parseOptions());
+    this.wrapper.setDataTable(this.parsedData);
+    this.wrapper.setOptions(this.parsedOptions);
 
     this.wrapper.draw(this.element.nativeElement);
   }

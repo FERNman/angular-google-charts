@@ -1,5 +1,7 @@
-import { Component, OnInit, ElementRef, Input, ChangeDetectionStrategy, OnChanges } from '@angular/core';
+import { Component, OnInit, ElementRef, Input, ChangeDetectionStrategy, OnChanges, Output } from '@angular/core';
 import { ScriptLoaderService } from '../../services/script-loader.service';
+import { EventEmitter } from 'events';
+import { SelectedEvent } from '../../models/events.model';
 
 @Component({
   selector: 'google-chart',
@@ -33,6 +35,15 @@ export class GoogleChartComponent implements OnInit, OnChanges {
   @Input()
   type: string;
 
+  @Output()
+  error = new EventEmitter();
+
+  @Output()
+  ready = new EventEmitter();
+
+  @Output()
+  select = new EventEmitter();
+
   private wrapper: any;
 
   constructor(
@@ -64,7 +75,17 @@ export class GoogleChartComponent implements OnInit, OnChanges {
 
   private createChart() {
     this.wrapper = new google.visualization.ChartWrapper();
+    this.registerEvents();
     this.updateChart();
+  }
+
+  private registerEvents() {
+    google.visualization.events.addListener(this.wrapper, 'ready', () => this.ready.emit('Chart Ready'));
+    google.visualization.events.addListener(this.wrapper, 'error', (error) => this.ready.emit(error));
+    google.visualization.events.addListener(this.wrapper, 'select', () => {
+      const selection = this.wrapper.visualization.getSelection();
+      this.ready.emit(selection);
+    });
   }
 
   private updateChart() {
@@ -73,7 +94,7 @@ export class GoogleChartComponent implements OnInit, OnChanges {
       [...this.dataTitles, ...this.roles],
       ...this.data
     ]);
-    this.wrapper.setOptions(this.options);
+    this.wrapper.setOptions(this.parseOptions());
 
     this.wrapper.draw(this.element.nativeElement);
   }

@@ -1,8 +1,4 @@
-export interface SelectedEvent {
+export interface ChartEvent {
   column: number;
   row: number;
-}
-
-export interface ErrorEvent {
-
 }

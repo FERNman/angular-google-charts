@@ -6,6 +6,9 @@
     [data]="chart.data"
     [dataTitles]="chart.dataTitles"
     [roles]="chart.roles"
-    [options]="chart.options">
+    [options]="chart.options"
+    (ready)="onReady()"
+    (select)="onSelect($event)"
+    (error)="onError($event)">
   </google-chart>
 </div>

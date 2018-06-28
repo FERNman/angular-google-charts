@@ -1,7 +1,9 @@
+/// <reference types="google.visualization"/>
+
 import { Component, OnInit, ElementRef, Input, ChangeDetectionStrategy, OnChanges, Output, EventEmitter } from '@angular/core';
 
 import { ScriptLoaderService } from '../../services/script-loader.service';
-import { SelectedEvent } from '../../models/events.model';
+import { ChartEvent } from '../../models/events.model';
 
 @Component({
   selector: 'google-chart',
@@ -36,15 +38,21 @@ export class GoogleChartComponent implements OnInit, OnChanges {
   type: string;
 
   @Output()
-  error = new EventEmitter<ErrorEvent>();
+  error = new EventEmitter();
 
   @Output()
   ready = new EventEmitter();
 
   @Output()
-  select = new EventEmitter<SelectedEvent>();
+  select = new EventEmitter<ChartEvent>();
 
-  protected wrapper: any;
+  @Output()
+  mouseenter = new EventEmitter<ChartEvent>();
+
+  @Output()
+  mouseleave = new EventEmitter<ChartEvent>();
+
+  wrapper: google.visualization.ChartWrapper;
 
   constructor(
     protected element: ElementRef,
@@ -73,32 +81,35 @@ export class GoogleChartComponent implements OnInit, OnChanges {
     };
   }
 
-  protected get parsedData() {
-    let dataTable = [];
+  protected get parsedData(): google.visualization.DataTable {
+    let dataTable: google.visualization.DataTable = null;
     if (this.dataTitles) {
-      dataTable = [
+      dataTable = google.visualization.arrayToDataTable([
         [...this.dataTitles, ...this.roles],
         ...this.data
-      ];
+      ], false);
     } else {
-      dataTable = this.data;
+      dataTable = google.visualization.arrayToDataTable(this.data, true);
     }
     return dataTable;
   }
 
   protected createChart() {
     this.wrapper = new google.visualization.ChartWrapper();
-    this.registerEvents();
     this.updateChart();
   }
 
   protected registerEvents() {
+    google.visualization.events.removeAllListeners(this.wrapper);
+
     google.visualization.events.addListener(this.wrapper, 'ready', () => this.ready.emit('Chart Ready'));
-    google.visualization.events.addListener(this.wrapper, 'error', (error) => this.ready.emit(error));
+    google.visualization.events.addListener(this.wrapper, 'error', (error) => this.error.emit(error));
     google.visualization.events.addListener(this.wrapper, 'select', () => {
-      const selection = this.wrapper.visualization.getSelection();
-      this.ready.emit(selection);
+      const selection = this.wrapper.getChart().getSelection();
+      this.select.emit(selection);
     });
+    google.visualization.events.addListener(this.wrapper.getChart(), 'onmouseover', (event) => this.mouseenter.emit(event));
+    google.visualization.events.addListener(this.wrapper.getChart(), 'onmouseout', (event) => this.mouseleave.emit(event));
   }
 
   protected updateChart() {
@@ -107,5 +118,7 @@ export class GoogleChartComponent implements OnInit, OnChanges {
     this.wrapper.setOptions(this.parsedOptions);
 
     this.wrapper.draw(this.element.nativeElement);
+
+    this.registerEvents();
   }
 }

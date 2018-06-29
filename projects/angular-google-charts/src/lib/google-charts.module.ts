@@ -14,4 +14,4 @@ import { GoogleChartComponent } from './google-chart/google-chart.component';
     GoogleChartComponent
   ]
 })
-export class GoogleChartModule { }
+export class GoogleChartsModule { }

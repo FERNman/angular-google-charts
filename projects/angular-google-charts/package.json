@@ -1,6 +1,33 @@
 {
   "name": "angular-google-charts",
-  "version": "1.0.4",
+  "version": "0.0.1",
+  "description": "A wrapper of the Google Charts library written with Angular 6",
+  "keywords": [
+    "Angular",
+    "Angular2",
+    "AngularCLI",
+    "Google Charts",
+    "Google",
+    "Angular Google Charts",
+    "Angular2 Google Charts",
+    "Angular 6 Google Charts",
+    "Angular chart",
+    "Angular charts"
+  ],
+  "homepage": "https://github.com/FERNman/angular-google-charts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FERNman/angular-google-charts"
+  },
+  "bugs": {
+    "url": "https://github.com/FERNman/angular-google-charts",
+    "email": "gabriel.sperrer@gmail.com"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Gabriel Sperrer",
+    "email": "gabriel.sperrer@gmail.com"
+  },
   "dependencies": {
     "@types/google.visualization": "0.0.41"
   },

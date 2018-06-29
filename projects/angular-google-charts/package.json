@@ -1,7 +1,7 @@
 {
   "name": "angular-google-charts",
-  "version": "1.0.0",
-  "devDependencies": {
+  "version": "1.0.2",
+  "dependencies": {
     "@types/google.visualization": "0.0.41"
   },
   "peerDependencies": {

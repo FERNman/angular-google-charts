@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
     type: string,
     data: Array<Array<string | number | {}>>,
     roles: Array<{type: string, role: string}>,
-    dataTitles?: Array<string>,
+    columnNames?: Array<string>,
     options?: {}
   }> = [];
 
@@ -26,7 +26,7 @@ export class AppComponent implements OnInit {
       ['Gold', 19.30],
       ['Platinum', 21.45],
     ],
-    dataTitles: ['Element', 'Density'],
+    columnNames: ['Element', 'Density'],
     options: {
       animation: {
         duration: 250,
@@ -43,7 +43,7 @@ export class AppComponent implements OnInit {
     this.charts.push({
       title: 'Pie Chart',
       type: 'PieChart',
-      dataTitles: ['Task', 'Hours per Day'],
+      columnNames: ['Task', 'Hours per Day'],
       data: [
         ['Work',     11],
         ['Eat',      2],
@@ -57,7 +57,7 @@ export class AppComponent implements OnInit {
     this.charts.push({
       title: 'Bar Chart',
       type: 'BarChart',
-      dataTitles: ['Element', 'Density'],
+      columnNames: ['Element', 'Density'],
       roles: [{ role: 'style', type: 'string' }],
       data: [
         ['Copper', 8.94, '#b87333'],
@@ -70,7 +70,7 @@ export class AppComponent implements OnInit {
     this.charts.push({
       title: 'Area Chart',
       type: 'AreaChart',
-      dataTitles: ['Year', 'Sales', 'Expenses'],
+      columnNames: ['Year', 'Sales', 'Expenses'],
       data: [
         ['2013', 1000, 400],
         ['2014', 1170, 460],
@@ -83,7 +83,7 @@ export class AppComponent implements OnInit {
     this.charts.push({
       title: 'Bubble Chart',
       type: 'BubbleChart',
-      dataTitles: ['ID', 'X', 'Y'],
+      columnNames: ['ID', 'X', 'Y'],
       data: [
         ['Hallo',   80,  167],
         ['',   79,  136],
@@ -99,7 +99,7 @@ export class AppComponent implements OnInit {
     this.charts.push({
       title: 'Candlestick Chart',
       type: 'CandlestickChart',
-      dataTitles: null,
+      columnNames: null,
       data: [
         ['Mon', 20, 28, 38, 45],
         ['Tue', 31, 38, 55, 66],
@@ -113,7 +113,7 @@ export class AppComponent implements OnInit {
     this.charts.push({
       title: 'Combo Chart',
       type: 'ComboChart',
-      dataTitles: ['Month', 'Bolivia', 'Ecuador', 'Madagascar', 'Papua New Guinea', 'Rwanda', 'Average'],
+      columnNames: ['Month', 'Bolivia', 'Ecuador', 'Madagascar', 'Papua New Guinea', 'Rwanda', 'Average'],
       data: [
         ['2004/05', 165, 938, 522, 998, 450, 614.6],
         ['2005/06', 135, 1120, 599, 1268, 288, 682],
@@ -133,7 +133,7 @@ export class AppComponent implements OnInit {
     this.charts.push({
       title: 'Histogram',
       type: 'Histogram',
-      dataTitles: ['Dinosaur', 'Length'],
+      columnNames: ['Dinosaur', 'Length'],
       data: [
         ['Acrocanthosaurus (top-spined lizard)', 12.2],
         ['Albertosaurus (Alberta lizard)', 9.1],
@@ -170,7 +170,7 @@ export class AppComponent implements OnInit {
     this.charts.push({
       title: 'Scatter Chart',
       type: 'ScatterChart',
-      dataTitles: ['Age', 'Weight'],
+      columnNames: ['Age', 'Weight'],
       data: [
         [8, 12],
         [4, 5.5],
@@ -193,6 +193,14 @@ export class AppComponent implements OnInit {
 
   onSelect(event: ChartEvent) {
     console.log("Selected: " + event.toString());
+  }
+
+  onMouseEnter(event: ChartEvent) {
+    console.log("Hovering " + event.toString());
+  }
+
+  onMouseLeave(event: ChartEvent) {
+    console.log("No longer hovering " + event.toString());
   }
 
   ngOnInit() {

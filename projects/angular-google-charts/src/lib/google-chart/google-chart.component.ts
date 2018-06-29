@@ -17,7 +17,7 @@ export class GoogleChartComponent implements OnInit, OnChanges {
   data: Array<Array<string | number>>;
 
   @Input()
-  dataTitles: Array<string>;
+  columnNames: Array<string>;
 
   @Input()
   roles: Array<{type: string, role: string}> = new Array();
@@ -86,9 +86,9 @@ export class GoogleChartComponent implements OnInit, OnChanges {
 
   protected getDataTable(): google.visualization.DataTable {
     let dataTable: google.visualization.DataTable = null;
-    if (this.dataTitles) {
+    if (this.columnNames) {
       dataTable = google.visualization.arrayToDataTable([
-        [...this.dataTitles, ...this.roles],
+        [...this.columnNames, ...this.roles],
         ...this.data
       ], false);
     } else {

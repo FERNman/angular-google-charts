@@ -90,18 +90,18 @@ myData = [
 
 For further information, please see the official [google documentation](https://google-developers.appspot.com/chart/interactive/docs/reference#arraytodatatable) on `arraytodatatable`, which is the function used internally, or read the examples included.
 
-### Data Titles (required for most charts)
+### ColumnNames (required for most charts)
 `Array<string>`
 
 ```html
-<google-chart [dataTitles]="myDataTitles"></google-chart>
+<google-chart [columnNames]="myColumnNames"></google-chart>
 ```
 
-The `titles` property expects an `Array<string>` containing the titles for each column of the chart data. The number of entries must match the length of the inner array passed in the `data` property.
-Some charts don't require titles. Whether your chart requires it can be check in the official documentation.
+The `columnNames` property expects an `Array<string>` containing the names for each column of the chart data. The number of entries must match the length of the inner array passed in the `data` property.
+Some charts don't require columnNames. Whether your chart requires it can be check in the official documentation.
 
 ```typescript
-myDataTitles = ['City', 'Inhabitants'];
+myColumnNames = ['City', 'Inhabitants'];
 ```
 
 ### Roles

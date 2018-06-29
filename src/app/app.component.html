@@ -4,12 +4,14 @@
     [title]="chart.title"
     [type]="chart.type"
     [data]="chart.data"
-    [dataTitles]="chart.dataTitles"
+    [columnNames]="chart.columnNames"
     [roles]="chart.roles"
     [options]="chart.options"
     (ready)="onReady()"
     (select)="onSelect($event)"
-    (error)="onError($event)">
+    (error)="onError($event)"
+    (mouseenter)="onMouseEnter($event)"
+    (mouseleave)="onMouseLeave($event)">
   </google-chart>
 </div>
 
@@ -18,7 +20,7 @@
     [title]="changingChart.title"
     [type]="changingChart.type"
     [data]="changingChart.data"
-    [dataTitles]="changingChart.dataTitles"
+    [columnNames]="changingChart.columnNames"
     [options]="changingChart.options">
   </google-chart>
 

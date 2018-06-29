@@ -10,7 +10,7 @@ To use Angular-Google-Charts in your project, install the package with npm by ca
 npm install angular-google-charts
 ```
 
-This will add the package to your package.json and install the required dependencies. Next, import `GoogleChartsModule` into on of your modules.
+This will add the package to your package.json and install the required dependencies. Next, import `GoogleChartsModule` into one of your modules.
 
 ## Charts
 
@@ -22,13 +22,11 @@ To create a chart, simply create an object using the provided component.
 
 The component provides a few input properties for convenience.
 
-### Type (required)
+### Type (required): string
 
 ```html
 <google-chart [type]="myType"></google-chart>
 ```
-
-**Type: string**
 
 The type specifies which type of chart you want to display. It requires a string. Examples include:
 - `'BarChart'`
@@ -40,13 +38,11 @@ The type specifies which type of chart you want to display. It requires a string
 
 For more chart types and information, please see the [google chart gallery](https://google-developers.appspot.com/chart/interactive/docs/gallery);
 
-### Data (required)
+### Data (required): Array<Array<any>>
 
 ```html
 <google-chart [data]="myData"></google-chart>
 ```
-
-**Type: Array<Array<any>>**
 
 The data property expects an object of type `Array<Array<any>>`. The first object in the inner array should be the name of the data entry, and the following objects should be the data you want to display. The inner Array must contain the name of the entry and the data value(s). Every inner array must be of the same length.
 
@@ -73,13 +69,11 @@ myData = [
 
 For further information, please see the official [google documentation](https://google-developers.appspot.com/chart/interactive/docs/reference#arraytodatatable) on `arraytodatatable`, which is the function used internally, or read the examples included.
 
-### Data Titles (required for most charts)
+### Data Titles (required for most charts): Array<string>
 
 ```html
 <google-chart [dataTitles]="myDataTitles"></google-chart>
 ```
-
-**Type: Array<string>**
 
 The `titles` property expects an `Array<string>` containing the titles for each column of the chart data. The number of entries must match the length of the inner array passed in the `data` property.
 Some charts don't require titles. Whether your chart requires it can be check in the official documentation.
@@ -88,13 +82,11 @@ Some charts don't require titles. Whether your chart requires it can be check in
 myDataTitles = ['City', 'Inhabitants'];
 ```
 
-### Roles
+### Roles: Array<object>
 
 ```html
 <google-chart [roles]="myRoles"></google-chart>
 ```
-
-**Type: Array<object>**
 
 The `roles` property is optional and can be used for additional, row specific styling options. If provided, the length of the array must match the length of the roles provided in each of the inner arrays of the data object.
 
@@ -110,47 +102,46 @@ myData = [
 
 For further information, please see the [google documentation](https://google-developers.appspot.com/chart/interactive/docs/roles).
 
-### Title
+### Title: string
 
 ```html
 <google-chart [title]="myTitle"></google-chart>
 ```
 
-**Type: string**
-
 The `title` property is optional and provided for convenice. It can also be included in the `options` property.
 
-### Width
+### Width: number
 
 ```html
 <google-chart [width]="myWidth"></google-chart>
 ```
 
-**Type: number**
-
 The `width` property is optional and allows to set the width of the chart. The number provided will be converted to a pixel value. The default is `400px`.
 It should be used instead of the `width` property in the `options` object.
 
-### Height
+### Height: number
 
 ```html
 <google-chart [height]="myHeight"></google-chart>
 ```
 
-**Type: number**
-
 The `height` property is optional and allows to set the height of the chart. The number provided will be converted to a pixel value. The default is `400px`.
 It should be used instead of the `height` property in the `options` object.
 
-### Options
+### Options: object
 
 ```html
-<google-chart [title]="myTitle"></google-chart>
+<google-chart [options]="myOptions"></google-chart>
 ```
 
-**Type: object**
-
 The `options` property is optional and allows to customize the chart to a great extent. For more information, please see the [google documentation](https://google-developers.appspot.com/chart/interactive/docs/customizing_charts).
+
+```typescript
+myOptions = {
+  colors: ['#e0440e', '#e6693e', '#ec8f6e', '#f3b49f', '#f6c7b6'],
+  is3D: true
+};
+```
 
 ## Animations
 

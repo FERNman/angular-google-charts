@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { GoogleChartModule } from 'projects/angular-google-charts/src/public_api';
+import { GoogleChartsModule } from 'projects/angular-google-charts/src/public_api';
 
 @NgModule({
   declarations: [
@@ -11,7 +11,7 @@ import { GoogleChartModule } from 'projects/angular-google-charts/src/public_api
   ],
   imports: [
     BrowserModule,
-    GoogleChartModule
+    GoogleChartsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

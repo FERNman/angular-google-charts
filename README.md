@@ -170,7 +170,42 @@ myOptions = {
 };
 ```
 
+### Formatter
+`Array<{formatter: any, colIndex: number}> | any`
+
+```html
+<google-chart [formatter]="myFormatter"></google-chart>
+```
+
+The `formatter` property is optional and allows to format the chart data. You can pass in either a formatter class instance or an array of objects containing a formatter and an index.
+If passing a formatter class instance, every column will be formatted according to it. When passing in an array, you can specify which columns to format.
+
+```typescript
+// Formats the column with the index 1 and 3 to Date(long)
+myFormatter = [
+  { formatter: new google.visualization.Dateformat({formatType: 'long'}), colIndex: 1 },
+  { formatter: new google.visualization.Dateformat({formatType: 'long'}), colIndex: 3 }
+];
+```
+
+For more information and all formatter types, please refer to the [documentation](https://google-developers.appspot.com/chart/interactive/docs/reference#formatters).
+
 ## Animations
+
+To animate your charts, simply add the property `animation` to your chart's `options` object.
+
+```typescript
+const myOptions = {
+  ...
+  animation: {
+    duration: 1000,
+    easing: 'out',
+  },
+  ...
+};
+```
+
+For more information, please read the [official documentation](https://google-developers.appspot.com/chart/interactive/docs/animation).
 
 ## Events
 

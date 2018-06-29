@@ -1,13 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 
-import { ChartEvent, ChartErrorEvent } from 'projects/angular-google-charts/src/public_api';
+import { ChartEvent, ChartErrorEvent, GoogleChartComponent } from 'projects/angular-google-charts/src/public_api';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styles: [':host > *:not(h1) { display: inline-block !important; }']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   charts: Array<{
     title: string,
     type: string,
@@ -16,6 +16,28 @@ export class AppComponent {
     dataTitles?: Array<string>,
     options?: {}
   }> = [];
+
+  changingChart = {
+    title: 'Changing Chart',
+    type: 'BarChart',
+    data: [
+      ['Copper', 8.94],
+      ['Silver', 10.49],
+      ['Gold', 19.30],
+      ['Platinum', 21.45],
+    ],
+    dataTitles: ['Element', 'Density'],
+    options: {
+      animation: {
+        duration: 250,
+        easing: 'ease-in-out',
+        startup: true
+      }
+    }
+  }
+
+  @ViewChild('chart')
+  chart: GoogleChartComponent;
 
   constructor() {
     this.charts.push({
@@ -38,10 +60,10 @@ export class AppComponent {
       dataTitles: ['Element', 'Density'],
       roles: [{ role: 'style', type: 'string' }],
       data: [
-        ['Copper', 8.94, '#b87333'],            // RGB value
-        ['Silver', 10.49, 'silver'],            // English color name
+        ['Copper', 8.94, '#b87333'],
+        ['Silver', 10.49, 'silver'],
         ['Gold', 19.30, 'gold'],
-        ['Platinum', 21.45, 'color: #e5e4e2' ], // CSS-style declaration
+        ['Platinum', 21.45, 'color: #e5e4e2' ],
       ]
     });
 
@@ -171,5 +193,18 @@ export class AppComponent {
 
   onSelect(event: ChartEvent) {
     console.log("Selected: " + event.toString());
+  }
+
+  ngOnInit() {
+    console.log(this.chart);
+  }
+
+  changeChart() {
+    this.changingChart.data = [
+      ['Copper', Math.random() * 20.0],
+      ['Silver', Math.random() * 20.0],
+      ['Gold', Math.random() * 20.0],
+      ['Platinum', Math.random() * 20.0],
+    ];
   }
 }

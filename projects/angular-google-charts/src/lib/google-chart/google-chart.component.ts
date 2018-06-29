@@ -8,6 +8,7 @@ import { ScriptLoaderService } from '../script-loader/script-loader.service';
   selector: 'google-chart',
   template: '',
   styles: [':host { width: fit-content; display: block; }'],
+  exportAs: 'google-chart',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GoogleChartComponent implements OnInit, OnChanges {
@@ -35,6 +36,9 @@ export class GoogleChartComponent implements OnInit, OnChanges {
 
   @Input()
   type: string;
+
+  @Input()
+  formatter: any | Array<{ formatter: any, colIndex: number }>;
 
   @Output()
   error = new EventEmitter<ChartErrorEvent>();
@@ -65,7 +69,7 @@ export class GoogleChartComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    // If the wrapper is still undefined, the loader service is working
+    // If the wrapper is undefined, the loader service is working
     if (this.wrapper) {
       this.updateChart();
     }
@@ -80,7 +84,7 @@ export class GoogleChartComponent implements OnInit, OnChanges {
     };
   }
 
-  protected get parsedData(): google.visualization.DataTable {
+  protected getDataTable(): google.visualization.DataTable {
     let dataTable: google.visualization.DataTable = null;
     if (this.dataTitles) {
       dataTable = google.visualization.arrayToDataTable([
@@ -112,12 +116,31 @@ export class GoogleChartComponent implements OnInit, OnChanges {
   }
 
   protected updateChart() {
+    const dataTable = this.getDataTable();
+    this.formatData(dataTable);
+
     this.wrapper.setChartType(this.type);
-    this.wrapper.setDataTable(this.parsedData);
+    this.wrapper.setDataTable(dataTable);
     this.wrapper.setOptions(this.parsedOptions);
 
     this.wrapper.draw(this.element.nativeElement);
 
     this.registerEvents();
+  }
+
+  protected formatData(dataTable: google.visualization.DataTable) {
+    if (!this.formatter) {
+      return;
+    }
+
+    if (this.formatter instanceof Array) {
+      this.formatter.forEach((value) => {
+        value.formatter.format(dataTable, value.colIndex);
+      });
+    } else {
+      for (let i = 0; i < dataTable.getNumberOfColumns(); i++) {
+        this.formatter.format(dataTable, i);
+      }
+    }
   }
 }

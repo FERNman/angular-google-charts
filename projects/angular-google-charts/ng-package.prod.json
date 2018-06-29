@@ -3,5 +3,8 @@
   "dest": "../../dist/angular-google-charts",
   "lib": {
     "entryFile": "src/public_api.ts"
-  }
+  },
+  "whitelistedNonPeerDependencies": [
+    "."
+  ]
 }

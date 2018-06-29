@@ -29,7 +29,7 @@ export class ScriptLoaderService {
   private createScriptelement(): HTMLScriptElement {
     const script = document.createElement('script');
     script.type = 'text/javascript';
-    script.src = 'assets/scripts/google-chart-loader.js';
+    script.src = 'https://www.gstatic.com/charts/loader.js';
     script.async = true;
     document.getElementsByTagName('head')[0].appendChild(script);
     return script;

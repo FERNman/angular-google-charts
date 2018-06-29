@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { ChartEvent } from './modules/google-chart';
+
+import { ChartEvent, ChartErrorEvent } from 'projects/angular-google-charts/src/public_api';
 
 @Component({
   selector: 'app-root',
@@ -164,7 +165,7 @@ export class AppComponent {
     console.log("Chart ready");
   }
 
-  onError(error: ErrorEvent) {
+  onError(error: ChartErrorEvent) {
     console.log("Error: " + error.toString());
   }
 

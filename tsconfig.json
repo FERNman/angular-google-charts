@@ -15,6 +15,14 @@
     "lib": [
       "es2017",
       "dom"
-    ]
+    ],
+    "paths": {
+      "angular-google-charts": [
+        "dist/angular-google-charts"
+      ],
+      "angular-google-charts/*": [
+        "dist/angular-google-charts/*"
+      ]
+    }
   }
 }

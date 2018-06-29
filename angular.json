@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "angular-google-charts": {
+    "angular-google-charts-demo": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/angular-google-charts",
+            "outputPath": "dist/angular-google-charts-demo",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -26,8 +26,7 @@
               "src/favicon.ico",
               "src/assets"
             ],
-            "styles": [
-            ],
+            "styles": [],
             "scripts": []
           },
           "configurations": {
@@ -53,18 +52,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "angular-google-charts:build"
+            "browserTarget": "angular-google-charts-demo:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "angular-google-charts:build:production"
+              "browserTarget": "angular-google-charts-demo:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "angular-google-charts:build"
+            "browserTarget": "angular-google-charts-demo:build"
           }
         },
         "test": {
@@ -98,7 +97,7 @@
         }
       }
     },
-    "angular-google-charts-e2e": {
+    "angular-google-charts-demo-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "architect": {
@@ -106,11 +105,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "angular-google-charts:serve"
+            "devServerTarget": "angular-google-charts-demo:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "angular-google-charts:serve:production"
+              "devServerTarget": "angular-google-charts-demo:serve:production"
             }
           }
         },
@@ -124,7 +123,47 @@
           }
         }
       }
+    },
+    "angular-google-charts": {
+      "root": "projects/angular-google-charts",
+      "sourceRoot": "projects/angular-google-charts/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/angular-google-charts/tsconfig.lib.json",
+            "project": "projects/angular-google-charts/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "project": "projects/angular-google-charts/ng-package.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/angular-google-charts/src/test.ts",
+            "tsConfig": "projects/angular-google-charts/tsconfig.spec.json",
+            "karmaConfig": "projects/angular-google-charts/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/angular-google-charts/tsconfig.lib.json",
+              "projects/angular-google-charts/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
-  "defaultProject": "angular-google-charts"
+  "defaultProject": "angular-google-charts-demo"
 }

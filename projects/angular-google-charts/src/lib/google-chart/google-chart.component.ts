@@ -1,9 +1,8 @@
 /// <reference types="google.visualization"/>
 
 import { Component, OnInit, ElementRef, Input, ChangeDetectionStrategy, OnChanges, Output, EventEmitter } from '@angular/core';
-
-import { ScriptLoaderService } from '../../services/script-loader.service';
-import { ChartEvent, ChartErrorEvent } from '../../models/events.model';
+import { ChartErrorEvent, ChartEvent } from '../models/events.model';
+import { ScriptLoaderService } from '../script-loader/script-loader.service';
 
 @Component({
   selector: 'google-chart',

@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
 
-import { ScriptLoaderService } from './services/script-loader.service';
-
-import { GoogleChartComponent } from './components/google-chart/google-chart.component';
+import { ScriptLoaderService } from './script-loader/script-loader.service';
+import { GoogleChartComponent } from './google-chart/google-chart.component';
 
 @NgModule({
   providers: [

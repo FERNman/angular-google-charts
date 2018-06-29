@@ -10,11 +10,30 @@ To use Angular-Google-Charts in your project, install the package with npm by ca
 npm install angular-google-charts
 ```
 
-This will add the package to your package.json and install the required dependencies. Next, import `GoogleChartsModule` into one of your modules.
+This will add the package to your package.json and install the required dependencies.
+
+## Usage
+
+Import the `GoogleChartsModule` in your `app.module.ts`:
+
+```typescript
+import { GoogleChartsModule } from 'angular-google-charts';
+
+@NgModule({
+  ...
+  imports: [
+    ...
+    GoogleChartsModule,
+    ...
+  ],
+  ...
+})
+export class AppModule {}
+```
 
 ## Charts
 
-To create a chart, simply create an object using the provided component.
+To create a chart, simply use the `google-chart` component in your templates like this:
 
 ```html
 <google-chart></google-chart>
@@ -37,7 +56,7 @@ The type specifies which type of chart you want to display. It requires a string
 - `'Bubblechart'`
 - etc.
 
-For more chart types and information, please see the [google chart gallery](https://google-developers.appspot.com/chart/interactive/docs/gallery);
+For more chart types and information, please see the [google chart gallery](https://google-developers.appspot.com/chart/interactive/docs/gallery).
 
 ### Data (required)
 `Array<Array<any>>`
@@ -223,6 +242,35 @@ The `mouseleave` event fires when the mouse leaves the bounding box of one of th
 
 The event is of type `ChartEvent`, where column is the index of the hovered column and row is the index of the hovered row.
 
+## Advanced
+
+For advanced actions, one may needs to access to the underlying `ChartWrapper` creating the charts.
+
+```html
+<google-chart #chart></google-chart>
+```
+
+```typescript
+import { ViewChild } from '@angular/core';
+import { GoogleChartComponent } from 'angular-google-charts';
+
+@Component({
+  ...
+})
+export class AppComponent implements OnInit {
+  @ViewChild('chart')
+  chart: GoogleChartComponent;
+
+  ngOnInit() {
+    const wrapper = this.chart.wrapper;
+
+    wrapper.draw(myAdvancedData);
+  }
+}
+```
+
+When doing so, you are completely free to create the chart by yourself. Please refer to the (ChartWrapper Documentation)[https://developers.google.com/chart/interactive/docs/reference#chartwrapper-class] on how to do this.
+
 ## AngularCLI
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
@@ -250,3 +298,7 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ### Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+## License
+
+This project is provided under the [MIT license](https://github.com/FERNman/angular-google-charts/blob/master/LICENSE.md).

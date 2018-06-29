@@ -22,7 +22,7 @@ To create a chart, simply create an object using the provided component.
 
 The component provides a few input properties for convenience.
 
-### Type (required): string
+### Type (required): `string`
 
 ```html
 <google-chart [type]="myType"></google-chart>
@@ -38,7 +38,7 @@ The type specifies which type of chart you want to display. It requires a string
 
 For more chart types and information, please see the [google chart gallery](https://google-developers.appspot.com/chart/interactive/docs/gallery);
 
-### Data (required): Array<Array<any>>
+### Data (required): `Array<Array<any>>`
 
 ```html
 <google-chart [data]="myData"></google-chart>
@@ -69,7 +69,7 @@ myData = [
 
 For further information, please see the official [google documentation](https://google-developers.appspot.com/chart/interactive/docs/reference#arraytodatatable) on `arraytodatatable`, which is the function used internally, or read the examples included.
 
-### Data Titles (required for most charts): Array<string>
+### Data Titles (required for most charts): `Array<string>`
 
 ```html
 <google-chart [dataTitles]="myDataTitles"></google-chart>
@@ -82,7 +82,7 @@ Some charts don't require titles. Whether your chart requires it can be check in
 myDataTitles = ['City', 'Inhabitants'];
 ```
 
-### Roles: Array<object>
+### Roles: `Array<object>`
 
 ```html
 <google-chart [roles]="myRoles"></google-chart>
@@ -102,7 +102,7 @@ myData = [
 
 For further information, please see the [google documentation](https://google-developers.appspot.com/chart/interactive/docs/roles).
 
-### Title: string
+### Title: `string`
 
 ```html
 <google-chart [title]="myTitle"></google-chart>
@@ -110,7 +110,7 @@ For further information, please see the [google documentation](https://google-de
 
 The `title` property is optional and provided for convenice. It can also be included in the `options` property.
 
-### Width: number
+### Width: `number`
 
 ```html
 <google-chart [width]="myWidth"></google-chart>
@@ -119,7 +119,7 @@ The `title` property is optional and provided for convenice. It can also be incl
 The `width` property is optional and allows to set the width of the chart. The number provided will be converted to a pixel value. The default is `400px`.
 It should be used instead of the `width` property in the `options` object.
 
-### Height: number
+### Height: `number`
 
 ```html
 <google-chart [height]="myHeight"></google-chart>
@@ -128,7 +128,7 @@ It should be used instead of the `width` property in the `options` object.
 The `height` property is optional and allows to set the height of the chart. The number provided will be converted to a pixel value. The default is `400px`.
 It should be used instead of the `height` property in the `options` object.
 
-### Options: object
+### Options: `object`
 
 ```html
 <google-chart [options]="myOptions"></google-chart>

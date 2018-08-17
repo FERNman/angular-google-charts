@@ -63,9 +63,13 @@ export class GoogleChartComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit() {
-    this.loaderService.onLoad.subscribe(() => {
+    if (this.loaderService.loaded) {
       this.createChart();
-    });
+    } else {
+      this.loaderService.onLoad.subscribe(() => {
+        this.createChart();
+      });
+    }
   }
 
   ngOnChanges() {

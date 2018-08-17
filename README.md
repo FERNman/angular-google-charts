@@ -279,7 +279,7 @@ The event is of type `ChartEvent`, where column is the index of the hovered colu
 
 ## Advanced
 
-For advanced actions, one may needs to access to the underlying `ChartWrapper` creating the charts.
+For advanced actions, one may need to access to the underlying `ChartWrapper` creating the charts.
 
 ```html
 <google-chart #chart></google-chart>

@@ -5,6 +5,8 @@ import { Observable, Subject } from 'rxjs';
 export class ScriptLoaderService {
   private onLoadSubject = new Subject<boolean>();
 
+  private doneLoading = false;
+
   constructor(
     @Inject(LOCALE_ID) private localeId: string
   ) {
@@ -13,6 +15,10 @@ export class ScriptLoaderService {
 
   public get onLoad(): Observable<boolean> {
     return this.onLoadSubject.asObservable();
+  }
+
+  public get loaded(): boolean {
+    return this.doneLoading;
   }
 
   private initialize() {
@@ -43,6 +49,7 @@ export class ScriptLoaderService {
 
     google.charts.load('45.2', config);
     google.charts.setOnLoadCallback(() => {
+      this.doneLoading = true;
       this.onLoadSubject.next(true);
       this.onLoadSubject.complete();
     });

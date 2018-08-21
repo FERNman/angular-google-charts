@@ -71,6 +71,26 @@ export class MainComponent implements OnInit {
     });
 
     this.charts.push({
+      title: 'Material Bar Chart',
+      type: 'Bar',
+      columnNames: ['Year', 'Sales', 'Expenses', 'Profit'],
+      roles: [],
+      data: [
+        ['2014', 1000, 400, 200],
+        ['2015', 1170, 460, 250],
+        ['2016', 660, 1120, 300],
+        ['2017', 1030, 540, 350]
+      ],
+      options: {
+        chart: {
+          title: 'Material Bar Chart',
+          subtitle: 'Sales, Expenses, and Profit: 2014-2017'
+        },
+        bars: 'horizontal' // Required for Material Bar Charts.
+      }
+    });
+
+    this.charts.push({
       title: 'Area Chart',
       type: 'AreaChart',
       columnNames: ['Year', 'Sales', 'Expenses'],

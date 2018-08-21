@@ -29,6 +29,6 @@ export class GoogleChartPackagesHelper {
     };
 
     public static getPackageForChartName(chartName: string): string {
-        return this.ChartTypesToPackages[chartName];
+        return GoogleChartPackagesHelper.ChartTypesToPackages[chartName];
     }
 }

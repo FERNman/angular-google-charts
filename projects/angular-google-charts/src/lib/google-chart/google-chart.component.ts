@@ -107,11 +107,11 @@ export class GoogleChartComponent implements OnInit, OnChanges {
     this.wrapper.setChartType(this.type);
     this.wrapper.setDataTable(dataTable);
     this.wrapper.setOptions(this.parsedOptions);
-
-    this.wrapper.draw(this.element.nativeElement);
-
+    
     this.removeChartEvents();
     this.registerChartEvents();
+
+    this.wrapper.draw(this.element.nativeElement);
   }
 
   protected getDataTable(): google.visualization.DataTable {

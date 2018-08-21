@@ -3,6 +3,8 @@
 import { Component, OnInit, ElementRef, Input, ChangeDetectionStrategy, OnChanges, Output, EventEmitter } from '@angular/core';
 import { ChartErrorEvent, ChartEvent } from '../models/events.model';
 import { ScriptLoaderService } from '../script-loader/script-loader.service';
+import { Observable } from 'rxjs';
+import { GoogleChartPackagesHelper } from '../helpers/google-chart-packages.helper';
 
 @Component({
   selector: 'google-chart',
@@ -73,7 +75,6 @@ export class GoogleChartComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    // If the wrapper is undefined, the loader service is working
     if (this.wrapper) {
       this.updateChart();
     }
@@ -88,35 +89,15 @@ export class GoogleChartComponent implements OnInit, OnChanges {
     };
   }
 
-  protected getDataTable(): google.visualization.DataTable {
-    let dataTable: google.visualization.DataTable = null;
-    if (this.columnNames) {
-      dataTable = google.visualization.arrayToDataTable([
-        [...this.columnNames, ...this.roles],
-        ...this.data
-      ], false);
-    } else {
-      dataTable = google.visualization.arrayToDataTable(this.data, true);
-    }
-    return dataTable;
-  }
-
   protected createChart() {
-    this.wrapper = new google.visualization.ChartWrapper();
-    this.updateChart();
+    this.loadNeededPackages().subscribe(() => {
+      this.wrapper = new google.visualization.ChartWrapper();
+      this.updateChart();
+    });
   }
 
-  protected registerEvents() {
-    google.visualization.events.removeAllListeners(this.wrapper);
-
-    google.visualization.events.addListener(this.wrapper, 'ready', () => this.ready.emit('Chart Ready'));
-    google.visualization.events.addListener(this.wrapper, 'error', (error) => this.error.emit(error));
-    google.visualization.events.addListener(this.wrapper, 'select', () => {
-      const selection = this.wrapper.getChart().getSelection();
-      this.select.emit(selection);
-    });
-    google.visualization.events.addListener(this.wrapper.getChart(), 'onmouseover', (event) => this.mouseenter.emit(event));
-    google.visualization.events.addListener(this.wrapper.getChart(), 'onmouseout', (event) => this.mouseleave.emit(event));
+  protected loadNeededPackages(): Observable<any> {
+    return this.loaderService.loadChartPackages([GoogleChartPackagesHelper.getPackageForChartName(this.type)]);
   }
 
   protected updateChart() {
@@ -129,7 +110,19 @@ export class GoogleChartComponent implements OnInit, OnChanges {
 
     this.wrapper.draw(this.element.nativeElement);
 
-    this.registerEvents();
+    this.removeChartEvents();
+    this.registerChartEvents();
+  }
+
+  protected getDataTable(): google.visualization.DataTable {
+    if (this.columnNames) {
+      return google.visualization.arrayToDataTable([
+        [...this.columnNames, ...this.roles],
+        ...this.data
+      ], false);
+    } else {
+      return google.visualization.arrayToDataTable(this.data, true);
+    }
   }
 
   protected formatData(dataTable: google.visualization.DataTable) {
@@ -146,5 +139,25 @@ export class GoogleChartComponent implements OnInit, OnChanges {
         this.formatter.format(dataTable, i);
       }
     }
+  }
+
+  private removeChartEvents() {
+    google.visualization.events.removeAllListeners(this.wrapper);
+  }
+
+  private registerChartEvents() {
+    this.registerChartEvent('ready', () => this.ready.emit('Chart Ready'));
+    this.registerChartEvent('error', (error) => this.error.emit(error));
+    this.registerChartEvent('select', () => {
+      const selection = this.wrapper.getChart().getSelection();
+      this.select.emit(selection);
+    });
+
+    this.registerChartEvent('onmouseover', (event) => this.mouseenter.emit(event));
+    this.registerChartEvent('onmouseout', (event) => this.mouseleave.emit(event));
+  }
+
+  private registerChartEvent(eventName: string, callback: Function) {
+    google.visualization.events.addListener(this.wrapper, eventName, callback);
   }
 }

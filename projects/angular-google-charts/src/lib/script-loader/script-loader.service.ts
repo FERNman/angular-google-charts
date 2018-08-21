@@ -21,37 +21,45 @@ export class ScriptLoaderService {
     return this.doneLoading;
   }
 
-  private initialize() {
-    const script = this.createScriptelement();
+  public loadChartPackages(packages: Array<string>): Observable<any> {
+    return Observable.create(observer => {
+      const config = {
+        packages: packages,
+        language: this.localeId
+      };
+  
+      google.charts.load('45.2', config);
+      google.charts.setOnLoadCallback(() => {
+        observer.next();
+        observer.complete();
+      });
+    });
+  }
 
-    script.onload = () => this.loadCharts();
-    script.onerror = () => {
-      console.error("Failed to load the google chart script!");
-      this.onLoadSubject.error("Failed to load the google chart script!");
-      this.onLoadSubject.complete();
+  private initialize() {
+    if (!this.doneLoading) {
+      const script = this.createScriptElement();
+
+      script.onload = () => {
+        this.doneLoading = true;
+        this.onLoadSubject.next(true);
+        this.onLoadSubject.complete();
+      };
+
+      script.onerror = () => {
+        console.error("Failed to load the google chart script!");
+        this.onLoadSubject.error("Failed to load the google chart script!");
+        this.onLoadSubject.complete();
+      };
     }
   }
 
-  private createScriptelement(): HTMLScriptElement {
+  private createScriptElement(): HTMLScriptElement {
     const script = document.createElement('script');
     script.type = 'text/javascript';
     script.src = 'https://www.gstatic.com/charts/loader.js';
     script.async = true;
     document.getElementsByTagName('head')[0].appendChild(script);
     return script;
-  }
-
-  private loadCharts(): void {
-    const config = {
-      packages: ['corechart'],
-      language: this.localeId
-    };
-
-    google.charts.load('45.2', config);
-    google.charts.setOnLoadCallback(() => {
-      this.doneLoading = true;
-      this.onLoadSubject.next(true);
-      this.onLoadSubject.complete();
-    });
   }
 }

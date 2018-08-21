@@ -28,7 +28,7 @@ export class GoogleChartPackagesHelper {
         WordTree: 'wordtree'
     };
 
-    public static GetPackageForChartName(chartName: string): string {
+    public static getPackageForChartName(chartName: string): string {
         return this.ChartTypesToPackages[chartName];
     }
 }

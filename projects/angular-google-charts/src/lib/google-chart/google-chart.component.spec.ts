@@ -20,6 +20,8 @@ describe('ChartComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(GoogleChartComponent);
     component = fixture.componentInstance;
+    component.type = "BarChart";
+    component.data = [[]];
     fixture.detectChanges();
   });
 

@@ -1,4 +1,4 @@
-import { TestBed, inject, async } from '@angular/core/testing';
+import { TestBed, async } from '@angular/core/testing';
 
 import { ScriptLoaderService } from './script-loader.service';
 
@@ -14,32 +14,34 @@ describe('ScriptLoaderService', () => {
     service = TestBed.get(ScriptLoaderService);
   });
 
-  /*it('should be created', () => {
+  it('should be created', () => {
     expect(service).toBeTruthy();
-  });*/
-
-  it('should successfully load the google charts package on creation', (done: DoneFn) => {
-    service.onLoad.subscribe(() => {
-      var scripts = Array.from(document.getElementsByTagName("script"));
-      expect(scripts.find(script => script.src === "https://www.gstatic.com/charts/loader.js" && script.type === "text/javascript")).toBeTruthy();
-
-      expect(google.charts).not.toBeUndefined();
-
-      done();
-    });
   });
 
-  /*it('#loaded should be false', () => {
-    expect(service.loaded).toBeFalsy();
-
+  it('should create a script object', () => {
     var scripts = Array.from(document.getElementsByTagName("script"));
     expect(scripts.find(script => script.src === "https://www.gstatic.com/charts/loader.js" && script.type === "text/javascript")).toBeTruthy();
   });
 
-  it('#loadPackages should load the passed packages', (done: DoneFn) => {
-    service.onLoad.subscribe(() => {
-      service.loadChartPackages(['corecharts', 'bar']).subscribe(() => {
-        expect(Object.keys(google.visualization).sort()).toEqual([
+  it('should successfully load the google charts package', async(() => {
+    service.onReady.subscribe(() => {
+      expect(google.charts).not.toBeUndefined();
+    });
+  }));
+
+  it('#doneLoading should match whether google is already loaded', () => {
+    if (typeof(google) === "undefined") {
+      expect(service.doneLoading).toBeFalsy();
+    } else {
+      expect(service.doneLoading).toBeTruthy();
+    }
+  });
+
+  it('#loadPackages should load the passed packages', async(() => {
+    service.onReady.subscribe(() => {
+      service.loadChartPackages(['corechart', 'bar']).subscribe(() => {
+        
+        const loadedCharts = [
           "AreaChart",
           "BarChart",
           "BubbleChart",
@@ -51,17 +53,30 @@ describe('ScriptLoaderService', () => {
           "LineChart",
           "ScatterChart",
           "SteppedAreaChart",
-          "Bar"
-        ].sort());
+        ];
 
-        done();
+        loadedCharts.forEach(chart => {
+          expect(hasKey(google.visualization, chart)).toBeTruthy("Didn't load " + chart);
+        });
+
+        expect(hasKey(google.charts, "Bar")).toBeTruthy("Didn't load Material Bar Chart");
       });
     });
-  });
+  }));
 
-  it('#loadPackages should be callable twice', (done: DoneFn) => {
-    service.onLoad.subscribe(() => {
-      done();
+  it('#loadPackages should be callable twice', async(() => {
+    service.onReady.subscribe(() => {
+      service.loadChartPackages(['treemap']).subscribe(() => {
+        expect(hasKey(google.visualization, "TreeMap")).toBeTruthy();
+      });
+
+      service.loadChartPackages(['table']).subscribe(() => {
+        expect(hasKey(google.visualization, "Table")).toBeTruthy();
+      });
     });
-  });*/
+  }));
+
+  function hasKey(obj: object, key: string): boolean {
+    return obj.hasOwnProperty(key);
+  }
 });

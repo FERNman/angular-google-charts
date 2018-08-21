@@ -4,6 +4,7 @@ import { Component, OnInit, ElementRef, Input, ChangeDetectionStrategy, OnChange
 import { ChartErrorEvent, ChartEvent } from '../models/events.model';
 import { ScriptLoaderService } from '../script-loader/script-loader.service';
 import { Observable } from 'rxjs';
+import { GoogleChartPackagesHelper } from '../helpers/google-chart-packages.helper';
 
 @Component({
   selector: 'google-chart',
@@ -96,7 +97,7 @@ export class GoogleChartComponent implements OnInit, OnChanges {
   }
 
   protected loadNeededPackages(): Observable<any> {
-    return this.loaderService.loadChartPackages(['corechart']);
+    return this.loaderService.loadChartPackages([GoogleChartPackagesHelper.getPackageForChartName(this.type)]);
   }
 
   protected updateChart() {

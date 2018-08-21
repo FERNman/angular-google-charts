@@ -76,6 +76,16 @@ describe('ScriptLoaderService', () => {
     });
   }));
 
+  it('after initial doneLoading, onReady should still fire', async(() => {
+    service.onReady.subscribe(() => {
+      expect(service.doneLoading).toBeTruthy();
+
+      service.onReady.subscribe(() => {
+        expect(service.doneLoading).toBeTruthy();
+      });
+    });
+  }));
+
   function hasKey(obj: object, key: string): boolean {
     return obj.hasOwnProperty(key);
   }

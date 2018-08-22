@@ -34,6 +34,25 @@ describe('ChartComponent', () => {
     return null;
   }
 
+  it('should fire ready events', (done) => {
+    fixture = TestBed.createComponent(GoogleChartComponent);
+      component = fixture.componentInstance;
+      component.type = "BarChart";
+      component.data = [
+        ['Copper', 8.94],
+        ['Silver', 10.49],
+        ['Gold', 19.30],
+        ['Platinum', 21.45]
+      ];
+      component.columnNames = ['Element', 'Density'];
+  
+      fixture.detectChanges();
+
+      component.ready.subscribe(() => {
+        done();
+      });
+  });
+
   describe('BarChart tests', () => {
     beforeEach((done) => {
       fixture = TestBed.createComponent(GoogleChartComponent);
@@ -109,11 +128,27 @@ describe('ChartComponent', () => {
   });
 
   describe('events', () => {
+    beforeEach((done) => {
+      fixture = TestBed.createComponent(GoogleChartComponent);
+      component = fixture.componentInstance;
+      component.type = "BarChart";
+      component.title = "My Bar Chart";
+      component.data = [
+        ['Copper', 8.94],
+        ['Silver', 10.49],
+        ['Gold', 19.30],
+        ['Platinum', 21.45]
+      ];
+      component.columnNames = ['Element', 'Density'];
+  
+      fixture.detectChanges();
+
+      component.ready.subscribe(() => {
+        done();
+      });
+    });
+
     it('should fire hover events', async(() => {
-
-    }));
-
-    it('should fire ready event', async(() => {
 
     }));
 
@@ -123,12 +158,34 @@ describe('ChartComponent', () => {
   });
 
   describe('advanced charts', () => {
-    it('should load the table chart package', async(() => {
+    it('should load the table chart package', (done) => {
+      fixture = TestBed.createComponent(GoogleChartComponent);
+      component = fixture.componentInstance;
+      component.type = "Table";
+      component.data = [];
+      component.columnNames = [];
+  
+      fixture.detectChanges();
 
-    }));
+      component.ready.subscribe(() => {
+        expect(google.visualization.Table).toBeDefined();
 
-    it('should create a material chart', async(() => {
+        done();
+      });
+    });
 
+    it('should load the material chart package', async(() => {
+      fixture = TestBed.createComponent(GoogleChartComponent);
+      component = fixture.componentInstance;
+      component.type = "Bar";
+      component.data = [];
+      component.columnNames = [];
+  
+      fixture.detectChanges();
+
+      component.ready.subscribe(() => {
+        expect((<any>google.charts).Bar).toBeDefined();
+      });
     }));
   });
 });

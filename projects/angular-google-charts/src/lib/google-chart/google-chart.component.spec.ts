@@ -2,7 +2,6 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GoogleChartComponent } from './google-chart.component';
 import { ScriptLoaderService } from '../script-loader/script-loader.service';
-import { element } from 'protractor';
 
 describe('ChartComponent', () => {
   let component: GoogleChartComponent;
@@ -149,11 +148,11 @@ describe('ChartComponent', () => {
     });
 
     it('should fire hover events', async(() => {
-
+      // TODO
     }));
 
     it('should fire select event', async(() => {
-
+      // TODO
     }));
   });
 

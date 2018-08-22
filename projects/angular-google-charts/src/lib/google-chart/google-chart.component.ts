@@ -89,6 +89,10 @@ export class GoogleChartComponent implements OnInit, OnChanges {
     };
   }
 
+  public getChartElement(): HTMLElement {
+    return this.element.nativeElement.firstElementChild;
+  }
+
   protected createChart() {
     this.loadNeededPackages().subscribe(() => {
       this.wrapper = new google.visualization.ChartWrapper();

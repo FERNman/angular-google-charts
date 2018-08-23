@@ -3,9 +3,9 @@ import { Observable, Subject } from 'rxjs';
 
 @Injectable()
 export class ScriptLoaderService {
-  private onLoadSubject = new Subject<boolean>();
+  private readonly scriptSource = "https://www.gstatic.com/charts/loader.js";
 
-  private doneLoading = false;
+  private onLoadSubject = new Subject<boolean>();
 
   constructor(
     @Inject(LOCALE_ID) private localeId: string
@@ -13,12 +13,32 @@ export class ScriptLoaderService {
     this.initialize();
   }
 
-  public get onLoad(): Observable<boolean> {
+  public get onReady(): Observable<boolean> {
+    if (this.doneLoading) {
+      return Observable.create(observer => {
+        observer.next(true);
+        observer.complete();
+      });
+    }
+
     return this.onLoadSubject.asObservable();
   }
 
-  public get loaded(): boolean {
-    return this.doneLoading;
+  public get doneLoading(): boolean {
+    if (typeof(google) !== "undefined") {
+      return true;
+    }
+
+    return false;
+  }
+
+  private get isLoading(): boolean {
+    if (typeof(google) === "undefined") {
+      const pageScripts = Array.from(document.getElementsByTagName("script"));
+      return pageScripts.findIndex(script => script.src === this.scriptSource) >= 0;
+    }
+
+    return false;
   }
 
   public loadChartPackages(packages: Array<string>): Observable<any> {
@@ -37,11 +57,10 @@ export class ScriptLoaderService {
   }
 
   private initialize() {
-    if (!this.doneLoading) {
+    if (!this.doneLoading && !this.isLoading) {
       const script = this.createScriptElement();
 
       script.onload = () => {
-        this.doneLoading = true;
         this.onLoadSubject.next(true);
         this.onLoadSubject.complete();
       };
@@ -57,7 +76,7 @@ export class ScriptLoaderService {
   private createScriptElement(): HTMLScriptElement {
     const script = document.createElement('script');
     script.type = 'text/javascript';
-    script.src = 'https://www.gstatic.com/charts/loader.js';
+    script.src = this.scriptSource;
     script.async = true;
     document.getElementsByTagName('head')[0].appendChild(script);
     return script;

@@ -65,13 +65,13 @@ export class GoogleChartComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit() {
-    if (this.loaderService.loaded) {
-      this.createChart();
-    } else {
-      this.loaderService.onLoad.subscribe(() => {
-        this.createChart();
-      });
+    if (!this.type ||!this.data) {
+      throw new Error("Can't create a Google Chart without passing a type and data.");
     }
+
+    this.loaderService.onReady.subscribe(() => {
+      this.createChart();
+    });
   }
 
   ngOnChanges() {
@@ -87,6 +87,10 @@ export class GoogleChartComponent implements OnInit, OnChanges {
       height: this.height,
       ...this.options
     };
+  }
+
+  public getChartElement(): HTMLElement {
+    return this.element.nativeElement.firstElementChild;
   }
 
   protected createChart() {

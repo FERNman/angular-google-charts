@@ -19,8 +19,10 @@ describe('ScriptLoaderService', () => {
   });
 
   it('should create a script object', () => {
-    var scripts = Array.from(document.getElementsByTagName("script"));
-    expect(scripts.find(script => script.src === "https://www.gstatic.com/charts/loader.js" && script.type === "text/javascript")).toBeTruthy();
+    const scripts = Array.from(document.getElementsByTagName('script'));
+    const googleLoaderScript = scripts.find(
+      script => script.src === 'https://www.gstatic.com/charts/loader.js' && script.type === 'text/javascript');
+    expect(googleLoaderScript).toBeTruthy();
   });
 
   it('should successfully load the google charts package', async(() => {
@@ -30,7 +32,7 @@ describe('ScriptLoaderService', () => {
   }));
 
   it('#doneLoading should match whether google is already loaded', () => {
-    if (typeof(google) === "undefined") {
+    if (typeof(google) === 'undefined') {
       expect(service.doneLoading).toBeFalsy();
     } else {
       expect(service.doneLoading).toBeTruthy();
@@ -40,26 +42,26 @@ describe('ScriptLoaderService', () => {
   it('#loadPackages should load the passed packages', async(() => {
     service.onReady.subscribe(() => {
       service.loadChartPackages(['corechart', 'bar']).subscribe(() => {
-        
+
         const loadedCharts = [
-          "AreaChart",
-          "BarChart",
-          "BubbleChart",
-          "CandlestickChart",
-          "ColumnChart",
-          "ComboChart",
-          "PieChart",
-          "Histogram",
-          "LineChart",
-          "ScatterChart",
-          "SteppedAreaChart",
+          'AreaChart',
+          'BarChart',
+          'BubbleChart',
+          'CandlestickChart',
+          'ColumnChart',
+          'ComboChart',
+          'PieChart',
+          'Histogram',
+          'LineChart',
+          'ScatterChart',
+          'SteppedAreaChart',
         ];
 
         loadedCharts.forEach(chart => {
-          expect(hasKey(google.visualization, chart)).toBeTruthy("Didn't load " + chart);
+          expect(hasKey(google.visualization, chart)).toBeTruthy('Didn\'t load ' + chart);
         });
 
-        expect(hasKey(google.charts, "Bar")).toBeTruthy("Didn't load Material Bar Chart");
+        expect(hasKey(google.charts, 'Bar')).toBeTruthy('Didn\'t load Material Bar Chart');
       });
     });
   }));
@@ -67,11 +69,11 @@ describe('ScriptLoaderService', () => {
   it('#loadPackages should be callable twice', async(() => {
     service.onReady.subscribe(() => {
       service.loadChartPackages(['treemap']).subscribe(() => {
-        expect(hasKey(google.visualization, "TreeMap")).toBeTruthy();
+        expect(hasKey(google.visualization, 'TreeMap')).toBeTruthy();
       });
 
       service.loadChartPackages(['table']).subscribe(() => {
-        expect(hasKey(google.visualization, "Table")).toBeTruthy();
+        expect(hasKey(google.visualization, 'Table')).toBeTruthy();
       });
     });
   }));

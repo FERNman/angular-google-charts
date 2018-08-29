@@ -1,7 +1,8 @@
-import { NgModule } from "@angular/core";
-import { Routes, RouterModule } from "@angular/router";
-import { TestComponent } from "./test/test.component";
-import { MainComponent } from "./main/main.component";
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+
+import { TestComponent } from './test/test.component';
+import { MainComponent } from './main/main.component';
 
 const routes: Routes = [
     { path: 'app', component: MainComponent },
@@ -17,4 +18,4 @@ const routes: Routes = [
         RouterModule
     ]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

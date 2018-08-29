@@ -19,11 +19,11 @@ describe('ChartComponent', () => {
 
   function findInChildren(parent: HTMLElement, comparison: (el: HTMLElement) => boolean): HTMLElement {
     const children = Array.from(parent.children);
-    for(let child of children) {
+    for (const child of children) {
       if (comparison(<HTMLElement>child)) {
         return <HTMLElement>child;
       } else {
-        let found = findInChildren(<HTMLElement>child, comparison);
+        const found = findInChildren(<HTMLElement>child, comparison);
         if (found) {
           return found;
         }
@@ -36,7 +36,7 @@ describe('ChartComponent', () => {
   it('should fire ready events', (done) => {
     fixture = TestBed.createComponent(GoogleChartComponent);
       component = fixture.componentInstance;
-      component.type = "BarChart";
+      component.type = 'BarChart';
       component.data = [
         ['Copper', 8.94],
         ['Silver', 10.49],
@@ -44,7 +44,7 @@ describe('ChartComponent', () => {
         ['Platinum', 21.45]
       ];
       component.columnNames = ['Element', 'Density'];
-  
+
       fixture.detectChanges();
 
       component.ready.subscribe(() => {
@@ -56,8 +56,8 @@ describe('ChartComponent', () => {
     beforeEach((done) => {
       fixture = TestBed.createComponent(GoogleChartComponent);
       component = fixture.componentInstance;
-      component.type = "BarChart";
-      component.title = "My Bar Chart";
+      component.type = 'BarChart';
+      component.title = 'My Bar Chart';
       component.data = [
         ['Copper', 8.94],
         ['Silver', 10.49],
@@ -65,7 +65,7 @@ describe('ChartComponent', () => {
         ['Platinum', 21.45]
       ];
       component.columnNames = ['Element', 'Density'];
-  
+
       fixture.detectChanges();
 
       component.ready.subscribe(() => {
@@ -83,10 +83,10 @@ describe('ChartComponent', () => {
       const chartElement = component.getChartElement();
       expect(chartElement).not.toBeNull();
     });
-  
+
     it('should set the title correctly', () => {
       const chartElement = component.getChartElement();
-      const title = findInChildren(chartElement, element => element.textContent === "My Bar Chart");
+      const title = findInChildren(chartElement, element => element.textContent === 'My Bar Chart');
       expect(title).not.toBeNull();
     });
 
@@ -102,23 +102,23 @@ describe('ChartComponent', () => {
       component.ready.subscribe(() => {
         const chartElement = component.getChartElement();
         const copperBar = findInChildren(chartElement, element => {
-          const attr = element.attributes.getNamedItem("stroke");
-          return attr ? attr.value === "#b87333" : false;
+          const attr = element.attributes.getNamedItem('stroke');
+          return attr ? attr.value === '#b87333' : false;
         });
-        
+
         const silverBar = findInChildren(chartElement, element => {
-          const attr = element.attributes.getNamedItem("stroke");
-          return attr ? attr.value === "#c0c0c0" : false;
+          const attr = element.attributes.getNamedItem('stroke');
+          return attr ? attr.value === '#c0c0c0' : false;
         });
         const goldBar = findInChildren(chartElement, element => {
-          const attr = element.attributes.getNamedItem("stroke");
-          return attr ? attr.value === "#ffd700" : false;
+          const attr = element.attributes.getNamedItem('stroke');
+          return attr ? attr.value === '#ffd700' : false;
         });
 
         expect(copperBar).not.toBeNull();
         expect(silverBar).not.toBeNull();
         expect(goldBar).not.toBeNull();
-        
+
         done();
       });
 
@@ -130,8 +130,8 @@ describe('ChartComponent', () => {
     beforeEach((done) => {
       fixture = TestBed.createComponent(GoogleChartComponent);
       component = fixture.componentInstance;
-      component.type = "BarChart";
-      component.title = "My Bar Chart";
+      component.type = 'BarChart';
+      component.title = 'My Bar Chart';
       component.data = [
         ['Copper', 8.94],
         ['Silver', 10.49],
@@ -139,7 +139,7 @@ describe('ChartComponent', () => {
         ['Platinum', 21.45]
       ];
       component.columnNames = ['Element', 'Density'];
-  
+
       fixture.detectChanges();
 
       component.ready.subscribe(() => {
@@ -160,10 +160,10 @@ describe('ChartComponent', () => {
     it('should load the table chart package', (done) => {
       fixture = TestBed.createComponent(GoogleChartComponent);
       component = fixture.componentInstance;
-      component.type = "Table";
+      component.type = 'Table';
       component.data = [];
       component.columnNames = [];
-  
+
       fixture.detectChanges();
 
       component.ready.subscribe(() => {
@@ -176,10 +176,10 @@ describe('ChartComponent', () => {
     it('should load the material chart package', async(() => {
       fixture = TestBed.createComponent(GoogleChartComponent);
       component = fixture.componentInstance;
-      component.type = "Bar";
+      component.type = 'Bar';
       component.data = [];
       component.columnNames = [];
-  
+
       fixture.detectChanges();
 
       component.ready.subscribe(() => {

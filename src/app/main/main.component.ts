@@ -35,7 +35,7 @@ export class MainComponent implements OnInit {
         startup: true
       }
     }
-  }
+  };
 
   @ViewChild('chart')
   chart: GoogleChartComponent;
@@ -207,23 +207,23 @@ export class MainComponent implements OnInit {
   }
 
   onReady() {
-    console.log("Chart ready");
+    console.log('Chart ready');
   }
 
   onError(error: ChartErrorEvent) {
-    console.log("Error: " + error.toString());
+    console.log('Error: ' + error.toString());
   }
 
   onSelect(event: ChartEvent) {
-    console.log("Selected: " + event.toString());
+    console.log('Selected: ' + event.toString());
   }
 
   onMouseEnter(event: ChartEvent) {
-    console.log("Hovering " + event.toString());
+    console.log('Hovering ' + event.toString());
   }
 
   onMouseLeave(event: ChartEvent) {
-    console.log("No longer hovering " + event.toString());
+    console.log('No longer hovering ' + event.toString());
   }
 
   ngOnInit() {

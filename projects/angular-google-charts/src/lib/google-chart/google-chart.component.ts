@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { GoogleChartPackagesHelper } from '../helpers/google-chart-packages.helper';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'google-chart',
   template: '',
   styles: [':host { width: fit-content; display: block; }'],
@@ -28,10 +29,10 @@ export class GoogleChartComponent implements OnInit, OnChanges {
   title: string;
 
   @Input()
-  width: number = 400;
+  width = 400;
 
   @Input()
-  height: number = 400;
+  height = 400;
 
   @Input()
   options: any = {};
@@ -65,8 +66,8 @@ export class GoogleChartComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit() {
-    if (!this.type ||!this.data) {
-      throw new Error("Can't create a Google Chart without passing a type and data.");
+    if (!this.type || !this.data) {
+      throw new Error('Can\'t create a Google Chart without passing a type and data.');
     }
 
     this.loaderService.onReady.subscribe(() => {
@@ -111,7 +112,7 @@ export class GoogleChartComponent implements OnInit, OnChanges {
     this.wrapper.setChartType(this.type);
     this.wrapper.setDataTable(dataTable);
     this.wrapper.setOptions(this.parsedOptions);
-    
+
     this.removeChartEvents();
     this.registerChartEvents();
 

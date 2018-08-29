@@ -141,8 +141,8 @@ The `title` property is optional and provided for convenice. It can also be incl
 <google-chart [width]="myWidth"></google-chart>
 ```
 
-The `width` property is optional and allows to set the width of the chart. The number provided will be converted to a pixel value. The default is `400px`.
-It should be used instead of the `width` property in the `options` object.
+The `width` property is optional and allows to set the width of the chart. The number provided will be converted to a pixel value. The default is `undefined`, which makes the chart figure out its width by itself.
+You can also set the width using css, which has the advantage of allowing `%` values instead of only pixels. For more information on that, see [dynamic resize](#dynamic-resize).
 
 ### Height
 `number`
@@ -151,8 +151,8 @@ It should be used instead of the `width` property in the `options` object.
 <google-chart [height]="myHeight"></google-chart>
 ```
 
-The `height` property is optional and allows to set the height of the chart. The number provided will be converted to a pixel value. The default is `400px`.
-It should be used instead of the `height` property in the `options` object.
+The `height` property is optional and allows to set the height of the chart. The number provided will be converted to a pixel value. The default is `undefined`, which makes the chart figure out its height by itself.
+You can also set the height using css, which has the advantage of allowing `%` values instead of only pixels. For more information on that, see [dynamic resize](#dynamic-resize).
 
 ### Options
 `object`
@@ -189,6 +189,16 @@ myFormatter = [
 ```
 
 For more information and all formatter types, please refer to the [documentation](https://google-developers.appspot.com/chart/interactive/docs/reference#formatters).
+
+### Dynamic Resize
+`boolean`
+
+```html
+<google-chart [dynamicResize]="dynamicResize"></google-chart>
+```
+
+The `dynamicResize` property is optional and makes your chart listen on `window.resize` events to adapt it's size.
+Defaults to `false` and should only be used when setting the width or height of the chart to a percentage value. Otherwise, the chart gets redrawn unnecessary and therefore slows down the site.
 
 ## Animations
 

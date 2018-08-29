@@ -29,10 +29,10 @@ export class GoogleChartComponent implements OnInit, OnChanges {
   title: string;
 
   @Input()
-  width = 400;
+  width: number = undefined;
 
   @Input()
-  height = 400;
+  height: number = undefined;
 
   @Input()
   options: any = {};

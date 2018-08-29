@@ -60,6 +60,12 @@ describe('ChartComponent', () => {
       // no need for more expect() functions
     });
 
+    it('should load the corechart package', () => {
+      expect(google.visualization.BarChart).toBeDefined();
+      expect(google.visualization.AreaChart).toBeDefined();
+      expect(google.visualization.BubbleChart).toBeDefined();
+    });
+
     it ('should match parent width', () => {
       const chartElement = component.getChartElement();
       const chartContainer = chartElement.parentElement;
@@ -68,6 +74,23 @@ describe('ChartComponent', () => {
       component.ngOnChanges();
 
       const chartParent = chartContainer.parentElement;
+      expect(chartContainer.clientWidth).toEqual(chartParent.clientWidth);
+    });
+
+    it ('should resize on window resize', () => {
+      const chartElement = component.getChartElement();
+      component.dynamicResize = true;
+
+      const chartContainer = chartElement.parentElement;
+      chartContainer.style.width = '100%';
+
+      component.ngOnChanges();
+
+      const chartParent = chartContainer.parentElement;
+      chartParent.style.width = '1000px';
+
+      component.onResize(null);
+
       expect(chartContainer.clientWidth).toEqual(chartParent.clientWidth);
     });
   });
@@ -91,12 +114,6 @@ describe('ChartComponent', () => {
       component.ready.subscribe(() => {
         done();
       });
-    });
-
-    it('should load the corechart package', () => {
-      expect(google.visualization.BarChart).toBeDefined();
-      expect(google.visualization.AreaChart).toBeDefined();
-      expect(google.visualization.BubbleChart).toBeDefined();
     });
 
     it('should render a simple bar chart', () => {

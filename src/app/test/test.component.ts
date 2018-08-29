@@ -9,8 +9,8 @@ import { Location } from '@angular/common';
 export class TestComponent implements OnInit {
 
   chart = {
-    title: "Test Chart",
-    type: "BarChart",
+    title: 'Test Chart',
+    type: 'BarChart',
     data: [
       ['Copper', 8.94],
       ['Silver', 10.49],

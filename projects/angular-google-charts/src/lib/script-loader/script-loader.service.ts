@@ -3,7 +3,7 @@ import { Observable, Subject } from 'rxjs';
 
 @Injectable()
 export class ScriptLoaderService {
-  private readonly scriptSource = "https://www.gstatic.com/charts/loader.js";
+  private readonly scriptSource = 'https://www.gstatic.com/charts/loader.js';
 
   private onLoadSubject = new Subject<boolean>();
 
@@ -25,7 +25,7 @@ export class ScriptLoaderService {
   }
 
   public get doneLoading(): boolean {
-    if (typeof(google) !== "undefined") {
+    if (typeof(google) !== 'undefined') {
       return true;
     }
 
@@ -33,8 +33,8 @@ export class ScriptLoaderService {
   }
 
   private get isLoading(): boolean {
-    if (typeof(google) === "undefined") {
-      const pageScripts = Array.from(document.getElementsByTagName("script"));
+    if (typeof(google) === 'undefined') {
+      const pageScripts = Array.from(document.getElementsByTagName('script'));
       return pageScripts.findIndex(script => script.src === this.scriptSource) >= 0;
     }
 
@@ -47,7 +47,7 @@ export class ScriptLoaderService {
         packages: packages,
         language: this.localeId
       };
-  
+
       google.charts.load('45.2', config);
       google.charts.setOnLoadCallback(() => {
         observer.next();
@@ -66,8 +66,8 @@ export class ScriptLoaderService {
       };
 
       script.onerror = () => {
-        console.error("Failed to load the google chart script!");
-        this.onLoadSubject.error("Failed to load the google chart script!");
+        console.error('Failed to load the google chart script!');
+        this.onLoadSubject.error('Failed to load the google chart script!');
         this.onLoadSubject.complete();
       };
     }

@@ -21,6 +21,18 @@ import { GoogleChartsModule } from 'angular-google-charts';
 export class AppModule {}
 ```
 
+And create a `google-chart` component somewhere in your application:
+
+```html
+<google-chart
+  [title]="chart.title"
+  [type]="chart.type"
+  [data]="chart.data"
+  [columnNames]="chart.columnNames"
+  [options]="chart.options">
+</google-chart>
+```
+
 ## Install
 
 With [npm](https://npmjs.org/) installed, run

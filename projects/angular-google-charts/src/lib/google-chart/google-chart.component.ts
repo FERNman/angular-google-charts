@@ -1,6 +1,9 @@
 /// <reference types="google.visualization"/>
 
-import { Component, OnInit, ElementRef, Input, ChangeDetectionStrategy, OnChanges, Output, EventEmitter } from '@angular/core';
+import {
+  Component, OnInit, ElementRef, Input, ChangeDetectionStrategy,
+  OnChanges, Output, EventEmitter, HostListener
+} from '@angular/core';
 import { ChartErrorEvent, ChartEvent } from '../models/events.model';
 import { ScriptLoaderService } from '../script-loader/script-loader.service';
 import { Observable } from 'rxjs';
@@ -29,10 +32,13 @@ export class GoogleChartComponent implements OnInit, OnChanges {
   title: string;
 
   @Input()
-  width = 400;
+  width: number = undefined;
 
   @Input()
-  height = 400;
+  height: number = undefined;
+
+  @Input()
+  dynamicResize = false;
 
   @Input()
   options: any = {};
@@ -88,6 +94,15 @@ export class GoogleChartComponent implements OnInit, OnChanges {
       height: this.height,
       ...this.options
     };
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    if (this.dynamicResize) {
+      if (this.wrapper) {
+        this.updateChart();
+      }
+    }
   }
 
   public getChartElement(): HTMLElement {

@@ -33,23 +33,66 @@ describe('ChartComponent', () => {
     return null;
   }
 
-  it('should fire ready events', (done) => {
-    fixture = TestBed.createComponent(GoogleChartComponent);
+  describe('Generic Chart tests', () => {
+    beforeEach((done) => {
+      fixture = TestBed.createComponent(GoogleChartComponent);
       component = fixture.componentInstance;
-      component.type = 'BarChart';
+      component.type = 'PieChart';
+      component.title = 'My Chart';
       component.data = [
-        ['Copper', 8.94],
-        ['Silver', 10.49],
-        ['Gold', 19.30],
-        ['Platinum', 21.45]
+        ['Mushrooms', 3],
+        ['Onions', 1],
+        ['Olives', 1],
+        ['Zucchini', 1],
+        ['Pepperoni', 2]
       ];
-      component.columnNames = ['Element', 'Density'];
+      component.columnNames = ['Topping', 'Slices'];
 
       fixture.detectChanges();
 
       component.ready.subscribe(() => {
         done();
       });
+    });
+
+    it('should fire ready events', () => {
+      // if we ever come here, beforeEach called done(), so component.ready works.
+      // no need for more expect() functions
+    });
+
+    it('should load the corechart package', () => {
+      expect(google.visualization.BarChart).toBeDefined();
+      expect(google.visualization.AreaChart).toBeDefined();
+      expect(google.visualization.BubbleChart).toBeDefined();
+    });
+
+    it ('should match parent width', () => {
+      const chartElement = component.getChartElement();
+      const chartContainer = chartElement.parentElement;
+      chartContainer.style.width = '100%';
+
+      component.ngOnChanges();
+
+      const chartParent = chartContainer.parentElement;
+      expect(chartContainer.clientWidth).toEqual(chartParent.clientWidth);
+    });
+
+    it ('should resize on window resize', () => {
+      const chartElement = component.getChartElement();
+      component.dynamicResize = true;
+
+      const chartContainer = chartElement.parentElement;
+      chartContainer.style.width = '100%';
+
+      component.ngOnChanges();
+
+      const chartParent = chartContainer.parentElement;
+      chartParent.style.width = '1000px';
+
+      component.onResize(null);
+
+      expect(chartContainer.clientWidth).toEqual(chartParent.clientWidth);
+    });
   });
 
   describe('BarChart tests', () => {
@@ -71,12 +114,6 @@ describe('ChartComponent', () => {
       component.ready.subscribe(() => {
         done();
       });
-    });
-
-    it('should load the corechart package', () => {
-      expect(google.visualization.BarChart).toBeDefined();
-      expect(google.visualization.AreaChart).toBeDefined();
-      expect(google.visualization.BubbleChart).toBeDefined();
     });
 
     it('should render a simple bar chart', () => {
@@ -101,11 +138,11 @@ describe('ChartComponent', () => {
 
       component.ready.subscribe(() => {
         const chartElement = component.getChartElement();
+
         const copperBar = findInChildren(chartElement, element => {
           const attr = element.attributes.getNamedItem('stroke');
           return attr ? attr.value === '#b87333' : false;
         });
-
         const silverBar = findInChildren(chartElement, element => {
           const attr = element.attributes.getNamedItem('stroke');
           return attr ? attr.value === '#c0c0c0' : false;

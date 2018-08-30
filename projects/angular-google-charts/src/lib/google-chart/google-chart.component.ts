@@ -72,9 +72,8 @@ export class GoogleChartComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit() {
-    if (!this.type || !this.data) {
-      throw new Error('Can\'t create a Google Chart without passing a type and data.');
-    }
+    if (this.type == null) { throw new Error('Can\'t create a Google Chart without specifying a type!'); }
+    if (this.data == null) { throw new Error('Can\'t create a Google Chart without data!'); }
 
     this.loaderService.onReady.subscribe(() => {
       this.createChart();

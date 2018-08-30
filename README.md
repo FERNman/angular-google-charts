@@ -316,6 +316,35 @@ export class AppComponent implements OnInit {
 
 When doing so, you are completely free to create the chart by yourself. Please refer to the (ChartWrapper Documentation)[https://developers.google.com/chart/interactive/docs/reference#chartwrapper-class] on how to do this.
 
+## Custom Components
+
+For some specific types of Google Charts, it may be required to create a custom component. To be able to do so, the ScriptLoaderService (the service that loads the GoogleCharts Library) can be injected into your component.
+
+```typescript
+constructor( private loaderService: ScriptLoaderService ) {}
+```
+
+And in your OnInit method (or whereever you'd want to create your chart):
+
+```typescript
+ngOnInit() {
+  this.loaderService.onReady.subscribe( () => {
+    this.loaderService.loadChartPackages(this.type).subscribe(() => {
+      // Start creating your chart now
+      // Example:
+      const formatter = new google.visualization.BarFormat();
+    });
+
+  });
+}
+```
+
+To pass a Chart Type into a Google Chart Package name, you can use the `GoogleChartPackagesHelper`.
+
+```typescript
+const type = GoogleChartPackagesHelper.getPackageForChartName('BarChart');
+```
+
 ## AngularCLI
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.

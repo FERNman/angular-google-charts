@@ -77,7 +77,7 @@ describe('ChartComponent', () => {
       expect(chartContainer.clientWidth).toEqual(chartParent.clientWidth);
     });
 
-    it ('should resize on window resize', () => {
+    it ('should resize on window resize', (done) => {
       const chartElement = component.getChartElement();
       component.dynamicResize = true;
 
@@ -85,13 +85,17 @@ describe('ChartComponent', () => {
       chartContainer.style.width = '100%';
 
       component.ngOnChanges();
+      component.ngAfterViewInit();
 
       const chartParent = chartContainer.parentElement;
       chartParent.style.width = '1000px';
 
-      component.onResize(null);
+      window.dispatchEvent(new Event('resize'));
 
-      expect(chartContainer.clientWidth).toEqual(chartParent.clientWidth);
+      setTimeout(() => {
+        expect(chartContainer.clientWidth).toEqual(chartParent.clientWidth);
+        done();
+      }, 200);
     });
   });
 

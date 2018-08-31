@@ -1,19 +1,59 @@
 version: 2
-jobs:
-  build:
-    working_directory: ~/my-project
+
+default: &defaults
+  working_directory: ~/angular-google-charts
     docker:
-      # specify the version you desire here
-      # see https://hub.docker.com/r/circleci/node/tags/
       - image: circleci/node:8-browsers
+
+jobs:
+  test:
+    <<: *defaults
     steps:
       - checkout
+      
       - restore_cache:
-          key: my-project-{{ .Branch }}-{{ checksum "package-lock.json" }}
+          keys:
+          - v1-dependencies-.
+          # fallback to using the latest cache if no exact match is found
+	        - v1-dependencies-
+
       - run: npm install
-      - save_cache:
-          key: my-project-{{ .Branch }}-{{ checksum "package-lock.json" }}
-          paths:
-             - "node_modules"
       - run: npm run test -- angular-google-charts --watch=false --progress=false
-      - run: npm run e2e -- --protractor-config=./e2e/protractor-ci.conf.js
+
+      - save_cache:
+          key: v1-dependecies-
+          paths:
+             - node_modules
+
+      - persist_to_workspace:
+          root: ~/angular-google-charts
+          paths: .
+          
+  deploy:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+        at: ~/angular-google-charts
+      - run:
+        name: Authenticate with registry
+        command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/angular-google-charts/.npmrc
+      - run:
+        name: Publish package
+        command: npm publish
+
+workflows:
+  version: 2
+  test-deploy:
+    jobs:
+      - test:
+          filters:
+            tags:
+              only: /^v.*/
+      - deploy:
+          requires:
+            - test
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/

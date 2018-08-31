@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "test": "ng test",
+    "start": "ng serve -o",
+    "build": "ng build --prod angular-google-charts",
+    "test": "ng test angular-google-charts",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },

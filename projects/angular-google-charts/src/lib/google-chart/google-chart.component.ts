@@ -2,11 +2,13 @@
 
 import {
   Component, OnInit, ElementRef, Input, ChangeDetectionStrategy,
-  OnChanges, Output, EventEmitter, HostListener
+  OnChanges, Output, EventEmitter, HostListener, AfterViewInit
 } from '@angular/core';
+import { Observable, fromEvent } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+
 import { ChartErrorEvent, ChartEvent } from '../models/events.model';
 import { ScriptLoaderService } from '../script-loader/script-loader.service';
-import { Observable } from 'rxjs';
 import { GoogleChartPackagesHelper } from '../helpers/google-chart-packages.helper';
 
 @Component({
@@ -17,7 +19,7 @@ import { GoogleChartPackagesHelper } from '../helpers/google-chart-packages.help
   exportAs: 'google-chart',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GoogleChartComponent implements OnInit, OnChanges {
+export class GoogleChartComponent implements OnInit, AfterViewInit, OnChanges {
 
   @Input()
   data: Array<Array<string | number>>;
@@ -80,6 +82,10 @@ export class GoogleChartComponent implements OnInit, OnChanges {
     });
   }
 
+  ngAfterViewInit() {
+    this.addResizeListener();
+  }
+
   ngOnChanges() {
     if (this.wrapper) {
       this.updateChart();
@@ -93,15 +99,6 @@ export class GoogleChartComponent implements OnInit, OnChanges {
       height: this.height,
       ...this.options
     };
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    if (this.dynamicResize) {
-      if (this.wrapper) {
-        this.updateChart();
-      }
-    }
   }
 
   public getChartElement(): HTMLElement {
@@ -158,6 +155,14 @@ export class GoogleChartComponent implements OnInit, OnChanges {
         this.formatter.format(dataTable, i);
       }
     }
+  }
+
+  private addResizeListener() {
+    fromEvent(window, 'resize')
+      .pipe(debounceTime(100))
+      .subscribe(() => {
+        this.ngOnChanges();
+      });
   }
 
   private removeChartEvents() {

@@ -105,7 +105,7 @@ myColumnNames = ['City', 'Inhabitants'];
 ```
 
 ### Roles
-`Array<object>`
+`Array<{role: string, type: string}>`
 
 ```html
 <google-chart [roles]="myRoles"></google-chart>

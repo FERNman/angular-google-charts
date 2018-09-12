@@ -71,6 +71,25 @@ export class MainComponent implements OnInit {
     });
 
     this.charts.push({
+      title: 'Styled Line Chart',
+      type: 'LineChart',
+      columnNames: ['Element', 'Density'],
+      roles: [
+        {type: 'number', role: 'interval'},
+        {type: 'number', role: 'interval'},
+        {type: 'string', role: 'annotation'},
+        {type: 'string', role: 'annotationText'},
+        {type: 'boolean', role: 'certainty'}
+      ],
+      data: [
+        ['April', 1000, 900, 1100, 'A', 'Stolen data', true],
+        ['May', 1170, 1000, 1200, 'B', 'Coffee spill', true],
+        ['June', 660, 550, 800, 'C', 'Wumpus attack', true],
+        ['July', 1030, null, null, null, null, false]
+      ]
+    });
+
+    this.charts.push({
       title: 'Material Bar Chart',
       type: 'Bar',
       columnNames: ['Year', 'Sales', 'Expenses', 'Profit'],

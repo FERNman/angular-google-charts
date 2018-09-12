@@ -115,7 +115,7 @@ The `roles` property is optional and can be used for additional, row specific st
 
 ```typescript
 myRoles = [
-  { role: 'style' }
+  { role: 'style', type: 'string' }
 ];
 
 myData = [

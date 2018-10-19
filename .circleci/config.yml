@@ -2,25 +2,21 @@ version: 2
 
 default: &defaults
   working_directory: ~/angular-google-charts
-    docker:
-      - image: circleci/node:8-browsers
+  docker:
+    - image: circleci/node:8-browsers
 
 jobs:
   build:
     <<: *defaults
     steps:
       - checkout
-      
       - restore_cache:
-          key: angular-google-charts-{{ .Branch }}-{{ checksum "package-lock.json" }}
-
+          key: angular-google-charts-{{ checksum "package-lock.json" }}
       - run: npm install
-
       - save_cache:
-          key: angular-google-charts-{{ .Branch }}-{{ checksum "package-lock.json" }}
+          key: angular-google-charts-{{ checksum "package-lock.json" }}
           paths:
              - node_modules
-      
       - persist_to_workspace:
           root: ~/angular-google-charts
           paths: .
@@ -32,7 +28,7 @@ jobs:
         at: ~/angular-google-charts
       - run: 
         name: Run Tests
-        command: npm run test -- angular-google-charts --watch=false --progress=false
+        command: npm run test angular-google-charts --watch=false --progress=false
           
   deploy:
     <<: *defaults
@@ -48,7 +44,7 @@ jobs:
 
 workflows:
   version: 2
-  test-deploy:
+  build-test-deploy:
     jobs:
       - build
       - test:

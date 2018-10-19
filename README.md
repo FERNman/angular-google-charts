@@ -23,13 +23,36 @@ import { GoogleChartsModule } from 'angular-google-charts';
   ...
   imports: [
     ...
-    GoogleChartsModule,
+    GoogleChartsModule.forRoot(),
     ...
   ],
   ...
 })
 export class AppModule {}
 ```
+
+If you want to use GeoCharts, you may want to provide a Maps API Key. More information on this can be found in the [official documentation](https://developers.google.com/chart/interactive/docs/basic_load_libs#load-settings).
+
+To do so, just add your Maps API Key in the `GoogleChartsModule.forRoot()` method like this:
+
+```typescript
+import { GoogleChartsModule } from 'angular-google-charts';
+
+@NgModule({
+  ...
+  imports: [
+    ...
+    GoogleChartsModule.forRoot('my-custom-maps-api-key'),
+    ...
+  ],
+  ...
+})
+export class AppModule {}
+```
+
+*Note:*
+
+It is not necessary to import the `GoogleChartsModule` by calling its `forRoot` method. You can simply import the module as well.
 
 ## Charts
 

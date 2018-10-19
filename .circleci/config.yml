@@ -11,8 +11,9 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: angular-google-charts-{{ checksum "package-lock.json" }}
-          key: angular-google-charts-
+          keys:
+            - angular-google-charts-{{ checksum "package-lock.json" }}
+            - angular-google-charts-
       - run: npm install
       - save_cache:
           key: angular-google-charts-{{ checksum "package-lock.json" }}

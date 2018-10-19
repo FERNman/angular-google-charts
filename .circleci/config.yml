@@ -25,22 +25,22 @@ jobs:
     <<: *defaults
     steps:
       - attach_workspace:
-        at: ~/angular-google-charts
+          at: ~/angular-google-charts
       - run: 
-        name: Run Tests
-        command: npm run test angular-google-charts --watch=false --progress=false
+          name: Run Tests
+          command: npm run test angular-google-charts --watch=false --progress=false
           
   deploy:
     <<: *defaults
     steps:
       - attach_workspace:
-        at: ~/angular-google-charts
+          at: ~/angular-google-charts
       - run:
-        name: Authenticate with registry
-        command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/angular-google-charts/.npmrc
+          name: Authenticate with registry
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/angular-google-charts/.npmrc
       - run:
-        name: Publish package
-        command: npm publish
+          name: Publish package
+          command: npm publish
 
 workflows:
   version: 2

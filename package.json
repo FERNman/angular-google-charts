@@ -6,6 +6,7 @@
     "start": "ng serve -o",
     "build": "ng build --prod angular-google-charts",
     "test": "ng test angular-google-charts",
+    "ci-test": "ng test angular-google-charts --watch=false --progress=false",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },

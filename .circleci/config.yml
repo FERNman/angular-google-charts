@@ -38,11 +38,11 @@ jobs:
       - attach_workspace:
           at: ~/angular-google-charts
       - run:
-          name: Authenticate with registry
-          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/angular-google-charts/.npmrc
-      - run:
           name: Build in production
           command: npm run build
+      - run:
+          name: Authenticate with registry
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/angular-google-charts/dist/angular-google-charts/.npmrc
       - run:
           name: Publish package
           command: cd dist/angular-google-charts && npm publish

@@ -24,7 +24,12 @@ jobs:
       - persist_to_workspace:
           root: ~/angular-google-charts
           paths: .
-      
+
+  test:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+        at: ~/angular-google-charts
       - run: 
         name: Run Tests
         command: npm run test -- angular-google-charts --watch=false --progress=false
@@ -45,15 +50,16 @@ workflows:
   version: 2
   test-deploy:
     jobs:
+      - build
       - test:
-          filters:
-            tags:
-              only: /^v.*/
+          requires: 
+            - build
       - deploy:
           requires:
+            - build
             - test
           filters:
             tags:
               only: /^v.*/
             branches:
-              ignore: /.*/
+              only: master

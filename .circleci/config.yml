@@ -2,60 +2,65 @@ version: 2
 
 default: &defaults
   working_directory: ~/angular-google-charts
-    docker:
-      - image: circleci/node:8-browsers
+  docker:
+    - image: circleci/node:8-browsers
 
 jobs:
-  test:
+  build:
     <<: *defaults
     steps:
       - checkout
-      
       - restore_cache:
           keys:
-            - v1-dependencies-
-            # fallback to using the latest cache if no exact match is found
-	          - v1-dependencies-
-
+            - angular-google-charts-{{ checksum "package-lock.json" }}
+            - angular-google-charts-
       - run: npm install
-      - run: 
-        name: Run Tests
-        command: npm run test -- angular-google-charts --watch=false --progress=false
-
       - save_cache:
-          key: v1-dependecies-
+          key: angular-google-charts-{{ checksum "package-lock.json" }}
           paths:
              - node_modules
-
       - persist_to_workspace:
           root: ~/angular-google-charts
           paths: .
+
+  test:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/angular-google-charts
+      - run: 
+          name: Run Tests
+          command: npm run ci-test
           
   deploy:
     <<: *defaults
     steps:
       - attach_workspace:
-        at: ~/angular-google-charts
+          at: ~/angular-google-charts
       - run:
-        name: Authenticate with registry
-        command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/angular-google-charts/.npmrc
+          name: Build in production
+          command: npm run build
       - run:
-        name: Publish package
-        command: npm publish
+          name: Authenticate with registry
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/angular-google-charts/dist/angular-google-charts/.npmrc
+      - run:
+          name: Publish package
+          command: cd dist/angular-google-charts && npm publish
 
 workflows:
   version: 2
-  test-deploy:
+  build-test-deploy:
     jobs:
+      - build
       - test:
-          filters:
-            tags:
-              only: /^v.*/
+          requires: 
+            - build
       - deploy:
           requires:
+            - build
             - test
           filters:
-            tags:
-              only: /^v.*/
             branches:
               ignore: /.*/
+            tags:
+              only: /^v[0-9]+(\.[0-9]+)*/

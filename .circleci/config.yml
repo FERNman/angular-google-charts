@@ -43,11 +43,9 @@ jobs:
       - run:
           name: Build in production
           command: npm run build
-      working_directory:
-          ~/angular-google-charts/dist/angular-google-charts
       - run:
           name: Publish package
-          command: npm publish
+          command: cd dist/angular-google-charts && npm publish
 
 workflows:
   version: 2

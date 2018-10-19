@@ -1,4 +1,4 @@
-import { Injectable, Inject, LOCALE_ID } from '@angular/core';
+import { Injectable, Inject, LOCALE_ID, Optional } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
 @Injectable()
@@ -8,7 +8,8 @@ export class ScriptLoaderService {
   private onLoadSubject = new Subject<boolean>();
 
   constructor(
-    @Inject(LOCALE_ID) private localeId: string
+    @Inject(LOCALE_ID) private localeId: string,
+    @Optional() private googleApiKey: string
   ) {
     this.initialize();
   }

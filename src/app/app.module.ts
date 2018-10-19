@@ -1,5 +1,4 @@
 import { BrowserModule } from '@angular/platform-browser';
-
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
@@ -17,7 +16,7 @@ import { MainComponent } from './main/main.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    GoogleChartsModule
+    GoogleChartsModule.forRoot('AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY')
   ],
   providers: [],
   bootstrap: [AppComponent]

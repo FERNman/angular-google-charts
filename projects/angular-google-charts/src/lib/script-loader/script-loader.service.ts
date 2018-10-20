@@ -1,6 +1,8 @@
 import { Injectable, Inject, LOCALE_ID, Optional } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
+import { GOOGLE_API_KEY } from '../models/injection-tokens.model';
+
 @Injectable()
 export class ScriptLoaderService {
   private readonly scriptSource = 'https://www.gstatic.com/charts/loader.js';
@@ -9,7 +11,7 @@ export class ScriptLoaderService {
 
   constructor(
     @Inject(LOCALE_ID) private localeId: string,
-    @Optional() private googleApiKey: string
+    @Inject(GOOGLE_API_KEY) @Optional() private googleApiKey?: string
   ) {
     this.initialize();
   }
@@ -46,7 +48,8 @@ export class ScriptLoaderService {
     return Observable.create(observer => {
       const config = {
         packages: packages,
-        language: this.localeId
+        language: this.localeId,
+        mapsApiKey: this.googleApiKey
       };
 
       google.charts.load('45.2', config);

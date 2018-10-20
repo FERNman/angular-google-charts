@@ -2,8 +2,7 @@ import { NgModule, Provider, LOCALE_ID, InjectionToken, ModuleWithProviders } fr
 
 import { ScriptLoaderService } from './script-loader/script-loader.service';
 import { GoogleChartComponent } from './google-chart/google-chart.component';
-
-export const GOOGLE_API_KEY = new InjectionToken<string>('GOOGLE_API_KEY');
+import { GOOGLE_API_KEY } from './models/injection-tokens.model';
 
 export const GOOGLE_CHARTS_PROVIDERS: Provider[] = [
   {
@@ -38,6 +37,6 @@ export class GoogleChartsModule {
   }
 }
 
-function setupScriptLoaderService(localeId: string, googleApiKey: string): ScriptLoaderService {
+export function setupScriptLoaderService(localeId: string, googleApiKey: string): ScriptLoaderService {
   return new ScriptLoaderService(localeId, googleApiKey);
 }

@@ -282,7 +282,7 @@ export class MainComponent implements OnInit {
   }
 
   onError(error: ChartErrorEvent) {
-    console.log('Error: ' + error.toString());
+    console.error('Error: ' + error.message.toString());
   }
 
   onSelect(event: ChartEvent) {

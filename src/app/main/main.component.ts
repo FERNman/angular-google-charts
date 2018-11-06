@@ -13,7 +13,7 @@ export class MainComponent implements OnInit {
     title: string,
     type: string,
     data: Array<Array<string | number | {}>>,
-    roles: Array<{type: string, role: string}>,
+    roles: Array<{type: string, role: string, index?: number}>,
     columnNames?: Array<string>,
     options?: {}
   }> = [];
@@ -68,6 +68,50 @@ export class MainComponent implements OnInit {
         ['Gold', 19.30, 'gold'],
         ['Platinum', 21.45, 'color: #e5e4e2' ],
       ]
+    });
+
+    this.charts.push({
+      title: 'Bar Chart',
+      type: 'BarChart',
+      columnNames: ['City', '2010 Population', '2000 Population'],
+      roles: [
+        { role: 'annotation', type: 'string', index: 1 },
+        { role: 'annotation', type: 'string', index: 2 },
+      ],
+      data: [
+        ['New York City, NY', 8175000, '8.1M', 8008000, '8M'],
+        ['Los Angeles, CA', 3792000, '3.8M', 3694000,  '3.7M'],
+        ['Chicago, IL', 2695000, '2.7M', 2896000, '2.9M'],
+        ['Houston, TX', 2099000, '2.1M', 1953000, '2.0M'],
+        ['Philadelphia, PA', 1526000, '1.5M', 1517000, '1.5M']
+      ],
+      options: {
+        annotations: {
+          alwaysOutside: true,
+          textStyle: {
+            fontSize: 12,
+            auraColor: 'none',
+            color: '#555'
+          },
+          boxStyle: {
+            stroke: '#ccc',
+            strokeWidth: 1,
+            gradient: {
+              color1: '#f3e5f5',
+              color2: '#f3e5f5',
+              x1: '0%', y1: '0%',
+              x2: '100%', y2: '100%'
+            }
+          }
+        },
+        hAxis: {
+          title: 'Total Population',
+          minValue: 0,
+        },
+        vAxis: {
+          title: 'City'
+        }
+      }
     });
 
     this.charts.push({
@@ -221,7 +265,15 @@ export class MainComponent implements OnInit {
         [3, 3.5],
         [6.5, 7]
       ],
-      roles: []
+      roles: [],
+      options: {
+        explorer: {
+          actions: ['dragToZoom', 'rightClickToReset'],
+          keepInBounds: true,
+          maxZoomIn: 4,
+          zoomDelta: 1
+        }
+      }
     });
   }
 

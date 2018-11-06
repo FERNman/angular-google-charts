@@ -28,7 +28,7 @@ export class GoogleChartComponent implements OnInit, AfterViewInit, OnChanges {
   columnNames: Array<string>;
 
   @Input()
-  roles: Array<{type: string, role: string}> = new Array();
+  roles: Array<{type: string, role: string, index?: number}> = new Array();
 
   @Input()
   title: string;
@@ -132,8 +132,25 @@ export class GoogleChartComponent implements OnInit, AfterViewInit, OnChanges {
 
   protected getDataTable(): google.visualization.DataTable {
     if (this.columnNames) {
+      const columns: Array<any> = this.columnNames;
+
+      if (this.roles) {
+        this.roles.forEach(role => {
+          const roleData = {
+            type: role.type,
+            role: role.role
+          };
+
+          if (role.index != null) {
+            columns.splice(role.index + 1, 0, roleData);
+          } else {
+            columns.push(roleData);
+          }
+        });
+      }
+
       return google.visualization.arrayToDataTable([
-        [...this.columnNames, ...this.roles],
+        columns,
         ...this.data
       ], false);
     } else {

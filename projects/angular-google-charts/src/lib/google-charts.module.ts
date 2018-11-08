@@ -26,7 +26,7 @@ export const GOOGLE_CHARTS_PROVIDERS: Provider[] = [
   ]
 })
 export class GoogleChartsModule {
-  public static forRoot(googleApiKey?: string): ModuleWithProviders<GoogleChartsModule> {
+  public static forRoot(googleApiKey?: string): ModuleWithProviders {
     return {
       ngModule: GoogleChartsModule,
       providers: [

@@ -1,6 +1,7 @@
 import { NgModule, Provider, LOCALE_ID, InjectionToken, ModuleWithProviders } from '@angular/core';
 
 import { ScriptLoaderService } from './script-loader/script-loader.service';
+import { RawChartComponent } from './raw-chart/raw-chart.component';
 import { GoogleChartComponent } from './google-chart/google-chart.component';
 import { GOOGLE_API_KEY } from './models/injection-tokens.model';
 
@@ -19,10 +20,12 @@ export const GOOGLE_CHARTS_PROVIDERS: Provider[] = [
     ScriptLoaderService
   ],
   declarations: [
-    GoogleChartComponent
+    GoogleChartComponent,
+    RawChartComponent
   ],
   exports: [
-    GoogleChartComponent
+    GoogleChartComponent,
+    RawChartComponent
   ]
 })
 export class GoogleChartsModule {

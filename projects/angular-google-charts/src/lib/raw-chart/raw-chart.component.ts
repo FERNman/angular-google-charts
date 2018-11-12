@@ -18,10 +18,10 @@ import { GoogleChartPackagesHelper } from "../helpers/google-chart-packages.help
 export class RawChartComponent implements OnInit, OnChanges, AfterViewInit {
   
   @Input()
-  rawData: google.visualization.ChartSpecs;
+  chartData: google.visualization.ChartSpecs;
 
   @Input()
-  formatter: any | Array<{ formatter: any, colIndex: number }>;
+  formatter: google.visualization.DefaultFormatter | Array<{ formatter: google.visualization.DefaultFormatter, colIndex: number }>;
 
   @Input()
   dynamicResize = false;
@@ -49,7 +49,7 @@ export class RawChartComponent implements OnInit, OnChanges, AfterViewInit {
   ) { }
 
   ngOnInit() {
-    if (this.rawData == null) { throw new Error('Can\'t create a Google Chart without data!'); }
+    if (this.chartData == null) { throw new Error('Can\'t create a Google Chart without data!'); }
 
     this.loaderService.onReady.subscribe(() => {
       this.createChart();
@@ -79,21 +79,21 @@ export class RawChartComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   protected loadNeededPackages(): Observable<any> {
-    return this.loaderService.loadChartPackages([GoogleChartPackagesHelper.getPackageForChartName(this.rawData.chartType)]);
+    return this.loaderService.loadChartPackages([GoogleChartPackagesHelper.getPackageForChartName(this.chartData.chartType)]);
   }
 
   protected updateChart() {
-    if (this.rawData.dataTable) {
-      this.formatData(<google.visualization.DataTable>this.rawData.dataTable);
+    if (this.chartData.dataTable) {
+      this.formatData(<google.visualization.DataTable>this.chartData.dataTable);
     }
 
-    this.wrapper.setChartType(this.rawData.chartType);
-    this.wrapper.setDataTable(<google.visualization.DataTable>this.rawData.dataTable);
-    this.wrapper.setOptions(this.rawData.options);
-    this.wrapper.setDataSourceUrl(this.rawData.dataSourceUrl);
-    this.wrapper.setQuery(this.rawData.query);
-    this.wrapper.setRefreshInterval(this.rawData.refreshInterval);
-    this.wrapper.setView(this.rawData.view);
+    this.wrapper.setChartType(this.chartData.chartType);
+    this.wrapper.setDataTable(<google.visualization.DataTable>this.chartData.dataTable);
+    this.wrapper.setOptions(this.chartData.options);
+    this.wrapper.setDataSourceUrl(this.chartData.dataSourceUrl);
+    this.wrapper.setQuery(this.chartData.query);
+    this.wrapper.setRefreshInterval(this.chartData.refreshInterval);
+    this.wrapper.setView(this.chartData.view);
 
     this.removeChartEvents();
     this.registerChartEvents();

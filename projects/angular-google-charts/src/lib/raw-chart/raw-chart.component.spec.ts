@@ -37,7 +37,7 @@ describe('RawChartComponent', () => {
     beforeEach((done) => {
       fixture = TestBed.createComponent(RawChartComponent);
       component = fixture.componentInstance;
-      component.rawData = {
+      component.chartData = {
         chartType: 'BarChart',
         dataTable: [
           ['Topping', 'Slices'],
@@ -107,7 +107,7 @@ describe('RawChartComponent', () => {
     beforeEach((done) => {
       fixture = TestBed.createComponent(RawChartComponent);
       component = fixture.componentInstance;
-      component.rawData = {
+      component.chartData = {
         chartType: 'BarChart',
         dataTable: [
           ['Element', 'Density'],
@@ -140,7 +140,7 @@ describe('RawChartComponent', () => {
     });
 
     it('should format the data', (done) => {
-      component.rawData.dataTable = [
+      component.chartData.dataTable = [
         ['Element', 'Density', { role: 'style', type: 'string' }],
         ['Copper', 8.94, '#b87333'],
         ['Silver', 10.49, 'silver'],
@@ -179,7 +179,7 @@ describe('RawChartComponent', () => {
     beforeEach((done) => {
       fixture = TestBed.createComponent(RawChartComponent);
       component = fixture.componentInstance;
-      component.rawData = {
+      component.chartData = {
         chartType: 'BarChart',
         dataTable: [
           ['Element', 'Density'],
@@ -213,7 +213,7 @@ describe('RawChartComponent', () => {
     it('should load the table chart package', (done) => {
       fixture = TestBed.createComponent(RawChartComponent);
       component = fixture.componentInstance;
-      component.rawData = {
+      component.chartData = {
         chartType: 'Table',
         dataTable: [],
       };
@@ -230,7 +230,7 @@ describe('RawChartComponent', () => {
     it('should load the material chart package', async(() => {
       fixture = TestBed.createComponent(RawChartComponent);
       component = fixture.componentInstance;
-      component.rawData = {
+      component.chartData = {
         chartType: 'Bar'
       };
 

@@ -53,7 +53,7 @@ export class GoogleChartComponent extends RawChartComponent implements OnInit, O
     if (this.type == null) { throw new Error('Can\'t create a Google Chart without specifying a type!'); }
     if (this.data == null) { throw new Error('Can\'t create a Google Chart without data!'); }
 
-    this.rawData = {
+    this.chartData = {
       chartType: this.type
     };
 
@@ -64,7 +64,7 @@ export class GoogleChartComponent extends RawChartComponent implements OnInit, O
 
   ngOnChanges() {
     if (this.wrapper) {
-      this.rawData = {
+      this.chartData = {
         chartType: this.type,
         dataTable: this.getDataTable(),
         options: this.parseOptions()
@@ -85,7 +85,7 @@ export class GoogleChartComponent extends RawChartComponent implements OnInit, O
 
   protected createChart() {
     this.loadNeededPackages().subscribe(() => {
-      this.rawData = {
+      this.chartData = {
         chartType: this.type,
         dataTable: this.getDataTable(),
         options: this.parseOptions()

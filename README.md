@@ -58,20 +58,24 @@ It is not necessary to import the `GoogleChartsModule` by calling its `forRoot` 
 
 To create a chart, you have to possible components to use, the `RawChartComponent` and the `GoogleChartComponent`.
 
-### RawChartComponent
+### Raw Chart Component
 
 ```html
 <raw-chart></raw-chart>
 ```
 
-#### ChartData
+This component is really not more than a wrapper around the basic Google-Charts `ChartWrapper`. It provides a bit of extra functionality, such as automatically
+resizing when the width of the parent changes.
+
+#### Chart Data
 `google.visualization.ChartSpecs`
 
 ```html
 <raw-chart chartData="myChartData"></raw-chart>
 ```
 
-The chart data is an object that allows you to pass all chart configuration options at once. Please refer to the [Google documentation]()
+The chart data is an object that allows you to pass all chart configuration options at once. Please refer to the [Google documentation](https://developers.google.com/chart/interactive/docs/drawing_charts#chartwrapper) for more information. Everything you can pass to the ChartWrapper can be
+passed here as well.
 
 #### Formatter
 `Array<{formatter: google.visualization.DefaultFormatter, colIndex: number}> | google.visualization.DefaultFormatter`
@@ -93,6 +97,8 @@ myFormatter = [
 
 For more information and all formatter types, please refer to the [documentation](https://google-developers.appspot.com/chart/interactive/docs/reference#formatters).
 
+*Note: When you get the error "google is not defined" whilst using the formatter in your component, you probably didn't load the script. Please see [CustomComponents](CustomComponents)*.
+
 #### Dynamic Resize
 `boolean`
 
@@ -103,7 +109,7 @@ For more information and all formatter types, please refer to the [documentation
 The `dynamicResize` property is optional and makes your chart listen on `window.resize` events to adapt it's size.
 Defaults to `false` and should only be used when setting the width or height of the chart to a percentage value. Otherwise, the chart gets redrawn unnecessary and therefore slows down the site.
 
-### GoogleChartComponent
+### Google Chart Component
 
 ```html
 <google-chart></google-chart>

@@ -68,7 +68,7 @@ export class GoogleChartComponent extends RawChartComponent implements OnInit, O
         chartType: this.type,
         dataTable: this.getDataTable(),
         options: this.parseOptions()
-      }; 
+      };
     }
 
     super.ngOnChanges();
@@ -119,8 +119,8 @@ export class GoogleChartComponent extends RawChartComponent implements OnInit, O
         if (role.index != null) {
           columnNames.splice(role.index + 1, 0, roleData);
 
-          for (let otherRole of this.roles) {
-            if (otherRole == role) {
+          for (const otherRole of this.roles) {
+            if (otherRole === role) {
               continue;
             }
 
@@ -128,8 +128,7 @@ export class GoogleChartComponent extends RawChartComponent implements OnInit, O
               otherRole.index++;
             }
           }
-        }
-        else {
+        } else {
           columnNames.push(roleData);
         }
       });

@@ -1,14 +1,17 @@
 /// <reference types="google.visualization"/>
 
-import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, ElementRef, OnInit, OnChanges, AfterViewInit } from "@angular/core";
-import { Observable, fromEvent } from "rxjs";
-import { debounceTime } from "rxjs/operators";
+import {
+  Component, ChangeDetectionStrategy, Input, Output, EventEmitter, ElementRef, OnInit, OnChanges, AfterViewInit
+} from '@angular/core';
+import { Observable, fromEvent } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
-import { ChartErrorEvent, ChartEvent } from "../models/events.model";
-import { ScriptLoaderService } from "../script-loader/script-loader.service";
-import { GoogleChartPackagesHelper } from "../helpers/google-chart-packages.helper";
+import { ChartErrorEvent, ChartEvent } from '../models/events.model';
+import { ScriptLoaderService } from '../script-loader/script-loader.service';
+import { GoogleChartPackagesHelper } from '../helpers/google-chart-packages.helper';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'raw-chart',
   template: '',
   styles: [':host { width: fit-content; display: block; }'],
@@ -16,7 +19,7 @@ import { GoogleChartPackagesHelper } from "../helpers/google-chart-packages.help
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RawChartComponent implements OnInit, OnChanges, AfterViewInit {
-  
+
   @Input()
   chartData: google.visualization.ChartSpecs;
 

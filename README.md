@@ -56,15 +56,69 @@ It is not necessary to import the `GoogleChartsModule` by calling its `forRoot` 
 
 ## Charts
 
-To create a chart, simply use the `google-chart` component in your templates like this:
+To create a chart, you have to possible components to use, the `RawChartComponent` and the `GoogleChartComponent`.
+
+### Raw Chart Component
+
+```html
+<raw-chart></raw-chart>
+```
+
+This component is really not more than a wrapper around the basic Google-Charts `ChartWrapper`. It provides a bit of extra functionality, such as automatically
+resizing when the width of the parent changes.
+
+#### Chart Data
+`google.visualization.ChartSpecs`
+
+```html
+<raw-chart chartData="myChartData"></raw-chart>
+```
+
+The chart data is an object that allows you to pass all chart configuration options at once. Please refer to the [Google documentation](https://developers.google.com/chart/interactive/docs/drawing_charts#chartwrapper) for more information. Everything you can pass to the ChartWrapper can be
+passed here as well.
+
+#### Formatter
+`Array<{formatter: google.visualization.DefaultFormatter, colIndex: number}> | google.visualization.DefaultFormatter`
+
+```html
+<google-chart [formatter]="myFormatter"></google-chart>
+```
+
+The `formatter` property is optional and allows to format the chart data. You can pass in either a formatter class instance or an array of objects containing a formatter and an index.
+If passing a formatter class instance, every column will be formatted according to it. When passing in an array, you can specify which columns to format.
+
+```typescript
+// Formats the column with the index 1 and 3 to Date(long)
+myFormatter = [
+  { formatter: new google.visualization.Dateformat({formatType: 'long'}), colIndex: 1 },
+  { formatter: new google.visualization.Dateformat({formatType: 'long'}), colIndex: 3 }
+];
+```
+
+For more information and all formatter types, please refer to the [documentation](https://google-developers.appspot.com/chart/interactive/docs/reference#formatters).
+
+*Note: When you get the error "google is not defined" whilst using the formatter in your component, you probably didn't load the script. Please see [CustomComponents](CustomComponents)*.
+
+#### Dynamic Resize
+`boolean`
+
+```html
+<google-chart [dynamicResize]="dynamicResize"></google-chart>
+```
+
+The `dynamicResize` property is optional and makes your chart listen on `window.resize` events to adapt it's size.
+Defaults to `false` and should only be used when setting the width or height of the chart to a percentage value. Otherwise, the chart gets redrawn unnecessary and therefore slows down the site.
+
+### Google Chart Component
 
 ```html
 <google-chart></google-chart>
 ```
 
-The component provides a few input properties for convenience.
+The component provides a few input properties for convenience. It extends the RawChartComponent under the hood, so everything
+that's possible in the `RawChartComponent` also works in the `GoogleChartComponent`.
 
-### Type (required)
+#### Type (required)
 `string`
 
 ```html
@@ -81,7 +135,7 @@ The type specifies which type of chart you want to display. It requires a string
 
 For more chart types and information, please see the [google chart gallery](https://google-developers.appspot.com/chart/interactive/docs/gallery).
 
-### Data (required)
+#### Data (required)
 `Array<Array<any>>`
 
 ```html
@@ -128,17 +182,19 @@ myColumnNames = ['City', 'Inhabitants'];
 ```
 
 ### Roles
-`Array<{role: string, type: string}>`
+`Array<{ role: string, type: string, index?: number }>`
 
 ```html
 <google-chart [roles]="myRoles"></google-chart>
 ```
 
 The `roles` property is optional and can be used for additional, row specific styling options. If provided, the length of the array must match the length of the roles provided in each of the inner arrays of the data object.
+The optional `index` attribute can be used to place roles relative to columns. When specified, the role will be inserted **after** 
+after the `ColumnName` at the given index. If it is not specified (*default*), all roles will be appended at the back of the `ColumnNames`. 
 
 ```typescript
 myRoles = [
-  { role: 'style', type: 'string' }
+  { role: 'style', type: 'string', index: 2 }
 ];
 
 myData = [
@@ -192,36 +248,6 @@ myOptions = {
   is3D: true
 };
 ```
-
-### Formatter
-`Array<{formatter: any, colIndex: number}> | any`
-
-```html
-<google-chart [formatter]="myFormatter"></google-chart>
-```
-
-The `formatter` property is optional and allows to format the chart data. You can pass in either a formatter class instance or an array of objects containing a formatter and an index.
-If passing a formatter class instance, every column will be formatted according to it. When passing in an array, you can specify which columns to format.
-
-```typescript
-// Formats the column with the index 1 and 3 to Date(long)
-myFormatter = [
-  { formatter: new google.visualization.Dateformat({formatType: 'long'}), colIndex: 1 },
-  { formatter: new google.visualization.Dateformat({formatType: 'long'}), colIndex: 3 }
-];
-```
-
-For more information and all formatter types, please refer to the [documentation](https://google-developers.appspot.com/chart/interactive/docs/reference#formatters).
-
-### Dynamic Resize
-`boolean`
-
-```html
-<google-chart [dynamicResize]="dynamicResize"></google-chart>
-```
-
-The `dynamicResize` property is optional and makes your chart listen on `window.resize` events to adapt it's size.
-Defaults to `false` and should only be used when setting the width or height of the chart to a percentage value. Otherwise, the chart gets redrawn unnecessary and therefore slows down the site.
 
 ## Animations
 

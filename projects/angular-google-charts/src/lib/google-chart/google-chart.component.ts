@@ -2,14 +2,11 @@
 
 import {
   Component, OnInit, ElementRef, Input, ChangeDetectionStrategy,
-  OnChanges, Output, EventEmitter, HostListener, AfterViewInit
+  OnChanges
 } from '@angular/core';
-import { Observable, fromEvent } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
 
-import { ChartErrorEvent, ChartEvent } from '../models/events.model';
 import { ScriptLoaderService } from '../script-loader/script-loader.service';
-import { GoogleChartPackagesHelper } from '../helpers/google-chart-packages.helper';
+import { RawChartComponent } from '../raw-chart/raw-chart.component';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -19,7 +16,7 @@ import { GoogleChartPackagesHelper } from '../helpers/google-chart-packages.help
   exportAs: 'google-chart',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GoogleChartComponent implements OnInit, AfterViewInit, OnChanges {
+export class GoogleChartComponent extends RawChartComponent implements OnInit, OnChanges {
 
   @Input()
   data: Array<Array<string | number>>;
@@ -28,7 +25,7 @@ export class GoogleChartComponent implements OnInit, AfterViewInit, OnChanges {
   columnNames: Array<string>;
 
   @Input()
-  roles: Array<{type: string, role: string}> = new Array();
+  roles: Array<{type: string, role: string, index?: number}> = new Array();
 
   @Input()
   title: string;
@@ -40,59 +37,44 @@ export class GoogleChartComponent implements OnInit, AfterViewInit, OnChanges {
   height: number = undefined;
 
   @Input()
-  dynamicResize = false;
-
-  @Input()
   options: any = {};
 
   @Input()
   type: string;
 
-  @Input()
-  formatter: any | Array<{ formatter: any, colIndex: number }>;
-
-  @Output()
-  error = new EventEmitter<ChartErrorEvent>();
-
-  @Output()
-  ready = new EventEmitter();
-
-  @Output()
-  select = new EventEmitter<ChartEvent>();
-
-  @Output()
-  mouseenter = new EventEmitter<ChartEvent>();
-
-  @Output()
-  mouseleave = new EventEmitter<ChartEvent>();
-
-  wrapper: google.visualization.ChartWrapper;
-
   constructor(
-    protected element: ElementRef,
-    private loaderService: ScriptLoaderService
-  ) { }
+    element: ElementRef,
+    loaderService: ScriptLoaderService
+  ) {
+    super(element, loaderService);
+  }
 
   ngOnInit() {
     if (this.type == null) { throw new Error('Can\'t create a Google Chart without specifying a type!'); }
     if (this.data == null) { throw new Error('Can\'t create a Google Chart without data!'); }
+
+    this.chartData = {
+      chartType: this.type
+    };
 
     this.loaderService.onReady.subscribe(() => {
       this.createChart();
     });
   }
 
-  ngAfterViewInit() {
-    this.addResizeListener();
-  }
-
   ngOnChanges() {
     if (this.wrapper) {
-      this.updateChart();
+      this.chartData = {
+        chartType: this.type,
+        dataTable: this.getDataTable(),
+        options: this.parseOptions()
+      };
     }
+
+    super.ngOnChanges();
   }
 
-  protected get parsedOptions() {
+  protected parseOptions(): any {
     return {
       title: this.title,
       width: this.width,
@@ -101,39 +83,25 @@ export class GoogleChartComponent implements OnInit, AfterViewInit, OnChanges {
     };
   }
 
-  public getChartElement(): HTMLElement {
-    return this.element.nativeElement.firstElementChild;
-  }
-
   protected createChart() {
     this.loadNeededPackages().subscribe(() => {
+      this.chartData = {
+        chartType: this.type,
+        dataTable: this.getDataTable(),
+        options: this.parseOptions()
+      };
+
       this.wrapper = new google.visualization.ChartWrapper();
       this.updateChart();
     });
   }
 
-  protected loadNeededPackages(): Observable<any> {
-    return this.loaderService.loadChartPackages([GoogleChartPackagesHelper.getPackageForChartName(this.type)]);
-  }
-
-  protected updateChart() {
-    const dataTable = this.getDataTable();
-    this.formatData(dataTable);
-
-    this.wrapper.setChartType(this.type);
-    this.wrapper.setDataTable(dataTable);
-    this.wrapper.setOptions(this.parsedOptions);
-
-    this.removeChartEvents();
-    this.registerChartEvents();
-
-    this.wrapper.draw(this.element.nativeElement);
-  }
-
   protected getDataTable(): google.visualization.DataTable {
     if (this.columnNames) {
+      const columns = this.parseRoles(this.columnNames);
+
       return google.visualization.arrayToDataTable([
-        [...this.columnNames, ...this.roles],
+        columns,
         ...this.data
       ], false);
     } else {
@@ -141,47 +109,31 @@ export class GoogleChartComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
-  protected formatData(dataTable: google.visualization.DataTable) {
-    if (!this.formatter) {
-      return;
+  private parseRoles(columnNames: any[]): any[] {
+    if (this.roles) {
+      this.roles.forEach(role => {
+        const roleData = {
+          type: role.type,
+          role: role.role
+        };
+        if (role.index != null) {
+          columnNames.splice(role.index + 1, 0, roleData);
+
+          for (const otherRole of this.roles) {
+            if (otherRole === role) {
+              continue;
+            }
+
+            if (otherRole.index > role.index) {
+              otherRole.index++;
+            }
+          }
+        } else {
+          columnNames.push(roleData);
+        }
+      });
     }
 
-    if (this.formatter instanceof Array) {
-      this.formatter.forEach((value) => {
-        value.formatter.format(dataTable, value.colIndex);
-      });
-    } else {
-      for (let i = 0; i < dataTable.getNumberOfColumns(); i++) {
-        this.formatter.format(dataTable, i);
-      }
-    }
-  }
-
-  private addResizeListener() {
-    fromEvent(window, 'resize')
-      .pipe(debounceTime(100))
-      .subscribe(() => {
-        this.ngOnChanges();
-      });
-  }
-
-  private removeChartEvents() {
-    google.visualization.events.removeAllListeners(this.wrapper);
-  }
-
-  private registerChartEvents() {
-    this.registerChartEvent('ready', () => this.ready.emit('Chart Ready'));
-    this.registerChartEvent('error', (error) => this.error.emit(error));
-    this.registerChartEvent('select', () => {
-      const selection = this.wrapper.getChart().getSelection();
-      this.select.emit(selection);
-    });
-
-    this.registerChartEvent('onmouseover', (event) => this.mouseenter.emit(event));
-    this.registerChartEvent('onmouseout', (event) => this.mouseleave.emit(event));
-  }
-
-  private registerChartEvent(eventName: string, callback: Function) {
-    google.visualization.events.addListener(this.wrapper, eventName, callback);
+    return columnNames;
   }
 }

@@ -110,6 +110,7 @@ export class GoogleChartComponent extends RawChartComponent implements OnInit, O
   }
 
   private parseRoles(columnNames: any[]): any[] {
+    const columnNamesWithRoles = columnNames.slice();
     if (this.roles) {
       this.roles.forEach(role => {
         const roleData = {
@@ -117,7 +118,7 @@ export class GoogleChartComponent extends RawChartComponent implements OnInit, O
           role: role.role
         };
         if (role.index != null) {
-          columnNames.splice(role.index + 1, 0, roleData);
+          columnNamesWithRoles.splice(role.index + 1, 0, roleData);
 
           for (const otherRole of this.roles) {
             if (otherRole === role) {
@@ -129,11 +130,11 @@ export class GoogleChartComponent extends RawChartComponent implements OnInit, O
             }
           }
         } else {
-          columnNames.push(roleData);
+          columnNamesWithRoles.push(roleData);
         }
       });
     }
 
-    return columnNames;
+    return columnNamesWithRoles;
   }
 }

@@ -7,6 +7,7 @@ import {
 
 import { ScriptLoaderService } from '../script-loader/script-loader.service';
 import { RawChartComponent } from '../raw-chart/raw-chart.component';
+import {Role} from '../models/role.model';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -25,7 +26,7 @@ export class GoogleChartComponent extends RawChartComponent implements OnInit, O
   columnNames: Array<string>;
 
   @Input()
-  roles: Array<{type: string, role: string, index?: number}> = new Array();
+  roles: Array<Role> = new Array();
 
   @Input()
   title: string;
@@ -112,10 +113,13 @@ export class GoogleChartComponent extends RawChartComponent implements OnInit, O
   private parseRoles(columnNames: any[]): any[] {
     if (this.roles) {
       this.roles.forEach(role => {
-        const roleData = {
+        const roleData: Role = {
           type: role.type,
           role: role.role
         };
+        if (role.p) {
+          roleData.p = role.p;
+        }
         if (role.index != null) {
           columnNames.splice(role.index + 1, 0, roleData);
 

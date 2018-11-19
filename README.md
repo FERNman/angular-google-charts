@@ -182,7 +182,7 @@ myColumnNames = ['City', 'Inhabitants'];
 ```
 
 ### Roles
-`Array<{ role: string, type: string, index?: number }>`
+`Array<{ role: string, type: string, index?: number, p?: object }>`
 
 ```html
 <google-chart [roles]="myRoles"></google-chart>
@@ -191,6 +191,9 @@ myColumnNames = ['City', 'Inhabitants'];
 The `roles` property is optional and can be used for additional, row specific styling options. If provided, the length of the array must match the length of the roles provided in each of the inner arrays of the data object.
 The optional `index` attribute can be used to place roles relative to columns. When specified, the role will be inserted **after** 
 after the `ColumnName` at the given index. If it is not specified (*default*), all roles will be appended at the back of the `ColumnNames`. 
+The optional `p` attribute is used e.g. when you want to use html in a tooltip.
+In that case you have to set `p` with `{html: true}`.
+
 
 ```typescript
 myRoles = [
@@ -204,6 +207,7 @@ myData = [
 
 For further information, please see the [google documentation](https://google-developers.appspot.com/chart/interactive/docs/roles).
 
+For further information on the `p` attribute, please see the [google documentation](https://developers.google.com/chart/interactive/docs/reference#methods).
 ### Title
 `string`
 

@@ -1,4 +1,4 @@
-import { NgModule, Provider, LOCALE_ID, InjectionToken, ModuleWithProviders } from '@angular/core';
+import { NgModule, Provider, LOCALE_ID, ModuleWithProviders } from '@angular/core';
 
 import { ScriptLoaderService } from './script-loader/script-loader.service';
 import { RawChartComponent } from './raw-chart/raw-chart.component';

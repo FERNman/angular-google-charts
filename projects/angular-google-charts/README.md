@@ -1,6 +1,6 @@
 # angular-google-charts
 
-> A wrapper of the Google Charts library written with Angular 6
+> A wrapper of the Google Charts library written for Angular 6 & 7
 
 ## Usage
 

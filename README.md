@@ -1,6 +1,6 @@
 # Angular-Google-Charts
 
-This library provides a wrapper of the [Google Charts](https://google-developers.appspot.com/chart/) library for Angular 6+. It is built with the AngularCLI and includes some examples.
+This library provides a wrapper of the [Google Charts](https://google-developers.appspot.com/chart/) library for Angular 6 & 7. It is built with the AngularCLI and includes some examples.
 
 ## Setup
 

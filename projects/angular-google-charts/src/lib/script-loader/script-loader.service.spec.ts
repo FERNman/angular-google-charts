@@ -33,7 +33,7 @@ describe('ScriptLoaderService', () => {
     });
 
     it('#doneLoading should be false if another google package has already loaded, but GoogleCharts is not loaded', () => {
-      if (typeof(google.charts) === 'undefined') {
+      if (typeof(google) === 'undefined' || typeof(google.charts) === 'undefined') {
         expect(service.doneLoading).toBeFalsy();
       }
     });

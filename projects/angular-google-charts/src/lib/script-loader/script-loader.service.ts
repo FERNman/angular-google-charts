@@ -28,20 +28,21 @@ export class ScriptLoaderService {
   }
 
   public get doneLoading(): boolean {
-    if (typeof(google) !== 'undefined') {
-      return true;
+    if (typeof(google) === 'undefined' || typeof(google.charts) === 'undefined') {
+      return false;
     }
 
-    return false;
+    return true;
   }
 
   private get isLoading(): boolean {
-    if (typeof(google) === 'undefined') {
-      const pageScripts = Array.from(document.getElementsByTagName('script'));
-      return pageScripts.findIndex(script => script.src === this.scriptSource) >= 0;
+    if (this.doneLoading) {
+      return false;
     }
 
-    return false;
+    const pageScripts = Array.from(document.getElementsByTagName('script'));
+    const googleChartsScript = pageScripts.find(script => script.src === this.scriptSource);
+    return googleChartsScript !== undefined;
   }
 
   public loadChartPackages(packages: Array<string>): Observable<any> {

@@ -81,7 +81,7 @@ passed here as well.
 `Array<{formatter: google.visualization.DefaultFormatter, colIndex: number}> | google.visualization.DefaultFormatter`
 
 ```html
-<google-chart [formatter]="myFormatter"></google-chart>
+<raw-chart [formatter]="myFormatter"></raw-chart>
 ```
 
 The `formatter` property is optional and allows to format the chart data. You can pass in either a formatter class instance or an array of objects containing a formatter and an index.
@@ -103,11 +103,19 @@ For more information and all formatter types, please refer to the [documentation
 `boolean`
 
 ```html
-<google-chart [dynamicResize]="dynamicResize"></google-chart>
+<raw-chart [dynamicResize]="dynamicResize"></raw-chart>
 ```
 
 The `dynamicResize` property is optional and makes your chart listen on `window.resize` events to adapt it's size.
 Defaults to `false` and should only be used when setting the width or height of the chart to a percentage value. Otherwise, the chart gets redrawn unnecessary and therefore slows down the site.
+
+#### Styling
+
+```html
+<raw-chart style="width: 100%;"></raw-chart>
+```
+
+Many CSS properties work - exactly as you would expect them to - for the `raw-chart`. If you want to have the chart full-width, just set the width to 100% and it will work.
 
 ### Google Chart Component
 

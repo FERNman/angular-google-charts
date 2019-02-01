@@ -8,7 +8,7 @@ The list is of the following pattern:
 For any chart you want to create, use the `Chart name in GoogleCharts` for the type string.
 
 - Annotation Chart: `'AnnotationChart'`
-- Area Chart: `AreaChart`
+- Area Chart: `'AreaChart'`
 - Material Bar Chart: `'Bar'`
 - Bar Chart: `'BarChart'`
 - Bubble Chart: `'BubbleChart'`

@@ -13,7 +13,7 @@ export class MainComponent implements OnInit {
     title: string,
     type: string,
     data: Array<Array<string | number | {}>>,
-    roles: Array<{type: string, role: string, index?: number}>,
+    roles: Array<{ type: string, role: string, index?: number }>,
     columnNames?: Array<string>,
     options?: {}
   }> = [];
@@ -48,11 +48,11 @@ export class MainComponent implements OnInit {
       type: 'PieChart',
       columnNames: ['Task', 'Hours per Day'],
       data: [
-        ['Work',     11],
-        ['Eat',      2],
-        ['Commute',  2],
+        ['Work', 11],
+        ['Eat', 2],
+        ['Commute', 2],
         ['Watch TV', 2],
-        ['Sleep',    7]
+        ['Sleep', 7]
       ],
       roles: []
     });
@@ -66,7 +66,7 @@ export class MainComponent implements OnInit {
         ['Copper', 8.94, '#b87333'],
         ['Silver', 10.49, 'silver'],
         ['Gold', 19.30, 'gold'],
-        ['Platinum', 21.45, 'color: #e5e4e2' ],
+        ['Platinum', 21.45, 'color: #e5e4e2'],
       ]
     });
 
@@ -80,7 +80,7 @@ export class MainComponent implements OnInit {
       ],
       data: [
         ['New York City, NY', 8175000, '8.1M', 8008000, '8M'],
-        ['Los Angeles, CA', 3792000, '3.8M', 3694000,  '3.7M'],
+        ['Los Angeles, CA', 3792000, '3.8M', 3694000, '3.7M'],
         ['Chicago, IL', 2695000, '2.7M', 2896000, '2.9M'],
         ['Houston, TX', 2099000, '2.1M', 1953000, '2.0M'],
         ['Philadelphia, PA', 1526000, '1.5M', 1517000, '1.5M']
@@ -119,11 +119,11 @@ export class MainComponent implements OnInit {
       type: 'LineChart',
       columnNames: ['Element', 'Density'],
       roles: [
-        {type: 'number', role: 'interval'},
-        {type: 'number', role: 'interval'},
-        {type: 'string', role: 'annotation'},
-        {type: 'string', role: 'annotationText'},
-        {type: 'boolean', role: 'certainty'}
+        { type: 'number', role: 'interval' },
+        { type: 'number', role: 'interval' },
+        { type: 'string', role: 'annotation' },
+        { type: 'string', role: 'annotationText' },
+        { type: 'boolean', role: 'certainty' }
       ],
       data: [
         ['April', 1000, 900, 1100, 'A', 'Stolen data', true],
@@ -171,13 +171,13 @@ export class MainComponent implements OnInit {
       type: 'BubbleChart',
       columnNames: ['ID', 'X', 'Y'],
       data: [
-        ['Hallo',   80,  167],
-        ['',   79,  136],
-        ['',   78,  184],
-        ['',   72,  278],
-        ['',   81,  200],
-        ['',   72,  170],
-        ['',   68,  477]
+        ['Hallo', 80, 167],
+        ['', 79, 136],
+        ['', 78, 184],
+        ['', 72, 278],
+        ['', 81, 200],
+        ['', 72, 170],
+        ['', 68, 477]
       ],
       roles: []
     });
@@ -209,10 +209,10 @@ export class MainComponent implements OnInit {
       ],
       roles: [],
       options: {
-        vAxis: {title: 'Cups'},
-        hAxis: {title: 'Month'},
+        vAxis: { title: 'Cups' },
+        hAxis: { title: 'Month' },
         seriesType: 'bars',
-        series: {5: {type: 'line'}}
+        series: { 5: { type: 'line' } }
       }
     });
 

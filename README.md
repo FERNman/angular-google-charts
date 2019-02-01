@@ -141,6 +141,8 @@ The type specifies which type of chart you want to display. It requires a string
 - `'Bubblechart'`
 - etc.
 
+For a full list of the types available, please refer to [ChartTypes.md](./ChartTypes.md).
+
 For more chart types and information, please see the [google chart gallery](https://google-developers.appspot.com/chart/interactive/docs/gallery).
 
 #### Data (required)

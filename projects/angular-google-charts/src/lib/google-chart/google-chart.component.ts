@@ -113,7 +113,9 @@ export class GoogleChartComponent extends RawChartComponent implements OnInit, O
   private parseRoles(columnNames: any[]): any[] {
     const columnNamesWithRoles = columnNames.slice();
     if (this.roles) {
-      this.roles.forEach(role => {
+      // Roles must be copied to avoid modifying the index everytime there's a change from ngOnChanges.
+      const copyRoles = this.roles.map(role => Object.assign({}, role));
+      copyRoles.forEach(role => {
         const roleData: Role = {
           type: role.type,
           role: role.role
@@ -124,7 +126,7 @@ export class GoogleChartComponent extends RawChartComponent implements OnInit, O
         if (role.index != null) {
           columnNamesWithRoles.splice(role.index + 1, 0, roleData);
 
-          for (const otherRole of this.roles) {
+          for (const otherRole of copyRoles) {
             if (otherRole === role) {
               continue;
             }

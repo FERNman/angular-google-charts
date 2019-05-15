@@ -77,6 +77,15 @@ resizing when the width of the parent changes.
 The chart data is an object that allows you to pass all chart configuration options at once. Please refer to the [Google documentation](https://developers.google.com/chart/interactive/docs/drawing_charts#chartwrapper) for more information. Everything you can pass to the ChartWrapper can be
 passed here as well.
 
+#### First Row is Data
+`boolean`
+
+```html
+<raw-chart [firstRowIsData]="true"></raw-chart>
+```
+
+This property is necessary when you want to create a raw chart that has the first row as data row. Defaults to false as for most charts the first row is the header row.
+
 #### Formatter
 `Array<{formatter: google.visualization.DefaultFormatter, colIndex: number}> | google.visualization.DefaultFormatter`
 

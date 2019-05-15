@@ -1,5 +1,5 @@
 import { Injectable, Inject, LOCALE_ID, Optional } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, of } from 'rxjs';
 
 import { GOOGLE_API_KEY } from '../models/injection-tokens.model';
 
@@ -18,10 +18,7 @@ export class ScriptLoaderService {
 
   public get onReady(): Observable<boolean> {
     if (this.doneLoading) {
-      return Observable.create(observer => {
-        observer.next(true);
-        observer.complete();
-      });
+      return of(true);
     }
 
     return this.onLoadSubject.asObservable();
@@ -45,7 +42,7 @@ export class ScriptLoaderService {
     return googleChartsScript !== undefined;
   }
 
-  public loadChartPackages(packages: Array<string>): Observable<any> {
+  public loadChartPackages(packages: Array<string>): Observable<void> {
     return Observable.create(observer => {
       const config = {
         packages: packages,

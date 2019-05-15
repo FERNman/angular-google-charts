@@ -97,16 +97,14 @@ export class GoogleChartComponent extends RawChartComponent implements OnInit, O
     });
   }
 
-  protected getDataTable(): google.visualization.DataTable {
+  protected getDataTable(): Array<any>  {
     if (this.columnNames) {
       const columns = this.parseRoles(this.columnNames);
-
-      return google.visualization.arrayToDataTable([
-        columns,
-        ...this.data
-      ], false);
+      this.firstRowIsData = false;
+      return [columns, ...this.data];
     } else {
-      return google.visualization.arrayToDataTable(this.data, true);
+      this.firstRowIsData = true;
+      return this.data;
     }
   }
 

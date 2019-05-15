@@ -62,6 +62,7 @@ describe('RawChartComponent', () => {
     it('should fire ready events', () => {
       // if we ever come here, beforeEach called done(), so component.ready works.
       // no need for more expect() functions
+      expect(true).toBeTruthy();
     });
 
     it('should load the corechart package', () => {
@@ -139,7 +140,7 @@ describe('RawChartComponent', () => {
       expect(title).not.toBeNull();
     });
 
-    it('should format the data', (done) => {
+    it('should apply the roles', (done) => {
       component.chartData.dataTable = [
         ['Element', 'Density', { role: 'style', type: 'string' }],
         ['Copper', 8.94, '#b87333'],
@@ -167,6 +168,28 @@ describe('RawChartComponent', () => {
         expect(copperBar).not.toBeNull();
         expect(silverBar).not.toBeNull();
         expect(goldBar).not.toBeNull();
+
+        done();
+      });
+
+      component.ngOnChanges();
+    });
+
+    it('should use the format the data', (done) => {
+      component.chartData.dataTable = [
+        ['Element', 'Density'],
+        ['Copper', new Date(1990, 10, 1)],
+        ['Silver', new Date(1991, 9, 1)],
+        ['Gold', new Date(1992, 8, 1)],
+        ['Platinum', new Date(1993, 7, 1)],
+      ];
+
+      component.formatter = [{
+        formatter: new google.visualization.DateFormat({formatType: 'long'}), colIndex: 1
+      }];
+
+      component.ready.subscribe(() => {
+        // TODO: Find a way to test whether the formatter worked.
 
         done();
       });
@@ -215,30 +238,31 @@ describe('RawChartComponent', () => {
       component = fixture.componentInstance;
       component.chartData = {
         chartType: 'Table',
-        dataTable: [],
+        dataTable: [['asf', 'asdf'], [1, 1]],
       };
-
-      fixture.detectChanges();
 
       component.ready.subscribe(() => {
         expect(google.visualization.Table).toBeDefined();
 
         done();
       });
+
+      fixture.detectChanges();
     });
 
     it('should load the material chart package', async(() => {
       fixture = TestBed.createComponent(RawChartComponent);
       component = fixture.componentInstance;
       component.chartData = {
-        chartType: 'Bar'
+        chartType: 'Bar',
+        dataTable: [['test', 'asdf'],[0, 1]]
       };
-
-      fixture.detectChanges();
 
       component.ready.subscribe(() => {
         expect((<any>google.charts).Bar).toBeDefined();
       });
+
+      fixture.detectChanges();
     }));
   });
 });

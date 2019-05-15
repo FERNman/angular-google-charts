@@ -29,6 +29,9 @@ export class RawChartComponent implements OnInit, OnChanges, AfterViewInit {
   @Input()
   dynamicResize = false;
 
+  @Input()
+  firstRowIsData = false;
+
   @Output()
   error = new EventEmitter<ChartErrorEvent>();
 
@@ -45,6 +48,8 @@ export class RawChartComponent implements OnInit, OnChanges, AfterViewInit {
   mouseleave = new EventEmitter<ChartEvent>();
 
   wrapper: google.visualization.ChartWrapper;
+
+  private dataTable: google.visualization.DataTable;
 
   constructor(
     protected element: ElementRef,
@@ -64,7 +69,6 @@ export class RawChartComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   ngOnChanges() {
-
     if (this.wrapper) {
       this.updateChart();
     }
@@ -81,17 +85,20 @@ export class RawChartComponent implements OnInit, OnChanges, AfterViewInit {
     });
   }
 
-  protected loadNeededPackages(): Observable<any> {
+  protected loadNeededPackages(): Observable<void> {
     return this.loaderService.loadChartPackages([GoogleChartPackagesHelper.getPackageForChartName(this.chartData.chartType)]);
   }
 
   protected updateChart() {
-    if (this.chartData.dataTable) {
-      this.formatData(<google.visualization.DataTable>this.chartData.dataTable);
+    // This check here is important to allow passing of a created dataTable as well as just an array
+    if (!(this.chartData.dataTable instanceof google.visualization.DataTable)) {
+      this.dataTable = google.visualization.arrayToDataTable(<any[]>this.chartData.dataTable, this.firstRowIsData);
+    } else {
+      this.dataTable = this.chartData.dataTable;
     }
 
+    this.wrapper.setDataTable(this.dataTable);
     this.wrapper.setChartType(this.chartData.chartType);
-    this.wrapper.setDataTable(<google.visualization.DataTable>this.chartData.dataTable);
     this.wrapper.setOptions(this.chartData.options);
     this.wrapper.setDataSourceUrl(this.chartData.dataSourceUrl);
     this.wrapper.setQuery(this.chartData.query);
@@ -101,14 +108,14 @@ export class RawChartComponent implements OnInit, OnChanges, AfterViewInit {
     this.removeChartEvents();
     this.registerChartEvents();
 
+    if (this.formatter) {
+      this.formatData(this.dataTable);
+    }
+
     this.wrapper.draw(this.element.nativeElement);
   }
 
   protected formatData(dataTable: google.visualization.DataTable) {
-    if (!this.formatter) {
-      return;
-    }
-
     if (this.formatter instanceof Array) {
       this.formatter.forEach((value) => {
         value.formatter.format(dataTable, value.colIndex);
@@ -135,18 +142,21 @@ export class RawChartComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   private registerChartEvents() {
-    this.registerChartEvent('ready', () => this.ready.emit('Chart Ready'));
-    this.registerChartEvent('error', (error) => this.error.emit(error));
-    this.registerChartEvent('select', () => {
+    this.registerChartEvent(this.wrapper, 'ready', () => {
+      this.registerChartEvent(this.wrapper.getChart(), 'onmouseover', (event) => this.mouseenter.emit(event));
+      this.registerChartEvent(this.wrapper.getChart(), 'onmouseout', (event) => this.mouseleave.emit(event));
+
+      this.ready.emit('Chart Ready');
+    });
+
+    this.registerChartEvent(this.wrapper, 'error', (error) => this.error.emit(error));
+    this.registerChartEvent(this.wrapper, 'select', () => {
       const selection = this.wrapper.getChart().getSelection();
       this.select.emit(selection);
     });
-
-    this.registerChartEvent('onmouseover', (event) => this.mouseenter.emit(event));
-    this.registerChartEvent('onmouseout', (event) => this.mouseleave.emit(event));
   }
 
-  private registerChartEvent(eventName: string, callback: Function) {
-    google.visualization.events.addListener(this.wrapper, eventName, callback);
+  private registerChartEvent(object: any, eventName: string, callback: Function) {
+    google.visualization.events.addListener(object, eventName, callback);
   }
 }

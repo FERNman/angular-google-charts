@@ -71,7 +71,7 @@ resizing when the width of the parent changes.
 `google.visualization.ChartSpecs`
 
 ```html
-<raw-chart chartData="myChartData"></raw-chart>
+<raw-chart [chartData]="myChartData"></raw-chart>
 ```
 
 The chart data is an object that allows you to pass all chart configuration options at once. Please refer to the [Google documentation](https://developers.google.com/chart/interactive/docs/drawing_charts#chartwrapper) for more information. Everything you can pass to the ChartWrapper can be

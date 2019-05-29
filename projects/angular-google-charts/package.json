@@ -30,8 +30,8 @@
     "@types/google.visualization": "0.0.43"
   },
   "peerDependencies": {
-    "@angular/common": "^6.0.0-rc.0 || ^6.0.0",
-    "@angular/core": "^6.0.0-rc.0 || ^6.0.0"
+    "@angular/common": "^6.0.0-rc.0 || ^6.0.0 || ^7.0.0 || ^8.0.0",
+    "@angular/core": "^6.0.0-rc.0 || ^6.0.0 || ^7.0.0 || ^8.0.0"
   },
   "main": "src/public_api.ts"
 }

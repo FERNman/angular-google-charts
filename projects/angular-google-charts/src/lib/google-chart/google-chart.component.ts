@@ -1,13 +1,10 @@
 /// <reference types="google.visualization"/>
 
-import {
-  Component, OnInit, ElementRef, Input, ChangeDetectionStrategy,
-  OnChanges
-} from '@angular/core';
+import { Component, OnInit, ElementRef, Input, ChangeDetectionStrategy, OnChanges } from '@angular/core';
 
 import { ScriptLoaderService } from '../script-loader/script-loader.service';
 import { RawChartComponent } from '../raw-chart/raw-chart.component';
-import {Role} from '../models/role.model';
+import { Role } from '../models/role.model';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -18,7 +15,6 @@ import {Role} from '../models/role.model';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GoogleChartComponent extends RawChartComponent implements OnInit, OnChanges {
-
   @Input()
   data: Array<Array<string | number>>;
 
@@ -43,16 +39,17 @@ export class GoogleChartComponent extends RawChartComponent implements OnInit, O
   @Input()
   type: string;
 
-  constructor(
-    element: ElementRef,
-    loaderService: ScriptLoaderService
-  ) {
+  constructor(element: ElementRef, loaderService: ScriptLoaderService) {
     super(element, loaderService);
   }
 
   ngOnInit() {
-    if (this.type == null) { throw new Error('Can\'t create a Google Chart without specifying a type!'); }
-    if (this.data == null) { throw new Error('Can\'t create a Google Chart without data!'); }
+    if (this.type == null) {
+      throw new Error('Can\'t create a Google Chart without specifying a type!');
+    }
+    if (this.data == null) {
+      throw new Error('Can\'t create a Google Chart without data!');
+    }
 
     this.chartData = {
       chartType: this.type
@@ -97,7 +94,7 @@ export class GoogleChartComponent extends RawChartComponent implements OnInit, O
     });
   }
 
-  protected getDataTable(): Array<any>  {
+  protected getDataTable(): Array<any> {
     if (this.columnNames) {
       const columns = this.parseRoles(this.columnNames);
       this.firstRowIsData = false;

@@ -9,33 +9,20 @@ export const GOOGLE_CHARTS_PROVIDERS: Provider[] = [
   {
     provide: ScriptLoaderService,
     useFactory: setupScriptLoaderService,
-    deps: [
-      LOCALE_ID, GOOGLE_API_KEY
-    ]
+    deps: [LOCALE_ID, GOOGLE_API_KEY]
   }
 ];
 
 @NgModule({
-  providers: [
-    ScriptLoaderService
-  ],
-  declarations: [
-    GoogleChartComponent,
-    RawChartComponent
-  ],
-  exports: [
-    GoogleChartComponent,
-    RawChartComponent
-  ]
+  providers: [ScriptLoaderService],
+  declarations: [GoogleChartComponent, RawChartComponent],
+  exports: [GoogleChartComponent, RawChartComponent]
 })
 export class GoogleChartsModule {
   public static forRoot(googleApiKey?: string): ModuleWithProviders {
     return {
       ngModule: GoogleChartsModule,
-      providers: [
-        GOOGLE_CHARTS_PROVIDERS,
-        { provide: GOOGLE_API_KEY, useValue: googleApiKey ? googleApiKey : '' }
-      ]
+      providers: [GOOGLE_CHARTS_PROVIDERS, { provide: GOOGLE_API_KEY, useValue: googleApiKey ? googleApiKey : '' }]
     };
   }
 }

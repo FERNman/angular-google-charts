@@ -1,7 +1,15 @@
 /// <reference types="google.visualization"/>
 
 import {
-  Component, ChangeDetectionStrategy, Input, Output, EventEmitter, ElementRef, OnInit, OnChanges, AfterViewInit
+  Component,
+  ChangeDetectionStrategy,
+  Input,
+  Output,
+  EventEmitter,
+  ElementRef,
+  OnInit,
+  OnChanges,
+  AfterViewInit
 } from '@angular/core';
 import { Observable, fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -19,12 +27,16 @@ import { GoogleChartPackagesHelper } from '../helpers/google-chart-packages.help
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RawChartComponent implements OnInit, OnChanges, AfterViewInit {
-
   @Input()
   chartData: google.visualization.ChartSpecs;
 
   @Input()
-  formatter: google.visualization.DefaultFormatter | Array<{ formatter: google.visualization.DefaultFormatter, colIndex: number }>;
+  formatter:
+    | google.visualization.DefaultFormatter
+    | Array<{
+        formatter: google.visualization.DefaultFormatter;
+        colIndex: number;
+      }>;
 
   @Input()
   dynamicResize = false;
@@ -51,13 +63,12 @@ export class RawChartComponent implements OnInit, OnChanges, AfterViewInit {
 
   private dataTable: google.visualization.DataTable;
 
-  constructor(
-    protected element: ElementRef,
-    protected loaderService: ScriptLoaderService
-  ) { }
+  constructor(protected element: ElementRef, protected loaderService: ScriptLoaderService) {}
 
   ngOnInit() {
-    if (this.chartData == null) { throw new Error('Can\'t create a Google Chart without data!'); }
+    if (this.chartData == null) {
+      throw new Error('Can\'t create a Google Chart without data!');
+    }
 
     this.loaderService.onReady.subscribe(() => {
       this.createChart();
@@ -117,7 +128,7 @@ export class RawChartComponent implements OnInit, OnChanges, AfterViewInit {
 
   protected formatData(dataTable: google.visualization.DataTable) {
     if (this.formatter instanceof Array) {
-      this.formatter.forEach((value) => {
+      this.formatter.forEach(value => {
         value.formatter.format(dataTable, value.colIndex);
       });
     } else {
@@ -143,13 +154,13 @@ export class RawChartComponent implements OnInit, OnChanges, AfterViewInit {
 
   private registerChartEvents() {
     this.registerChartEvent(this.wrapper, 'ready', () => {
-      this.registerChartEvent(this.wrapper.getChart(), 'onmouseover', (event) => this.mouseenter.emit(event));
-      this.registerChartEvent(this.wrapper.getChart(), 'onmouseout', (event) => this.mouseleave.emit(event));
+      this.registerChartEvent(this.wrapper.getChart(), 'onmouseover', event => this.mouseenter.emit(event));
+      this.registerChartEvent(this.wrapper.getChart(), 'onmouseout', event => this.mouseleave.emit(event));
 
       this.ready.emit('Chart Ready');
     });
 
-    this.registerChartEvent(this.wrapper, 'error', (error) => this.error.emit(error));
+    this.registerChartEvent(this.wrapper, 'error', error => this.error.emit(error));
     this.registerChartEvent(this.wrapper, 'select', () => {
       const selection = this.wrapper.getChart().getSelection();
       this.select.emit(selection);

@@ -9,16 +9,10 @@ import { ScriptLoaderService } from 'projects/angular-google-charts/src/public_a
   styleUrls: ['./test.component.scss']
 })
 export class TestComponent implements OnInit {
-
   chart = {
     title: 'Test Chart',
     type: 'BarChart',
-    data: [
-      ['Copper', 8.94],
-      ['Silver', 10.49],
-      ['Gold', 19.30],
-      ['Platinum', 21.45],
-    ],
+    data: [['Copper', 8.94], ['Silver', 10.49], ['Gold', 19.3], ['Platinum', 21.45]],
     columnNames: ['Element', 'Density'],
     options: {
       animation: {
@@ -29,8 +23,7 @@ export class TestComponent implements OnInit {
     }
   };
 
-
-  rawChartData: google.visualization.ChartSpecs ={
+  rawChartData: google.visualization.ChartSpecs = {
     chartType: 'AreaChart',
     dataTable: [
       ['SMR CV', 'US Cents/KG'],
@@ -41,22 +34,19 @@ export class TestComponent implements OnInit {
       [new Date(1994, 1, 1), 160],
       [new Date(1995, 1, 1), 320],
       [new Date(1996, 1, 1), 640],
-      [new Date(1997, 1, 1), 1280],
+      [new Date(1997, 1, 1), 1280]
     ]
   };
 
   rawFormatter: any;
   private areaChartPackage = GoogleChartPackagesHelper.getPackageForChartName('AreaChart');
 
-  constructor(
-    private location: Location,
-    private loaderService: ScriptLoaderService
-  ) { }
+  constructor(private location: Location, private loaderService: ScriptLoaderService) {}
 
   ngOnInit() {
     this.loaderService.onReady.subscribe(() => {
       this.loaderService.loadChartPackages([this.areaChartPackage]).subscribe(() => {
-        this.rawFormatter = [{ formatter: new google.visualization.DateFormat({formatType: 'long'}), colIndex: 0}];
+        this.rawFormatter = [{ formatter: new google.visualization.DateFormat({ formatType: 'long' }), colIndex: 0 }];
       });
     });
   }

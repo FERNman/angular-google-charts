@@ -8,25 +8,19 @@ import { Router } from '@angular/router';
   styles: [':host > *:not(h1) { display: inline-block !important; }']
 })
 export class MainComponent implements OnInit {
-
   charts: Array<{
-    title: string,
-    type: string,
-    data: Array<Array<string | number | {}>>,
-    roles: Array<{ type: string, role: string, index?: number }>,
-    columnNames?: Array<string>,
-    options?: {}
+    title: string;
+    type: string;
+    data: Array<Array<string | number | {}>>;
+    roles: Array<{ type: string; role: string; index?: number }>;
+    columnNames?: Array<string>;
+    options?: {};
   }> = [];
 
   changingChart = {
     title: 'Changing Chart',
     type: 'BarChart',
-    data: [
-      ['Copper', 8.94],
-      ['Silver', 10.49],
-      ['Gold', 19.30],
-      ['Platinum', 21.45],
-    ],
+    data: [['Copper', 8.94], ['Silver', 10.49], ['Gold', 19.3], ['Platinum', 21.45]],
     columnNames: ['Element', 'Density'],
     options: {
       animation: {
@@ -37,23 +31,15 @@ export class MainComponent implements OnInit {
     }
   };
 
-  @ViewChild('chart')
+  @ViewChild('chart', { static: true })
   chart: GoogleChartComponent;
 
-  constructor(
-    private router: Router
-  ) {
+  constructor(private router: Router) {
     this.charts.push({
       title: 'Pie Chart',
       type: 'PieChart',
       columnNames: ['Task', 'Hours per Day'],
-      data: [
-        ['Work', 11],
-        ['Eat', 2],
-        ['Commute', 2],
-        ['Watch TV', 2],
-        ['Sleep', 7]
-      ],
+      data: [['Work', 11], ['Eat', 2], ['Commute', 2], ['Watch TV', 2], ['Sleep', 7]],
       roles: []
     });
 
@@ -62,22 +48,14 @@ export class MainComponent implements OnInit {
       type: 'BarChart',
       columnNames: ['Element', 'Density'],
       roles: [{ role: 'style', type: 'string' }],
-      data: [
-        ['Copper', 8.94, '#b87333'],
-        ['Silver', 10.49, 'silver'],
-        ['Gold', 19.30, 'gold'],
-        ['Platinum', 21.45, 'color: #e5e4e2'],
-      ]
+      data: [['Copper', 8.94, '#b87333'], ['Silver', 10.49, 'silver'], ['Gold', 19.3, 'gold'], ['Platinum', 21.45, 'color: #e5e4e2']]
     });
 
     this.charts.push({
       title: 'Bar Chart',
       type: 'BarChart',
       columnNames: ['City', '2010 Population', '2000 Population'],
-      roles: [
-        { role: 'annotation', type: 'string', index: 1 },
-        { role: 'annotation', type: 'string', index: 2 },
-      ],
+      roles: [{ role: 'annotation', type: 'string', index: 1 }, { role: 'annotation', type: 'string', index: 2 }],
       data: [
         ['New York City, NY', 8175000, '8.1M', 8008000, '8M'],
         ['Los Angeles, CA', 3792000, '3.8M', 3694000, '3.7M'],
@@ -99,14 +77,16 @@ export class MainComponent implements OnInit {
             gradient: {
               color1: '#f3e5f5',
               color2: '#f3e5f5',
-              x1: '0%', y1: '0%',
-              x2: '100%', y2: '100%'
+              x1: '0%',
+              y1: '0%',
+              x2: '100%',
+              y2: '100%'
             }
           }
         },
         hAxis: {
           title: 'Total Population',
-          minValue: 0,
+          minValue: 0
         },
         vAxis: {
           title: 'City'
@@ -138,12 +118,7 @@ export class MainComponent implements OnInit {
       type: 'Bar',
       columnNames: ['Year', 'Sales', 'Expenses', 'Profit'],
       roles: [],
-      data: [
-        ['2014', 1000, 400, 200],
-        ['2015', 1170, 460, 250],
-        ['2016', 660, 1120, 300],
-        ['2017', 1030, 540, 350]
-      ],
+      data: [['2014', 1000, 400, 200], ['2015', 1170, 460, 250], ['2016', 660, 1120, 300], ['2017', 1030, 540, 350]],
       options: {
         chart: {
           title: 'Material Bar Chart',
@@ -157,12 +132,7 @@ export class MainComponent implements OnInit {
       title: 'Area Chart',
       type: 'AreaChart',
       columnNames: ['Year', 'Sales', 'Expenses'],
-      data: [
-        ['2013', 1000, 400],
-        ['2014', 1170, 460],
-        ['2015', 660, 1120],
-        ['2016', 1030, 540]
-      ],
+      data: [['2013', 1000, 400], ['2014', 1170, 460], ['2015', 660, 1120], ['2016', 1030, 540]],
       roles: []
     });
 
@@ -170,15 +140,7 @@ export class MainComponent implements OnInit {
       title: 'Bubble Chart',
       type: 'BubbleChart',
       columnNames: ['ID', 'X', 'Y'],
-      data: [
-        ['Hallo', 80, 167],
-        ['', 79, 136],
-        ['', 78, 184],
-        ['', 72, 278],
-        ['', 81, 200],
-        ['', 72, 170],
-        ['', 68, 477]
-      ],
+      data: [['Hallo', 80, 167], ['', 79, 136], ['', 78, 184], ['', 72, 278], ['', 81, 200], ['', 72, 170], ['', 68, 477]],
       roles: []
     });
 
@@ -186,13 +148,7 @@ export class MainComponent implements OnInit {
       title: 'Candlestick Chart',
       type: 'CandlestickChart',
       columnNames: null,
-      data: [
-        ['Mon', 20, 28, 38, 45],
-        ['Tue', 31, 38, 55, 66],
-        ['Wed', 50, 55, 77, 80],
-        ['Thu', 77, 77, 66, 50],
-        ['Fri', 68, 66, 22, 15]
-      ],
+      data: [['Mon', 20, 28, 38, 45], ['Tue', 31, 38, 55, 66], ['Wed', 50, 55, 77, 80], ['Thu', 77, 77, 66, 50], ['Fri', 68, 66, 22, 15]],
       roles: null
     });
 
@@ -257,14 +213,7 @@ export class MainComponent implements OnInit {
       title: 'Scatter Chart',
       type: 'ScatterChart',
       columnNames: ['Age', 'Weight'],
-      data: [
-        [8, 12],
-        [4, 5.5],
-        [11, 14],
-        [4, 5],
-        [3, 3.5],
-        [6.5, 7]
-      ],
+      data: [[8, 12], [4, 5.5], [11, 14], [4, 5], [3, 3.5], [6.5, 7]],
       roles: [],
       options: {
         explorer: {
@@ -306,7 +255,7 @@ export class MainComponent implements OnInit {
       ['Copper', Math.random() * 20.0],
       ['Silver', Math.random() * 20.0],
       ['Gold', Math.random() * 20.0],
-      ['Platinum', Math.random() * 20.0],
+      ['Platinum', Math.random() * 20.0]
     ];
   }
 

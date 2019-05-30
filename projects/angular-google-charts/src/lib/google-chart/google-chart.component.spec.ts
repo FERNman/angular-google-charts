@@ -9,12 +9,9 @@ describe('ChartComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ GoogleChartComponent ],
-      providers: [
-        ScriptLoaderService
-      ]
-    })
-    .compileComponents();
+      declarations: [GoogleChartComponent],
+      providers: [ScriptLoaderService]
+    }).compileComponents();
   }));
 
   function findInChildren(parent: HTMLElement, comparison: (el: HTMLElement) => boolean): HTMLElement {
@@ -34,18 +31,12 @@ describe('ChartComponent', () => {
   }
 
   describe('Generic Chart tests', () => {
-    beforeEach((done) => {
+    beforeEach(done => {
       fixture = TestBed.createComponent(GoogleChartComponent);
       component = fixture.componentInstance;
       component.type = 'PieChart';
       component.title = 'My Chart';
-      component.data = [
-        ['Mushrooms', 3],
-        ['Onions', 1],
-        ['Olives', 1],
-        ['Zucchini', 1],
-        ['Pepperoni', 2]
-      ];
+      component.data = [['Mushrooms', 3], ['Onions', 1], ['Olives', 1], ['Zucchini', 1], ['Pepperoni', 2]];
       component.columnNames = ['Topping', 'Slices'];
 
       fixture.detectChanges();
@@ -66,7 +57,7 @@ describe('ChartComponent', () => {
       expect(google.visualization.BubbleChart).toBeDefined();
     });
 
-    it ('should match parent width', () => {
+    it('should match parent width', () => {
       const chartElement = component.getChartElement();
       const chartContainer = chartElement.parentElement;
       chartContainer.style.width = '100%';
@@ -77,7 +68,7 @@ describe('ChartComponent', () => {
       expect(chartContainer.clientWidth).toEqual(chartParent.clientWidth);
     });
 
-    it ('should resize on window resize', (done) => {
+    it('should resize on window resize', done => {
       const chartElement = component.getChartElement();
       component.dynamicResize = true;
 
@@ -100,17 +91,12 @@ describe('ChartComponent', () => {
   });
 
   describe('BarChart tests', () => {
-    beforeEach((done) => {
+    beforeEach(done => {
       fixture = TestBed.createComponent(GoogleChartComponent);
       component = fixture.componentInstance;
       component.type = 'BarChart';
       component.title = 'My Bar Chart';
-      component.data = [
-        ['Copper', 8.94],
-        ['Silver', 10.49],
-        ['Gold', 19.30],
-        ['Platinum', 21.45]
-      ];
+      component.data = [['Copper', 8.94], ['Silver', 10.49], ['Gold', 19.3], ['Platinum', 21.45]];
       component.columnNames = ['Element', 'Density'];
 
       fixture.detectChanges();
@@ -131,13 +117,13 @@ describe('ChartComponent', () => {
       expect(title).not.toBeNull();
     });
 
-    it('should format the data', (done) => {
+    it('should format the data', done => {
       component.roles = [{ role: 'style', type: 'string' }];
       component.data = [
         ['Copper', 8.94, '#b87333'],
         ['Silver', 10.49, 'silver'],
-        ['Gold', 19.30, 'gold'],
-        ['Platinum', 21.45, 'color: #e5e4e2' ],
+        ['Gold', 19.3, 'gold'],
+        ['Platinum', 21.45, 'color: #e5e4e2']
       ];
 
       component.ready.subscribe(() => {
@@ -168,17 +154,12 @@ describe('ChartComponent', () => {
   });
 
   describe('events', () => {
-    beforeEach((done) => {
+    beforeEach(done => {
       fixture = TestBed.createComponent(GoogleChartComponent);
       component = fixture.componentInstance;
       component.type = 'BarChart';
       component.title = 'My Bar Chart';
-      component.data = [
-        ['Copper', 8.94],
-        ['Silver', 10.49],
-        ['Gold', 19.30],
-        ['Platinum', 21.45]
-      ];
+      component.data = [['Copper', 8.94], ['Silver', 10.49], ['Gold', 19.3], ['Platinum', 21.45]];
       component.columnNames = ['Element', 'Density'];
 
       fixture.detectChanges();
@@ -198,7 +179,7 @@ describe('ChartComponent', () => {
   });
 
   describe('advanced charts', () => {
-    it('should load the table chart package', (done) => {
+    it('should load the table chart package', done => {
       fixture = TestBed.createComponent(GoogleChartComponent);
       component = fixture.componentInstance;
       component.type = 'Table';

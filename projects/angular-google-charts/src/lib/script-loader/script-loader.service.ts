@@ -9,10 +9,7 @@ export class ScriptLoaderService {
 
   private onLoadSubject = new Subject<boolean>();
 
-  constructor(
-    @Inject(LOCALE_ID) private localeId: string,
-    @Inject(GOOGLE_API_KEY) @Optional() private googleApiKey?: string
-  ) {
+  constructor(@Inject(LOCALE_ID) private localeId: string, @Inject(GOOGLE_API_KEY) @Optional() private googleApiKey?: string) {
     this.initialize();
   }
 
@@ -25,7 +22,7 @@ export class ScriptLoaderService {
   }
 
   public get doneLoading(): boolean {
-    if (typeof(google) === 'undefined' || typeof(google.charts) === 'undefined') {
+    if (typeof google === 'undefined' || typeof google.charts === 'undefined') {
       return false;
     }
 

@@ -12,15 +12,10 @@ describe('MainComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        MainComponent
-      ],
-      providers: [
-        { provide: Router, useVale: routerSpy }
-      ],
-      schemas: [ NO_ERRORS_SCHEMA ]
-    })
-    .compileComponents();
+      declarations: [MainComponent],
+      providers: [{ provide: Router, useVale: routerSpy }],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

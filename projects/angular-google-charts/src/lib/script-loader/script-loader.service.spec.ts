@@ -3,7 +3,6 @@ import { TestBed, async } from '@angular/core/testing';
 import { ScriptLoaderService } from './script-loader.service';
 
 describe('ScriptLoaderService', () => {
-
   let service: ScriptLoaderService;
 
   beforeEach(() => {
@@ -27,13 +26,13 @@ describe('ScriptLoaderService', () => {
     // TODO: Refactor these so to really check stuff
 
     it('#doneLoading should be false before the script is loaded', () => {
-      if (typeof(google) === 'undefined') {
+      if (typeof google === 'undefined') {
         expect(service.doneLoading).toBeFalsy();
       }
     });
 
     it('#doneLoading should be false if another google package has already loaded, but GoogleCharts is not loaded', () => {
-      if (typeof(google) === 'undefined' || typeof(google.charts) === 'undefined') {
+      if (typeof google === 'undefined' || typeof google.charts === 'undefined') {
         expect(service.doneLoading).toBeFalsy();
       }
     });
@@ -50,7 +49,6 @@ describe('ScriptLoaderService', () => {
     it('#loadPackages should load the passed packages', async(() => {
       service.onReady.subscribe(() => {
         service.loadChartPackages(['corechart', 'bar']).subscribe(() => {
-
           const loadedCharts = [
             'AreaChart',
             'BarChart',
@@ -62,7 +60,7 @@ describe('ScriptLoaderService', () => {
             'Histogram',
             'LineChart',
             'ScatterChart',
-            'SteppedAreaChart',
+            'SteppedAreaChart'
           ];
 
           loadedCharts.forEach(chart => {
@@ -103,11 +101,10 @@ describe('ScriptLoaderService', () => {
 
   function getGoogleLoaderScript() {
     const scripts = Array.from(document.getElementsByTagName('script'));
-    const googleLoaderScript = scripts.find(script =>
-      script.src === 'https://www.gstatic.com/charts/loader.js' &&
-      script.type === 'text/javascript');
+    const googleLoaderScript = scripts.find(
+      script => script.src === 'https://www.gstatic.com/charts/loader.js' && script.type === 'text/javascript'
+    );
 
     return googleLoaderScript;
   }
 });
-

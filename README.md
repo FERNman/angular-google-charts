@@ -50,6 +50,25 @@ import { GoogleChartsModule } from 'angular-google-charts';
 export class AppModule {}
 ```
 
+If you want to use a specific version of Google Charts, you will need to provide a Maps API Key or an empty string for the first parameter and then the charts version as a string. This must be something like this: '45.2', '45', 'current', 'upcoming', etc... More information on this can be found in the [official documentation](https://developers.google.com/chart/interactive/docs/basic_load_libs).
+
+To do so, just add your chart version in the `GoogleChartsModule.forRoot()` method like this:
+
+```typescript
+import { GoogleChartsModule } from 'angular-google-charts';
+
+@NgModule({
+  ...
+  imports: [
+    ...
+    GoogleChartsModule.forRoot('my-custom-maps-api-key or not', 'chart-version'),
+    ...
+  ],
+  ...
+})
+export class AppModule {}
+```
+
 *Note:*
 
 It is not necessary to import the `GoogleChartsModule` by calling its `forRoot` method. You can simply import the module as well.

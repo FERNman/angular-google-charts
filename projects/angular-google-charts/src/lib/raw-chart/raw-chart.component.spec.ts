@@ -200,13 +200,13 @@ describe('RawChartComponent', () => {
       });
     });
 
-    it('should fire hover events', async(() => {
+    it('should fire hover events', () => {
       // TODO
-    }));
+    });
 
-    it('should fire select event', async(() => {
+    it('should fire select event', () => {
       // TODO
-    }));
+    });
   });
 
   describe('advanced charts', () => {

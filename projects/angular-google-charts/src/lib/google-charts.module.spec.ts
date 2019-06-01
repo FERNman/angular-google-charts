@@ -11,7 +11,7 @@ describe('GoogleChartsModule', () => {
   });
 
   it('should provide ScriptLoaderService', () => {
-    expect(() => TestBed.get(ScriptLoaderService).toBeTruthy());
+    expect(TestBed.get(ScriptLoaderService)).toBeTruthy();
   });
 });
 
@@ -23,6 +23,6 @@ describe('GoogleChartsModule.forRoot()', () => {
   });
 
   it('should provide ScriptLoaderService', () => {
-    expect(() => TestBed.get(ScriptLoaderService).toBeTruthy());
+    expect(TestBed.get(ScriptLoaderService)).toBeTruthy();
   });
 });

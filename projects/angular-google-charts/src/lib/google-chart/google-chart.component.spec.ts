@@ -179,7 +179,7 @@ describe('ChartComponent', () => {
   });
 
   describe('advanced charts', () => {
-    it('should load the table chart package', done => {
+    it('should load the table chart package', async(() => {
       fixture = TestBed.createComponent(GoogleChartComponent);
       component = fixture.componentInstance;
       component.type = 'Table';
@@ -190,10 +190,8 @@ describe('ChartComponent', () => {
 
       component.ready.subscribe(() => {
         expect(google.visualization.Table).toBeDefined();
-
-        done();
       });
-    });
+    }));
 
     it('should load the material chart package', async(() => {
       fixture = TestBed.createComponent(GoogleChartComponent);

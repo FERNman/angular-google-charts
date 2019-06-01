@@ -72,7 +72,7 @@ describe('RawChartComponent', () => {
       expect(chartContainer.clientWidth).toEqual(chartParent.clientWidth);
     });
 
-    it('should resize on window resize', done => {
+    it('should resize on window resize', async(() => {
       const chartElement = component.getChartElement();
       component.dynamicResize = true;
 
@@ -89,9 +89,8 @@ describe('RawChartComponent', () => {
 
       setTimeout(() => {
         expect(chartContainer.clientWidth).toEqual(chartParent.clientWidth);
-        done();
       }, 200);
-    });
+    }));
   });
 
   describe('BarChart tests', () => {
@@ -124,7 +123,7 @@ describe('RawChartComponent', () => {
       expect(title).not.toBeNull();
     });
 
-    it('should apply the roles', done => {
+    it('should apply the roles', async(() => {
       component.chartData.dataTable = [
         ['Element', 'Density', { role: 'style', type: 'string' }],
         ['Copper', 8.94, '#b87333'],
@@ -152,14 +151,12 @@ describe('RawChartComponent', () => {
         expect(copperBar).not.toBeNull();
         expect(silverBar).not.toBeNull();
         expect(goldBar).not.toBeNull();
-
-        done();
       });
 
       component.ngOnChanges();
-    });
+    }));
 
-    it('should use the format the data', done => {
+    it('should use the format the data', async(() => {
       component.chartData.dataTable = [
         ['Element', 'Density'],
         ['Copper', new Date(1990, 10, 1)],
@@ -177,12 +174,10 @@ describe('RawChartComponent', () => {
 
       component.ready.subscribe(() => {
         // TODO: Find a way to test whether the formatter worked.
-
-        done();
       });
 
       component.ngOnChanges();
-    });
+    }));
   });
 
   describe('events', () => {
@@ -214,7 +209,7 @@ describe('RawChartComponent', () => {
   });
 
   describe('advanced charts', () => {
-    it('should load the table chart package', done => {
+    it('should load the table chart package', async(() => {
       fixture = TestBed.createComponent(RawChartComponent);
       component = fixture.componentInstance;
       component.chartData = {
@@ -224,12 +219,10 @@ describe('RawChartComponent', () => {
 
       component.ready.subscribe(() => {
         expect(google.visualization.Table).toBeDefined();
-
-        done();
       });
 
       fixture.detectChanges();
-    });
+    }));
 
     it('should load the material chart package', async(() => {
       fixture = TestBed.createComponent(RawChartComponent);

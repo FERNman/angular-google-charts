@@ -72,7 +72,7 @@ describe('RawChartComponent', () => {
       expect(chartContainer.clientWidth).toEqual(chartParent.clientWidth);
     });
 
-    it('should resize on window resize', async(() => {
+    it('should resize on window resize', done => {
       const chartElement = component.getChartElement();
       component.dynamicResize = true;
 
@@ -89,8 +89,9 @@ describe('RawChartComponent', () => {
 
       setTimeout(() => {
         expect(chartContainer.clientWidth).toEqual(chartParent.clientWidth);
+        done();
       }, 200);
-    }));
+    });
   });
 
   describe('BarChart tests', () => {

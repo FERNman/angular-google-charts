@@ -44,7 +44,7 @@ export class ScriptLoaderService {
   }
 
   public loadChartPackages(packages: Array<string>): Observable<void> {
-    return Observable.create(observer => {
+    return new Observable(observer => {
       const config = {
         packages: packages,
         language: this.localeId,

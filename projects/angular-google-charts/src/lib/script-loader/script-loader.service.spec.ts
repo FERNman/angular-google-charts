@@ -1,13 +1,21 @@
 import { TestBed, async } from '@angular/core/testing';
+import { Provider } from '@angular/core';
 
 import { ScriptLoaderService } from './script-loader.service';
+
+const SCRIPT_LOADER_PROVIDER: Provider[] = [
+  {
+    provide: ScriptLoaderService,
+    useFactory: () => new ScriptLoaderService('en-US', null, '46')
+  }
+];
 
 describe('ScriptLoaderService', () => {
   let service: ScriptLoaderService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ScriptLoaderService]
+      providers: [ScriptLoaderService, SCRIPT_LOADER_PROVIDER]
     });
 
     service = TestBed.get(ScriptLoaderService);
@@ -75,11 +83,11 @@ describe('ScriptLoaderService', () => {
     it('#loadPackages should be callable twice', async(() => {
       service.onReady.subscribe(() => {
         service.loadChartPackages(['treemap']).subscribe(() => {
-          expect(hasKey(google.visualization, 'TreeMap')).toBeTruthy();
+          expect(hasKey(google.visualization, 'TreeMap')).toBeTruthy('Didn\'t load TreeMap chart.');
         });
 
         service.loadChartPackages(['table']).subscribe(() => {
-          expect(hasKey(google.visualization, 'Table')).toBeTruthy();
+          expect(hasKey(google.visualization, 'Table')).toBeTruthy('Didn\'t load Table chart.');
         });
       });
     }));

@@ -90,7 +90,9 @@ export class RawChartComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   public clearChart(): void {
-    this.wrapper.clearChart();
+    if(this.wrapper) {
+      this.wrapper.getChart().clearChart();
+    }
   }
 
   protected createChart() {

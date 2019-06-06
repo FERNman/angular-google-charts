@@ -89,6 +89,10 @@ export class RawChartComponent implements OnInit, OnChanges, AfterViewInit {
     return this.element.nativeElement.firstElementChild;
   }
 
+  public clearChart(): void {
+    this.wrapper.clearChart();
+  }
+
   protected createChart() {
     this.loadNeededPackages().subscribe(() => {
       this.wrapper = new google.visualization.ChartWrapper();

@@ -75,7 +75,7 @@ It is not necessary to import the `GoogleChartsModule` by calling its `forRoot` 
 
 ## Charts
 
-To create a chart, you have to possible components to use, the `RawChartComponent` and the `GoogleChartComponent`.
+To create a chart, you have two possible components to use, the `RawChartComponent` and the `GoogleChartComponent`.
 
 ### Raw Chart Component
 

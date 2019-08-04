@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ChartErrorEvent, ChartEvent, GoogleChartComponent } from 'projects/angular-google-charts/src/public_api';
 import { Router } from '@angular/router';
+
+import { ChartErrorEvent, ChartEvent, GoogleChartComponent } from 'angular-google-charts';
 
 @Component({
   selector: 'app-main',
@@ -8,7 +9,7 @@ import { Router } from '@angular/router';
   styles: [':host > *:not(h1) { display: inline-block !important; }']
 })
 export class MainComponent implements OnInit {
-  charts: Array<{
+  public charts: Array<{
     title: string;
     type: string;
     data: Array<Array<string | number | {}>>;
@@ -17,7 +18,7 @@ export class MainComponent implements OnInit {
     options?: {};
   }> = [];
 
-  changingChart = {
+  public changingChart = {
     title: 'Changing Chart',
     type: 'BarChart',
     data: [['Copper', 8.94], ['Silver', 10.49], ['Gold', 19.3], ['Platinum', 21.45]],
@@ -32,7 +33,7 @@ export class MainComponent implements OnInit {
   };
 
   @ViewChild('chart', { static: true })
-  chart: GoogleChartComponent;
+  public chart: GoogleChartComponent;
 
   constructor(private router: Router) {
     this.charts.push({
@@ -226,31 +227,32 @@ export class MainComponent implements OnInit {
     });
   }
 
-  onReady() {
+  public onReady() {
     console.log('Chart ready');
   }
 
-  onError(error: ChartErrorEvent) {
+  public onError(error: ChartErrorEvent) {
     console.error('Error: ' + error.message.toString());
   }
 
-  onSelect(event: ChartEvent) {
+  public onSelect(event: ChartEvent) {
     console.log('Selected: ' + event.toString());
   }
 
-  onMouseEnter(event: ChartEvent) {
+  public onMouseEnter(event: ChartEvent) {
     console.log('Hovering ' + event.toString());
   }
 
-  onMouseLeave(event: ChartEvent) {
+  public onMouseLeave(event: ChartEvent) {
     console.log('No longer hovering ' + event.toString());
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     console.log(this.chart);
+    console.log(this.chart.wrapper);
   }
 
-  changeChart() {
+  public changeChart() {
     this.changingChart.data = [
       ['Copper', Math.random() * 20.0],
       ['Silver', Math.random() * 20.0],
@@ -259,7 +261,7 @@ export class MainComponent implements OnInit {
     ];
   }
 
-  navigateToTest() {
+  public navigateToTest() {
     this.router.navigateByUrl('/test');
   }
 }

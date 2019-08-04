@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { GoogleChartPackagesHelper } from 'projects/angular-google-charts/src/public_api';
-import { ScriptLoaderService } from 'projects/angular-google-charts/src/public_api';
+import { Component, OnInit } from '@angular/core';
+
+import { GoogleChartPackagesHelper } from 'angular-google-charts';
+import { ScriptLoaderService } from 'angular-google-charts';
 
 @Component({
   selector: 'app-test',
@@ -9,7 +10,7 @@ import { ScriptLoaderService } from 'projects/angular-google-charts/src/public_a
   styleUrls: ['./test.component.scss']
 })
 export class TestComponent implements OnInit {
-  chart = {
+  public chart = {
     title: 'Test Chart',
     type: 'BarChart',
     data: [['Copper', 8.94], ['Silver', 10.49], ['Gold', 19.3], ['Platinum', 21.45]],
@@ -23,7 +24,7 @@ export class TestComponent implements OnInit {
     }
   };
 
-  rawChartData: google.visualization.ChartSpecs = {
+  public rawChartData: google.visualization.ChartSpecs = {
     chartType: 'AreaChart',
     dataTable: [
       ['SMR CV', 'US Cents/KG'],
@@ -38,12 +39,12 @@ export class TestComponent implements OnInit {
     ]
   };
 
-  rawFormatter: any;
+  public rawFormatter: any;
   private areaChartPackage = GoogleChartPackagesHelper.getPackageForChartName('AreaChart');
 
   constructor(private location: Location, private loaderService: ScriptLoaderService) {}
 
-  ngOnInit() {
+  public ngOnInit() {
     this.loaderService.onReady.subscribe(() => {
       this.loaderService.loadChartPackages([this.areaChartPackage]).subscribe(() => {
         this.rawFormatter = [{ formatter: new google.visualization.DateFormat({ formatType: 'long' }), colIndex: 0 }];
@@ -51,7 +52,7 @@ export class TestComponent implements OnInit {
     });
   }
 
-  goBack() {
+  public goBack() {
     this.location.back();
   }
 }

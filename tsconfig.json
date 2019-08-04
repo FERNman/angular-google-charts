@@ -20,10 +20,7 @@
     ],
     "paths": {
       "angular-google-charts": [
-        "dist/angular-google-charts"
-      ],
-      "angular-google-charts/*": [
-        "dist/angular-google-charts/*"
+        "projects/angular-google-charts/src/public_api"
       ]
     }
   }

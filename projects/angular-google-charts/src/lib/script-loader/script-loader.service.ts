@@ -1,7 +1,7 @@
-import { Injectable, Inject, LOCALE_ID, Optional } from '@angular/core';
-import { Observable, Subject, of } from 'rxjs';
+import { Inject, Injectable, LOCALE_ID, Optional } from '@angular/core';
+import { Observable, of, Subject } from 'rxjs';
 
-import { GOOGLE_API_KEY, CHART_VERSION } from '../models/injection-tokens.model';
+import { CHART_VERSION, GOOGLE_API_KEY } from '../models/injection-tokens.model';
 
 @Injectable()
 export class ScriptLoaderService {

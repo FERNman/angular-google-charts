@@ -21,6 +21,7 @@
       "rxjs/Rx"
     ],
     "import-spacing": true,
+    "ordered-imports": true,
     "indent": [
       true,
       "spaces"
@@ -31,7 +32,7 @@
       true,
       140
     ],
-    "member-access": false,
+    "member-access": true,
     "member-ordering": [
       true,
       {

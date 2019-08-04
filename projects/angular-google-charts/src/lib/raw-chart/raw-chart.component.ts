@@ -1,25 +1,24 @@
 /// <reference types="google.visualization"/>
 
 import {
-  Component,
+  AfterViewInit,
   ChangeDetectionStrategy,
-  Input,
-  Output,
-  EventEmitter,
+  Component,
   ElementRef,
-  OnInit,
+  EventEmitter,
+  Input,
   OnChanges,
-  AfterViewInit
+  OnInit,
+  Output
 } from '@angular/core';
-import { Observable, fromEvent } from 'rxjs';
+import { fromEvent, Observable } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
+import { GoogleChartPackagesHelper } from '../helpers/google-chart-packages.helper';
 import { ChartErrorEvent, ChartEvent } from '../models/events.model';
 import { ScriptLoaderService } from '../script-loader/script-loader.service';
-import { GoogleChartPackagesHelper } from '../helpers/google-chart-packages.helper';
 
 @Component({
-  // tslint:disable-next-line:component-selector
   selector: 'raw-chart',
   template: '',
   styles: [':host { width: fit-content; display: block; }'],
@@ -28,10 +27,10 @@ import { GoogleChartPackagesHelper } from '../helpers/google-chart-packages.help
 })
 export class RawChartComponent implements OnInit, OnChanges, AfterViewInit {
   @Input()
-  chartData: google.visualization.ChartSpecs;
+  public chartData: google.visualization.ChartSpecs;
 
   @Input()
-  formatter:
+  public formatter:
     | google.visualization.DefaultFormatter
     | Array<{
         formatter: google.visualization.DefaultFormatter;
@@ -39,33 +38,33 @@ export class RawChartComponent implements OnInit, OnChanges, AfterViewInit {
       }>;
 
   @Input()
-  dynamicResize = false;
+  public dynamicResize = false;
 
   @Input()
-  firstRowIsData = false;
+  public firstRowIsData = false;
 
   @Output()
-  error = new EventEmitter<ChartErrorEvent>();
+  public error = new EventEmitter<ChartErrorEvent>();
 
   @Output()
-  ready = new EventEmitter();
+  public ready = new EventEmitter();
 
   @Output()
-  select = new EventEmitter<ChartEvent>();
+  public select = new EventEmitter<ChartEvent>();
 
   @Output()
-  mouseenter = new EventEmitter<ChartEvent>();
+  public mouseenter = new EventEmitter<ChartEvent>();
 
   @Output()
-  mouseleave = new EventEmitter<ChartEvent>();
+  public mouseleave = new EventEmitter<ChartEvent>();
 
-  wrapper: google.visualization.ChartWrapper;
+  public wrapper: google.visualization.ChartWrapper;
 
   private dataTable: google.visualization.DataTable;
 
   constructor(protected element: ElementRef, protected loaderService: ScriptLoaderService) {}
 
-  ngOnInit() {
+  public ngOnInit() {
     if (this.chartData == null) {
       throw new Error('Can\'t create a Google Chart without data!');
     }
@@ -75,11 +74,11 @@ export class RawChartComponent implements OnInit, OnChanges, AfterViewInit {
     });
   }
 
-  ngAfterViewInit() {
+  public ngAfterViewInit() {
     this.addResizeListener();
   }
 
-  ngOnChanges() {
+  public ngOnChanges() {
     if (this.wrapper) {
       this.updateChart();
     }
@@ -154,13 +153,13 @@ export class RawChartComponent implements OnInit, OnChanges, AfterViewInit {
 
   private registerChartEvents() {
     this.registerChartEvent(this.wrapper, 'ready', () => {
-      this.registerChartEvent(this.wrapper.getChart(), 'onmouseover', event => this.mouseenter.emit(event));
-      this.registerChartEvent(this.wrapper.getChart(), 'onmouseout', event => this.mouseleave.emit(event));
+      this.registerChartEvent(this.wrapper.getChart(), 'onmouseover', (event: ChartEvent) => this.mouseenter.emit(event));
+      this.registerChartEvent(this.wrapper.getChart(), 'onmouseout', (event: ChartEvent) => this.mouseleave.emit(event));
 
       this.ready.emit('Chart Ready');
     });
 
-    this.registerChartEvent(this.wrapper, 'error', error => this.error.emit(error));
+    this.registerChartEvent(this.wrapper, 'error', (error: ChartErrorEvent) => this.error.emit(error));
     this.registerChartEvent(this.wrapper, 'select', () => {
       const selection = this.wrapper.getChart().getSelection();
       this.select.emit(selection);

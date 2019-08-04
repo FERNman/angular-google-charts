@@ -1,13 +1,12 @@
 /// <reference types="google.visualization"/>
 
-import { Component, OnInit, ElementRef, Input, ChangeDetectionStrategy, OnChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges, OnInit } from '@angular/core';
 
-import { ScriptLoaderService } from '../script-loader/script-loader.service';
-import { RawChartComponent } from '../raw-chart/raw-chart.component';
 import { Role } from '../models/role.model';
+import { RawChartComponent } from '../raw-chart/raw-chart.component';
+import { ScriptLoaderService } from '../script-loader/script-loader.service';
 
 @Component({
-  // tslint:disable-next-line:component-selector
   selector: 'google-chart',
   template: '',
   styles: [':host { width: fit-content; display: block; }'],
@@ -16,34 +15,34 @@ import { Role } from '../models/role.model';
 })
 export class GoogleChartComponent extends RawChartComponent implements OnInit, OnChanges {
   @Input()
-  data: Array<Array<string | number>>;
+  public data: Array<Array<string | number>>;
 
   @Input()
-  columnNames: Array<string>;
+  public columnNames: Array<string>;
 
   @Input()
-  roles: Array<Role> = new Array();
+  public roles: Array<Role> = new Array();
 
   @Input()
-  title: string;
+  public title: string;
 
   @Input()
-  width: number = undefined;
+  public width: number = undefined;
 
   @Input()
-  height: number = undefined;
+  public height: number = undefined;
 
   @Input()
-  options: any = {};
+  public options: any = {};
 
   @Input()
-  type: string;
+  public type: string;
 
   constructor(element: ElementRef, loaderService: ScriptLoaderService) {
     super(element, loaderService);
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     if (this.type == null) {
       throw new Error('Can\'t create a Google Chart without specifying a type!');
     }
@@ -60,7 +59,7 @@ export class GoogleChartComponent extends RawChartComponent implements OnInit, O
     });
   }
 
-  ngOnChanges() {
+  public ngOnChanges() {
     if (this.wrapper) {
       this.chartData = {
         chartType: this.type,

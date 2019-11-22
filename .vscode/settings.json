@@ -1,4 +1,8 @@
 {
-  "prettier.tslintIntegration": true,
-  "prettier.printWidth": 140
+  "editor.formatOnSave": true,
+  "[typescript]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.tslint": true
+    }
+  }
 }

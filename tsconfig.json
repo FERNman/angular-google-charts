@@ -20,7 +20,7 @@
     ],
     "paths": {
       "angular-google-charts": [
-        "projects/angular-google-charts/src/public_api"
+        "libs/angular-google-charts/src/index.ts"
       ]
     }
   }

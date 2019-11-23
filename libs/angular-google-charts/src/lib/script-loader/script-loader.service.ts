@@ -3,7 +3,7 @@ import { Observable, of, Subject } from 'rxjs';
 
 import { CHART_VERSION, GOOGLE_API_KEY } from '../models/injection-tokens.model';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ScriptLoaderService {
   private readonly scriptSource = 'https://www.gstatic.com/charts/loader.js';
 

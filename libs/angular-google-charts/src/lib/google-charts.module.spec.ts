@@ -4,25 +4,44 @@ import { GoogleChartsModule } from './google-charts.module';
 import { ScriptLoaderService } from './script-loader/script-loader.service';
 
 describe('GoogleChartsModule', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [GoogleChartsModule]
+  let service: ScriptLoaderService;
+
+  describe('direct import', () => {
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        imports: [GoogleChartsModule]
+      });
+    });
+
+    beforeEach(() => {
+      service = TestBed.get(ScriptLoaderService);
+    });
+
+    it('should provide ScriptLoaderService', () => {
+      expect(service).toBeTruthy();
     });
   });
 
-  it('should provide ScriptLoaderService', () => {
-    expect(TestBed.get(ScriptLoaderService)).toBeTruthy();
-  });
-});
+  describe('forRoot()', () => {
+    const apiKey = 'myMapsApiKey';
 
-describe('GoogleChartsModule.forRoot()', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [GoogleChartsModule.forRoot('myMapsApiKey')]
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        imports: [GoogleChartsModule.forRoot(apiKey)]
+      });
     });
-  });
 
-  it('should provide ScriptLoaderService', () => {
-    expect(TestBed.get(ScriptLoaderService)).toBeTruthy();
+    beforeEach(() => {
+      service = TestBed.get(ScriptLoaderService);
+    });
+
+    it('should provide ScriptLoaderService', () => {
+      expect(service).toBeTruthy();
+    });
+
+    it('should have the correct api key set', () => {
+      const injectedKey = (service as any).googleApiKey;
+      expect(injectedKey).toEqual(apiKey);
+    });
   });
 });

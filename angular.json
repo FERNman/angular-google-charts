@@ -27,12 +27,7 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "libs/angular-google-charts/src/test.ts",
-            "tsConfig": "libs/angular-google-charts/tsconfig.spec.json",
-            "karmaConfig": "libs/angular-google-charts/karma.conf.js"
-          }
+          "builder": "@angular-builders/jest:run"
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
@@ -117,20 +112,16 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
-            "main": "apps/playground/src/test.ts",
-            "polyfills": "apps/playground/src/polyfills.ts",
-            "tsConfig": "apps/playground/tsconfig.spec.json",
-            "karmaConfig": "apps/playground/karma.conf.js",
+            "polyfills": "src/polyfills.ts",
             "assets": [
-              "apps/playground/src/favicon.ico",
-              "apps/playground/src/assets"
+              "src/favicon.ico",
+              "src/assets"
             ],
             "styles": [
-              "apps/playground/src/styles.scss"
-            ],
-            "scripts": []
+              "src/styles.scss"
+            ]
           }
         },
         "lint": {

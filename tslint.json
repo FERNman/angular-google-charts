@@ -23,6 +23,7 @@
     "array-type": [
       true,
       "array"
-    ]
+    ],
+    "no-host-metadata-property": false
   }
 }

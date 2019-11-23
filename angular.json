@@ -32,13 +32,8 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "libs/angular-google-charts/tsconfig.lib.json",
-              "libs/angular-google-charts/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "tsConfig": ["libs/angular-google-charts/tsconfig.lib.json", "libs/angular-google-charts/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -58,13 +53,8 @@
             "main": "apps/playground/src/main.ts",
             "polyfills": "apps/playground/src/polyfills.ts",
             "tsConfig": "apps/playground/tsconfig.app.json",
-            "assets": [
-              "apps/playground/src/favicon.ico",
-              "apps/playground/src/assets"
-            ],
-            "styles": [
-              "apps/playground/src/styles.scss"
-            ],
+            "assets": ["apps/playground/src/favicon.ico", "apps/playground/src/assets"],
+            "styles": ["apps/playground/src/styles.scss"],
             "scripts": []
           },
           "configurations": {
@@ -108,14 +98,8 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "apps/playground/tsconfig.app.json",
-              "apps/playground/tsconfig.spec.json",
-              "apps/playground/e2e/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "tsConfig": ["apps/playground/tsconfig.app.json"],
+            "exclude": ["**/node_modules/**"]
           }
         }
       }

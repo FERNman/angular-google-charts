@@ -1,29 +1,13 @@
 {
-  "extends": [
-    "tslint-angular",
-    "tslint-config-prettier"
-  ],
-  "rulesDirectory": [
-    "node_modules/codelyzer"
-  ],
+  "extends": ["tslint-angular", "tslint-config-prettier"],
+  "rulesDirectory": ["node_modules/codelyzer"],
   "rules": {
-    "directive-selector": [
-      true,
-      "attribute",
-      "camelCase"
-    ],
-    "component-selector": [
-      true,
-      "element",
-      "kebab-case"
-    ],
+    "directive-selector": [true, "attribute", "camelCase"],
+    "component-selector": [true, "element", "kebab-case"],
     "ordered-imports": true,
-    "member-ordering": true,
+    "member-ordering": [true, "fields-first"],
     "member-access": true,
-    "array-type": [
-      true,
-      "array"
-    ],
+    "array-type": [true, "array"],
     "no-host-metadata-property": false
   }
 }

@@ -2,9 +2,7 @@
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/angular-google-charts",
   "lib": {
-    "entryFile": "src/public_api.ts"
+    "entryFile": "src/index.ts"
   },
-  "whitelistedNonPeerDependencies": [
-    "."
-  ]
+  "whitelistedNonPeerDependencies": ["."]
 }

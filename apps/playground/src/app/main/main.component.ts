@@ -12,9 +12,9 @@ export class MainComponent implements OnInit {
   public charts: {
     title: string;
     type: string;
-    data: Array<Array<string | number | {}>>;
-    roles: Array<{ type: string; role: string; index?: number }>;
-    columnNames?: Array<string>;
+    data: (string | number | {})[][];
+    roles: { type: string; role: string; index?: number }[];
+    columnNames?: string[];
     options?: {};
   }[] = [];
 

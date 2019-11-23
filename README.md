@@ -69,7 +69,7 @@ import { GoogleChartsModule } from 'angular-google-charts';
 export class AppModule {}
 ```
 
-*Note:*
+_Note:_
 
 It is not necessary to import the `GoogleChartsModule` by calling its `forRoot` method. You can simply import the module as well.
 
@@ -87,6 +87,7 @@ This component is really not more than a wrapper around the basic Google-Charts 
 resizing when the width of the parent changes.
 
 #### Chart Data
+
 `google.visualization.ChartSpecs`
 
 ```html
@@ -97,6 +98,7 @@ The chart data is an object that allows you to pass all chart configuration opti
 passed here as well.
 
 #### First Row is Data
+
 `boolean`
 
 ```html
@@ -106,6 +108,7 @@ passed here as well.
 This property is necessary when you want to create a raw chart that has the first row as data row. Defaults to false as for most charts the first row is the header row.
 
 #### Formatter
+
 `Array<{formatter: google.visualization.DefaultFormatter, colIndex: number}> | google.visualization.DefaultFormatter`
 
 ```html
@@ -118,16 +121,17 @@ If passing a formatter class instance, every column will be formatted according 
 ```typescript
 // Formats the column with the index 1 and 3 to Date(long)
 myFormatter = [
-  { formatter: new google.visualization.Dateformat({formatType: 'long'}), colIndex: 1 },
-  { formatter: new google.visualization.Dateformat({formatType: 'long'}), colIndex: 3 }
+  { formatter: new google.visualization.Dateformat({ formatType: 'long' }), colIndex: 1 },
+  { formatter: new google.visualization.Dateformat({ formatType: 'long' }), colIndex: 3 }
 ];
 ```
 
 For more information and all formatter types, please refer to the [documentation](https://google-developers.appspot.com/chart/interactive/docs/reference#formatters).
 
-*Note: When you get the error "google is not defined" whilst using the formatter in your component, you probably didn't load the script. Please see [CustomComponents](#custom-components)*.
+_Note: When you get the error "google is not defined" whilst using the formatter in your component, you probably didn't load the script. Please see [CustomComponents](#custom-components)_.
 
 #### Dynamic Resize
+
 `boolean`
 
 ```html
@@ -155,6 +159,7 @@ The component provides a few input properties for convenience. It extends the Ra
 that's possible in the `RawChartComponent` also works in the `GoogleChartComponent`.
 
 #### Type (required)
+
 `string`
 
 ```html
@@ -162,6 +167,7 @@ that's possible in the `RawChartComponent` also works in the `GoogleChartCompone
 ```
 
 The type specifies which type of chart you want to display. It requires a string. Examples include:
+
 - `'BarChart'`
 - `'PieChart'`
 - `'ColumnChart'`
@@ -174,6 +180,7 @@ For a full list of the types available, please refer to [ChartTypes.md](./ChartT
 For more chart types and information, please see the [google chart gallery](https://google-developers.appspot.com/chart/interactive/docs/gallery).
 
 #### Data (required)
+
 `Array<Array<any>>`
 
 ```html
@@ -206,6 +213,7 @@ myData = [
 For further information, please see the official [google documentation](https://google-developers.appspot.com/chart/interactive/docs/reference#arraytodatatable) on `arraytodatatable`, which is the function used internally, or read the examples included.
 
 ### ColumnNames (required for most charts)
+
 `Array<string>`
 
 ```html
@@ -220,6 +228,7 @@ myColumnNames = ['City', 'Inhabitants'];
 ```
 
 ### Roles
+
 `Array<{ role: string, type: string, index?: number, p?: object }>`
 
 ```html
@@ -227,16 +236,13 @@ myColumnNames = ['City', 'Inhabitants'];
 ```
 
 The `roles` property is optional and can be used for additional, row specific styling options. If provided, the length of the array must match the length of the roles provided in each of the inner arrays of the data object.
-The optional `index` attribute can be used to place roles relative to columns. When specified, the role will be inserted **after** 
-after the `ColumnName` at the given index. If it is not specified (*default*), all roles will be appended at the back of the `ColumnNames`. 
+The optional `index` attribute can be used to place roles relative to columns. When specified, the role will be inserted **after**
+after the `ColumnName` at the given index. If it is not specified (_default_), all roles will be appended at the back of the `ColumnNames`.
 The optional `p` attribute is used e.g. when you want to use html in a tooltip.
 In that case you have to set `p` with `{html: true}`.
 
-
 ```typescript
-myRoles = [
-  { role: 'style', type: 'string', index: 2 }
-];
+myRoles = [{ role: 'style', type: 'string', index: 2 }];
 
 myData = [
   ['Element', 10.5, '#ffaaff'] // The last entry in the array is the role
@@ -246,7 +252,9 @@ myData = [
 For further information, please see the [google documentation](https://google-developers.appspot.com/chart/interactive/docs/roles).
 
 For further information on the `p` attribute, please see the [google documentation](https://developers.google.com/chart/interactive/docs/reference#methods).
+
 ### Title
+
 `string`
 
 ```html
@@ -256,6 +264,7 @@ For further information on the `p` attribute, please see the [google documentati
 The `title` property is optional and provided for convenice. It can also be included in the `options` property.
 
 ### Width
+
 `number`
 
 ```html
@@ -266,6 +275,7 @@ The `width` property is optional and allows to set the width of the chart. The n
 You can also set the width using css, which has the advantage of allowing `%` values instead of only pixels. For more information on that, see [dynamic resize](#dynamic-resize).
 
 ### Height
+
 `number`
 
 ```html
@@ -276,6 +286,7 @@ The `height` property is optional and allows to set the height of the chart. The
 You can also set the height using css, which has the advantage of allowing `%` values instead of only pixels. For more information on that, see [dynamic resize](#dynamic-resize).
 
 ### Options
+
 `object`
 
 ```html
@@ -420,7 +431,7 @@ And in your OnInit method (or whereever you'd want to create your chart):
 ```typescript
 ngOnInit() {
   this.loaderService.onReady.subscribe( () => {
-    this.loaderService.loadChartPackages(this.type).subscribe(() => {
+    this.loaderService.loadChartPackages([this.type]).subscribe(() => {
       // Start creating your chart now
       // Example:
       const formatter = new google.visualization.BarFormat();

@@ -1,5 +1,3 @@
-/// <reference types="google.visualization"/>
-
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -11,6 +9,7 @@ import {
   OnInit,
   Output
 } from '@angular/core';
+
 import { fromEvent, Observable } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
@@ -18,10 +17,20 @@ import { GoogleChartPackagesHelper } from '../helpers/google-chart-packages.help
 import { ChartErrorEvent, ChartEvent } from '../models/events.model';
 import { ScriptLoaderService } from '../script-loader/script-loader.service';
 
+interface CustomFormatter {
+  formatter: google.visualization.DefaultFormatter;
+  colIndex: number;
+}
+
+type Formatter = google.visualization.DefaultFormatter | CustomFormatter[];
+
 @Component({
   selector: 'raw-chart',
   template: '',
   styles: [':host { width: fit-content; display: block; }'],
+  host: {
+    class: 'raw-chart'
+  },
   exportAs: 'raw-chart',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -30,12 +39,7 @@ export class RawChartComponent implements OnInit, OnChanges, AfterViewInit {
   public chartData: google.visualization.ChartSpecs;
 
   @Input()
-  public formatter:
-    | google.visualization.DefaultFormatter
-    | {
-        formatter: google.visualization.DefaultFormatter;
-        colIndex: number;
-      }[];
+  public formatter: Formatter;
 
   @Input()
   public dynamicResize = false;

@@ -3,6 +3,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ScriptLoaderService } from '../script-loader/script-loader.service';
 import { RawChartComponent } from './raw-chart.component';
 
+jest.mock('../script-loader/script-loader.service');
+
 describe('RawChartComponent', () => {
   let component: RawChartComponent;
   let fixture: ComponentFixture<RawChartComponent>;
@@ -14,24 +16,8 @@ describe('RawChartComponent', () => {
     }).compileComponents();
   }));
 
-  function findInChildren(parent: HTMLElement, comparison: (el: HTMLElement) => boolean): HTMLElement {
-    const children = Array.from(parent.children);
-    for (const child of children) {
-      if (comparison(<HTMLElement>child)) {
-        return <HTMLElement>child;
-      } else {
-        const found = findInChildren(<HTMLElement>child, comparison);
-        if (found) {
-          return found;
-        }
-      }
-    }
-
-    return null;
-  }
-
   describe('Generic Chart tests', () => {
-    beforeEach(done => {
+    beforeEach(() => {
       fixture = TestBed.createComponent(RawChartComponent);
       component = fixture.componentInstance;
       component.chartData = {
@@ -51,9 +37,7 @@ describe('RawChartComponent', () => {
 
       fixture.detectChanges();
 
-      component.ready.subscribe(() => {
-        done();
-      });
+      return component.ready.toPromise();
     });
 
     it('should fire ready events', () => {
@@ -79,7 +63,7 @@ describe('RawChartComponent', () => {
       expect(chartContainer.clientWidth).toEqual(chartParent.clientWidth);
     });
 
-    it('should resize on window resize', done => {
+    it('should resize on window resize', async () => {
       const chartElement = component.getChartElement();
       component.dynamicResize = true;
 
@@ -94,15 +78,15 @@ describe('RawChartComponent', () => {
 
       window.dispatchEvent(new Event('resize'));
 
-      setTimeout(() => {
-        expect(chartContainer.clientWidth).toEqual(chartParent.clientWidth);
-        done();
-      }, 200);
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      expect(chartContainer.clientWidth).toEqual(chartParent.clientWidth);
     });
   });
 
   describe('BarChart tests', () => {
-    beforeEach(done => {
+    beforeEach(() => {
       fixture = TestBed.createComponent(RawChartComponent);
       component = fixture.componentInstance;
       component.chartData = {
@@ -121,9 +105,7 @@ describe('RawChartComponent', () => {
 
       fixture.detectChanges();
 
-      component.ready.subscribe(() => {
-        done();
-      });
+      return component.ready.toPromise();
     });
 
     it('should render a simple bar chart', () => {
@@ -137,7 +119,7 @@ describe('RawChartComponent', () => {
       expect(title).not.toBeNull();
     });
 
-    it('should apply the roles', async(() => {
+    it('should apply the roles', () => {
       component.chartData.dataTable = [
         ['Element', 'Density', { role: 'style', type: 'string' }],
         ['Copper', 8.94, '#b87333'],
@@ -146,7 +128,9 @@ describe('RawChartComponent', () => {
         ['Platinum', 21.45, 'color: #e5e4e2']
       ];
 
-      component.ready.subscribe(() => {
+      component.ngOnChanges();
+
+      return component.ready.toPromise().then(() => {
         const chartElement = component.getChartElement();
 
         const copperBar = findInChildren(chartElement, element => {
@@ -166,11 +150,9 @@ describe('RawChartComponent', () => {
         expect(silverBar).not.toBeNull();
         expect(goldBar).not.toBeNull();
       });
+    });
 
-      component.ngOnChanges();
-    }));
-
-    it('should use the format the data', async(() => {
+    it('should use the format the data', () => {
       component.chartData.dataTable = [
         ['Element', 'Density'],
         ['Copper', new Date(1990, 10, 1)],
@@ -186,16 +168,16 @@ describe('RawChartComponent', () => {
         }
       ];
 
-      component.ready.subscribe(() => {
+      component.ngOnChanges();
+
+      return component.ready.toPromise().then(() => {
         // TODO: Find a way to test whether the formatter worked.
       });
-
-      component.ngOnChanges();
-    }));
+    });
   });
 
   describe('events', () => {
-    beforeEach(done => {
+    beforeEach(() => {
       fixture = TestBed.createComponent(RawChartComponent);
       component = fixture.componentInstance;
       component.chartData = {
@@ -214,22 +196,16 @@ describe('RawChartComponent', () => {
 
       fixture.detectChanges();
 
-      component.ready.subscribe(() => {
-        done();
-      });
+      return component.ready.toPromise();
     });
 
-    it('should fire hover events', () => {
-      // TODO
-    });
+    it.todo('should fire hover events');
 
-    it('should fire select event', () => {
-      // TODO
-    });
+    it.todo('should fire select event');
   });
 
   describe('advanced charts', () => {
-    it('should load the table chart package', async(() => {
+    it('should load the table chart package', () => {
       fixture = TestBed.createComponent(RawChartComponent);
       component = fixture.componentInstance;
       component.chartData = {
@@ -240,14 +216,14 @@ describe('RawChartComponent', () => {
         ]
       };
 
-      component.ready.subscribe(() => {
+      fixture.detectChanges();
+
+      return component.ready.toPromise().then(() => {
         expect(google.visualization.Table).toBeDefined();
       });
+    });
 
-      fixture.detectChanges();
-    }));
-
-    it('should load the material chart package', async(() => {
+    it('should load the material chart package', () => {
       fixture = TestBed.createComponent(RawChartComponent);
       component = fixture.componentInstance;
       component.chartData = {
@@ -258,11 +234,27 @@ describe('RawChartComponent', () => {
         ]
       };
 
-      component.ready.subscribe(() => {
+      fixture.detectChanges();
+
+      return component.ready.toPromise().then(() => {
         expect((<any>google.charts).Bar).toBeDefined();
       });
-
-      fixture.detectChanges();
-    }));
+    });
   });
 });
+
+function findInChildren(parent: HTMLElement, comparison: (el: HTMLElement) => boolean): HTMLElement {
+  const children = Array.from(parent.children);
+  for (const child of children) {
+    if (comparison(<HTMLElement>child)) {
+      return <HTMLElement>child;
+    } else {
+      const found = findInChildren(<HTMLElement>child, comparison);
+      if (found) {
+        return found;
+      }
+    }
+  }
+
+  return null;
+}

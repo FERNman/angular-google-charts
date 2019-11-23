@@ -14,24 +14,8 @@ describe('ChartComponent', () => {
     }).compileComponents();
   }));
 
-  function findInChildren(parent: HTMLElement, comparison: (el: HTMLElement) => boolean): HTMLElement {
-    const children = Array.from(parent.children);
-    for (const child of children) {
-      if (comparison(<HTMLElement>child)) {
-        return <HTMLElement>child;
-      } else {
-        const found = findInChildren(<HTMLElement>child, comparison);
-        if (found) {
-          return found;
-        }
-      }
-    }
-
-    return null;
-  }
-
   describe('Generic Chart tests', () => {
-    beforeEach(done => {
+    beforeEach(() => {
       fixture = TestBed.createComponent(GoogleChartComponent);
       component = fixture.componentInstance;
       component.type = 'PieChart';
@@ -47,14 +31,13 @@ describe('ChartComponent', () => {
 
       fixture.detectChanges();
 
-      component.ready.subscribe(() => {
-        done();
-      });
+      return component.ready.toPromise();
     });
 
     it('should fire ready events', () => {
       // if we ever come here, beforeEach called done(), so component.ready works.
       // no need for more expect() functions
+      expect(true).toBeTruthy();
     });
 
     it('should load the corechart package', () => {
@@ -74,7 +57,7 @@ describe('ChartComponent', () => {
       expect(chartContainer.clientWidth).toEqual(chartParent.clientWidth);
     });
 
-    it('should resize on window resize', done => {
+    it('should resize on window resize', async () => {
       const chartElement = component.getChartElement();
       component.dynamicResize = true;
 
@@ -89,15 +72,15 @@ describe('ChartComponent', () => {
 
       window.dispatchEvent(new Event('resize'));
 
-      setTimeout(() => {
-        expect(chartContainer.clientWidth).toEqual(chartParent.clientWidth);
-        done();
-      }, 200);
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      expect(chartContainer.clientWidth).toEqual(chartParent.clientWidth);
     });
   });
 
   describe('BarChart tests', () => {
-    beforeEach(done => {
+    beforeEach(() => {
       fixture = TestBed.createComponent(GoogleChartComponent);
       component = fixture.componentInstance;
       component.type = 'BarChart';
@@ -112,9 +95,7 @@ describe('ChartComponent', () => {
 
       fixture.detectChanges();
 
-      component.ready.subscribe(() => {
-        done();
-      });
+      return component.ready.toPromise();
     });
 
     it('should render a simple bar chart', () => {
@@ -128,7 +109,7 @@ describe('ChartComponent', () => {
       expect(title).not.toBeNull();
     });
 
-    it('should format the data', done => {
+    it('should format the data', () => {
       component.roles = [{ role: 'style', type: 'string' }];
       component.data = [
         ['Copper', 8.94, '#b87333'],
@@ -137,7 +118,9 @@ describe('ChartComponent', () => {
         ['Platinum', 21.45, 'color: #e5e4e2']
       ];
 
-      component.ready.subscribe(() => {
+      component.ngOnChanges();
+
+      return component.ready.toPromise().then(() => {
         const chartElement = component.getChartElement();
 
         const copperBar = findInChildren(chartElement, element => {
@@ -156,16 +139,12 @@ describe('ChartComponent', () => {
         expect(copperBar).not.toBeNull();
         expect(silverBar).not.toBeNull();
         expect(goldBar).not.toBeNull();
-
-        done();
       });
-
-      component.ngOnChanges();
     });
   });
 
   describe('events', () => {
-    beforeEach(done => {
+    beforeEach(() => {
       fixture = TestBed.createComponent(GoogleChartComponent);
       component = fixture.componentInstance;
       component.type = 'BarChart';
@@ -180,22 +159,16 @@ describe('ChartComponent', () => {
 
       fixture.detectChanges();
 
-      component.ready.subscribe(() => {
-        done();
-      });
+      return component.ready.toPromise();
     });
 
-    it('should fire hover events', async(() => {
-      // TODO
-    }));
+    it.todo('should fire hover events');
 
-    it('should fire select event', async(() => {
-      // TODO
-    }));
+    it.todo('should fire select event');
   });
 
   describe('advanced charts', () => {
-    it('should load the table chart package', async(() => {
+    it('should load the table chart package', () => {
       fixture = TestBed.createComponent(GoogleChartComponent);
       component = fixture.componentInstance;
       component.type = 'Table';
@@ -204,12 +177,12 @@ describe('ChartComponent', () => {
 
       fixture.detectChanges();
 
-      component.ready.subscribe(() => {
+      return component.ready.toPromise().then(() => {
         expect(google.visualization.Table).toBeDefined();
       });
-    }));
+    });
 
-    it('should load the material chart package', async(() => {
+    it('should load the material chart package', () => {
       fixture = TestBed.createComponent(GoogleChartComponent);
       component = fixture.componentInstance;
       component.type = 'Bar';
@@ -218,9 +191,25 @@ describe('ChartComponent', () => {
 
       fixture.detectChanges();
 
-      component.ready.subscribe(() => {
+      return component.ready.toPromise().then(() => {
         expect((<any>google.charts).Bar).toBeDefined();
       });
-    }));
+    });
   });
 });
+
+function findInChildren(parent: HTMLElement, comparison: (el: HTMLElement) => boolean): HTMLElement {
+  const children = Array.from(parent.children);
+  for (const child of children) {
+    if (comparison(<HTMLElement>child)) {
+      return <HTMLElement>child;
+    } else {
+      const found = findInChildren(<HTMLElement>child, comparison);
+      if (found) {
+        return found;
+      }
+    }
+  }
+
+  return null;
+}

@@ -394,22 +394,20 @@ The event is of type `ChartEvent`, where column is the index of the hovered colu
 For advanced actions, one may need to access to the underlying `ChartWrapper` creating the charts.
 
 ```html
-<google-chart #chart></google-chart>
+<google-chart #chart (ready)="chartReady(chart)"></google-chart>
 ```
 
 ```typescript
-import { ViewChild, AfterViewInit } from '@angular/core';
 import { GoogleChartComponent } from 'angular-google-charts';
 
 @Component({
   ...
 })
-export class AppComponent implements AfterViewInit {
-  @ViewChild('chart')
-  chart: GoogleChartComponent;
+export class AppComponent {
+  private myAdvancedData: any; // Initialized somewhere else
 
-  ngAfterViewInit() {
-    const wrapper = this.chart.wrapper;
+  public chartReady(chart: GoogleChartComponent) {
+    const wrapper = chart.wrapper;
 
     wrapper.draw(myAdvancedData);
   }

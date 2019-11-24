@@ -398,17 +398,17 @@ For advanced actions, one may need to access to the underlying `ChartWrapper` cr
 ```
 
 ```typescript
-import { ViewChild } from '@angular/core';
+import { ViewChild, AfterViewInit } from '@angular/core';
 import { GoogleChartComponent } from 'angular-google-charts';
 
 @Component({
   ...
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements AfterViewInit {
   @ViewChild('chart')
   chart: GoogleChartComponent;
 
-  ngOnInit() {
+  ngAfterViewInit() {
     const wrapper = this.chart.wrapper;
 
     wrapper.draw(myAdvancedData);

@@ -1,5 +1,4 @@
-import { throwError } from 'rxjs';
-
+// @dynamic
 export class GoogleChartsFormatterHelper {
   private static formatters = {
     'ArrowFormat': (options) => new google.visualization.ArrowFormat(options),
@@ -9,10 +8,14 @@ export class GoogleChartsFormatterHelper {
     'PatternFormat': (options) => new google.visualization.PatternFormat(options)
   };
 
-  public static getFormatter(formatterName: string, options: any) {
+  public static getFormatter(formatterName: string, options: any): google.visualization.DefaultFormatter {
     if (Object.keys(this.formatters).indexOf(formatterName) === -1) {
       throw new Error('No formatter exists with the given name.');
     }
     return  this.formatters[formatterName](options);
+  }
+
+  public static listFormatterNames(): Array<string> {
+    return Object.keys(this.formatters);
   }
 }

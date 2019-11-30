@@ -16,6 +16,7 @@ export class MainComponent implements OnInit {
     roles: Array<{ type: string; role: string; index?: number }>;
     columnNames?: Array<string>;
     options?: {};
+    formatter?: {formatterName: string; options: {}} | Array<{formatterName: string; options: {}, colIndex: number}>;
   }> = [];
 
   public changingChart = {
@@ -134,7 +135,26 @@ export class MainComponent implements OnInit {
       type: 'AreaChart',
       columnNames: ['Year', 'Sales', 'Expenses'],
       data: [['2013', 1000, 400], ['2014', 1170, 460], ['2015', 660, 1120], ['2016', 1030, 540]],
-      roles: []
+      roles: [],
+      formatter: [{
+        formatterName: 'NumberFormat',
+        options: {
+          decimalSymbol: ',',
+          groupingSymbol: '.',
+          fractionDigits: 2,
+          suffix: '€'
+        },
+        colIndex: 1
+      }, {
+        formatterName: 'NumberFormat',
+        options: {
+          decimalSymbol: ',',
+          groupingSymbol: '.',
+          fractionDigits: 2,
+          suffix: '€'
+        },
+        colIndex: 2
+      }]
     });
 
     this.charts.push({

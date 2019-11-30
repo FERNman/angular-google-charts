@@ -39,11 +39,11 @@ export class RawChartComponent implements OnInit, OnChanges, AfterViewInit {
       }>
     | {
         formatterName: string;
-        options: any;
+        options: {};
       }
     | Array<{
       formatterName: string;
-      options: any;
+      options: {};
       colIndex: number
       }>;
 
@@ -145,21 +145,31 @@ export class RawChartComponent implements OnInit, OnChanges, AfterViewInit {
     let localFormatter: google.visualization.DefaultFormatter;
     if (this.formatter instanceof Array) {
       this.formatter.forEach(value => {
-        localFormatter = value.formatter instanceof google.visualization.DefaultFormatter ?
+        localFormatter = this.formatterIsProvided(value) ?
                          value.formatter :
                          GoogleChartsFormatterHelper.getFormatter(value.formatterName, value.options);
 
         localFormatter.format(dataTable, value.colIndex);
       });
     } else {
-      localFormatter = this.formatter instanceof google.visualization.DefaultFormatter ?
-                          this.formatter :
-                          GoogleChartsFormatterHelper.getFormatter(this.formatter.formatterName, this.formatter.options);
+      localFormatter = this.formatterIsProvided(this.formatter) ?
+                          this.formatter as google.visualization.DefaultFormatter :
+                          GoogleChartsFormatterHelper.getFormatter((this.formatter as {formatterName: string; options: {}}).formatterName,
+                            (this.formatter as {formatterName: string; options: {}}).options);
 
       for (let i = 0; i < dataTable.getNumberOfColumns(); i++) {
         localFormatter.format(dataTable, i);
       }
     }
+  }
+
+  private formatterIsProvided(formatter: any) {
+    return formatter instanceof google.visualization.ArrowFormat ||
+      formatter instanceof google.visualization.BarFormat ||
+      formatter instanceof google.visualization.ColorFormat ||
+      formatter instanceof google.visualization.DateFormat ||
+      formatter instanceof google.visualization.NumberFormat ||
+      formatter instanceof google.visualization.PatternFormat;
   }
 
   private addResizeListener() {

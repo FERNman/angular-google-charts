@@ -39,11 +39,11 @@ export class RawChartComponent implements OnInit, OnChanges, AfterViewInit {
       }>
     | {
         formatterName: string;
-        options: object;
+        options: any;
       }
     | Array<{
       formatterName: string;
-      options: object;
+      options: any;
       colIndex: number
       }>;
 
@@ -142,13 +142,22 @@ export class RawChartComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   protected formatData(dataTable: google.visualization.DataTable) {
+    let localFormatter: google.visualization.DefaultFormatter;
     if (this.formatter instanceof Array) {
       this.formatter.forEach(value => {
-        value.formatter.format(dataTable, value.colIndex);
+        localFormatter = value.formatter instanceof google.visualization.DefaultFormatter ?
+                         value.formatter :
+                         GoogleChartsFormatterHelper.getFormatter(value.formatterName, value.options);
+
+        localFormatter.format(dataTable, value.colIndex);
       });
     } else {
+      localFormatter = this.formatter instanceof google.visualization.DefaultFormatter ?
+                          this.formatter :
+                          GoogleChartsFormatterHelper.getFormatter(this.formatter.formatterName, this.formatter.options);
+
       for (let i = 0; i < dataTable.getNumberOfColumns(); i++) {
-        this.formatter.format(dataTable, i);
+        localFormatter.format(dataTable, i);
       }
     }
   }

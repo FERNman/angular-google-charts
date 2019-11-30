@@ -14,6 +14,7 @@ import {
 import { fromEvent, Observable } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
+import { GoogleChartsFormatterHelper} from '../helpers/google-chart-formatters.helper';
 import { GoogleChartPackagesHelper } from '../helpers/google-chart-packages.helper';
 import { ChartErrorEvent, ChartEvent } from '../models/events.model';
 import { ScriptLoaderService } from '../script-loader/script-loader.service';
@@ -35,6 +36,15 @@ export class RawChartComponent implements OnInit, OnChanges, AfterViewInit {
     | Array<{
         formatter: google.visualization.DefaultFormatter;
         colIndex: number;
+      }>
+    | {
+        formatterName: string;
+        options: object;
+      }
+    | Array<{
+      formatterName: string;
+      options: object;
+      colIndex: number
       }>;
 
   @Input()

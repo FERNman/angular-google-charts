@@ -106,13 +106,13 @@ passed here as well.
 This property is necessary when you want to create a raw chart that has the first row as data row. Defaults to false as for most charts the first row is the header row.
 
 #### Formatter
-`Array<{formatter: google.visualization.DefaultFormatter, colIndex: number}> | google.visualization.DefaultFormatter | Array<{formatterName: string, options: {}, colIndex: number}> | {formatterName: string, options: {}, colIndex: number}`
+`Array<{formatter: google.visualization.DefaultFormatter, colIndex: number}> | google.visualization.DefaultFormatter | Array<{formatterName: string, options: {}, colIndex: number}> | {formatterName: string, options: {}}`
 
 ```html
 <raw-chart [formatter]="myFormatter"></raw-chart>
 ```
 
-The `formatter` property is optional and allows to format the chart data. If you're only going to use the format() method available on all formatters, you just need to pass in an object with the desired formatter name and the option objects you wish to add. This formatter will be applied to all columns.
+The `formatter` property is optional and allows to format the chart data. If you don't want to deal with script loading and formatter instantiation in your application, you just need to pass in an object with the desired formatter name and the option objects you wish to add. This formatter will be applied to all columns.
 If you want to format specific columns, you can pass an array of objects where you have defined the formatter name, options and column index.
 
 ```typescript
@@ -124,6 +124,19 @@ myFormatter = [
   { formatterName: 'DateFormat', options:{formatType: 'long'}, colIndex: 1 },
   { formatterName: 'DateFormat', options: {formatType: 'long'}, colIndex: 3 }
 ];
+```
+*Note: The formatter name passed in should be the same as the formatter class name*.
+
+The Color Formatter is different from all the others because it doesn't take any options in its constructor. Instead it must be setup by calling addRange() or addGradientRange(). The options object for this formatter must start with a property called methodCall which takes a string with the name of the method to setup the formatter: 'AddRange' or 'AddGradientRange'.
+
+
+```typescript
+// Formats cells with values between 3 and 10
+myFormatter = {formatterName: 'ColorFormat', options: {methodCall: 'AddRange', from: 3, to: 10, color: '#FF0000', bgcolor: '#33FF33'}};
+
+// Formats cells with values between 3 and 10 with a gradient to indicate how close the value is from both limits 
+myFormatter = {formatterName: 'ColorFormat', options: {methodCall: 'AddRange', from: 3, to: 10, color: '#000000', fromBgColor: '#33FF33', toBgColor: '#FF0000'}};
+
 ```
 
 If you want to instantiate the formatters on your application you can do that. Simply pass in either a formatter class instance or an array of objects containing a formatter and an index.
@@ -141,7 +154,6 @@ For more information and all formatter types, please refer to the [documentation
 
 *Note1: When you get the error "google is not defined" whilst using the formatter in your component, you probably didn't load the script. Please see [CustomComponents](#custom-components)*.
 
-*Note2: The ColorFormat formatter is rather different from all others, the 'options' are not set via the constructor but calling the AddRange and AddGradientRange*.
 
 #### Dynamic Resize
 `boolean`

@@ -22,15 +22,15 @@ export class GoogleChartsFormatterHelper {
   }
 
   private static setupColorFormatter(formatter: google.visualization.ColorFormat, options: any): google.visualization.ColorFormat {
-    switch (options.func) {
+    switch (options['methodCall']) {
       case 'AddRange':
-        formatter.addRange(options.from, options.to, options.color, options.bgcolor);
+        formatter.addRange(options['from'], options['to'], options['color'], options['bgcolor']);
         return formatter;
       case 'AddGradientRange':
-        formatter.addGradientRange(options.from, options.to, options.color, options.fromBgColor, options.toBgColor);
+        formatter.addGradientRange(options['from'], options['to'], options['color'], options['fromBgColor'], options['toBgColor']);
         return formatter;
       default:
-        return formatter;
+        throw new Error('Incorrect method call for Color Formatter.');
     }
   }
 

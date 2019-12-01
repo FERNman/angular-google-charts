@@ -152,7 +152,7 @@ myFormatter = [
 
 For more information and all formatter types, please refer to the [documentation](https://google-developers.appspot.com/chart/interactive/docs/reference#formatters).
 
-*Note1: When you get the error "google is not defined" whilst using the formatter in your component, you probably didn't load the script. Please see [CustomComponents](#custom-components)*.
+*Note: When you get the error "google is not defined" whilst using the formatter in your component, you probably didn't load the script. Please see [CustomComponents](#custom-components)*.
 
 
 #### Dynamic Resize

@@ -106,13 +106,27 @@ passed here as well.
 This property is necessary when you want to create a raw chart that has the first row as data row. Defaults to false as for most charts the first row is the header row.
 
 #### Formatter
-`Array<{formatter: google.visualization.DefaultFormatter, colIndex: number}> | google.visualization.DefaultFormatter`
+`Array<{formatter: google.visualization.DefaultFormatter, colIndex: number}> | google.visualization.DefaultFormatter | Array<{formatterName: string, options: {}, colIndex: number}> | {formatterName: string, options: {}, colIndex: number}`
 
 ```html
 <raw-chart [formatter]="myFormatter"></raw-chart>
 ```
 
-The `formatter` property is optional and allows to format the chart data. You can pass in either a formatter class instance or an array of objects containing a formatter and an index.
+The `formatter` property is optional and allows to format the chart data. If you're only going to use the format() method available on all formatters, you just need to pass in an object with the desired formatter name and the option objects you wish to add. This formatter will be applied to all columns.
+If you want to format specific columns, you can pass an array of objects where you have defined the formatter name, options and column index.
+
+```typescript
+// Formats all columns to Date(long)
+myFormatter = {formatterName: 'DateFormat', options: {formatType: 'long'}}
+
+// Formats the column with the index 1 and 3 to Date(long)
+myFormatter = [
+  { formatterName: 'DateFormat', options:{formatType: 'long'}, colIndex: 1 },
+  { formatterName: 'DateFormat', options: {formatType: 'long'}, colIndex: 3 }
+];
+```
+
+If you want to instantiate the formatters on your application you can do that. Simply pass in either a formatter class instance or an array of objects containing a formatter and an index.
 If passing a formatter class instance, every column will be formatted according to it. When passing in an array, you can specify which columns to format.
 
 ```typescript
@@ -125,7 +139,9 @@ myFormatter = [
 
 For more information and all formatter types, please refer to the [documentation](https://google-developers.appspot.com/chart/interactive/docs/reference#formatters).
 
-*Note: When you get the error "google is not defined" whilst using the formatter in your component, you probably didn't load the script. Please see [CustomComponents](#custom-components)*.
+*Note1: When you get the error "google is not defined" whilst using the formatter in your component, you probably didn't load the script. Please see [CustomComponents](#custom-components)*.
+
+*Note2: The ColorFormat formatter is rather different from all others, the 'options' are not set via the constructor but calling the AddRange and AddGradientRange*.
 
 #### Dynamic Resize
 `boolean`

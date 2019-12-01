@@ -145,14 +145,14 @@ export class RawChartComponent implements OnInit, OnChanges, AfterViewInit {
     let localFormatter: google.visualization.DefaultFormatter;
     if (this.formatter instanceof Array) {
       this.formatter.forEach(value => {
-        localFormatter = this.formatterIsProvided(value) ?
+        localFormatter = GoogleChartsFormatterHelper.isInstance(value) ?
                          value.formatter :
                          GoogleChartsFormatterHelper.getFormatter(value.formatterName, value.options);
 
         localFormatter.format(dataTable, value.colIndex);
       });
     } else {
-      localFormatter = this.formatterIsProvided(this.formatter) ?
+      localFormatter = GoogleChartsFormatterHelper.isInstance(this.formatter) ?
                           this.formatter as google.visualization.DefaultFormatter :
                           GoogleChartsFormatterHelper.getFormatter((this.formatter as {formatterName: string; options: {}}).formatterName,
                             (this.formatter as {formatterName: string; options: {}}).options);
@@ -161,15 +161,6 @@ export class RawChartComponent implements OnInit, OnChanges, AfterViewInit {
         localFormatter.format(dataTable, i);
       }
     }
-  }
-
-  private formatterIsProvided(formatter: any) {
-    return formatter instanceof google.visualization.ArrowFormat ||
-      formatter instanceof google.visualization.BarFormat ||
-      formatter instanceof google.visualization.ColorFormat ||
-      formatter instanceof google.visualization.DateFormat ||
-      formatter instanceof google.visualization.NumberFormat ||
-      formatter instanceof google.visualization.PatternFormat;
   }
 
   private addResizeListener() {

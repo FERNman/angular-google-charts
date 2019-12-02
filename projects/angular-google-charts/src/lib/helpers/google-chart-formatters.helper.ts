@@ -6,7 +6,7 @@ export class GoogleChartsFormatterHelper {
     }
 
     if (formatterName === 'ColorFormat') {
-      return this.setupColorFormatter(new google.visualization[formatterName], options);
+      return this.setupColorFormatter(new google.visualization[formatterName](), options);
     }
 
     return  new google.visualization[formatterName](options);

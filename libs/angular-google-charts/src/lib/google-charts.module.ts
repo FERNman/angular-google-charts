@@ -1,7 +1,8 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 
 import { GoogleChartComponent } from './google-chart/google-chart.component';
-import { CHART_VERSION, GOOGLE_API_KEY } from './models/injection-tokens.model';
+import { Config } from './models/config.model';
+import { CHART_VERSION, MAPS_API_KEY } from './models/injection-tokens.model';
 import { RawChartComponent } from './raw-chart/raw-chart.component';
 
 @NgModule({
@@ -9,12 +10,12 @@ import { RawChartComponent } from './raw-chart/raw-chart.component';
   exports: [GoogleChartComponent, RawChartComponent]
 })
 export class GoogleChartsModule {
-  public static forRoot(googleApiKey?: string, chartVersion?: string): ModuleWithProviders {
+  public static forRoot({ mapsApiKey, version }: Config = {}): ModuleWithProviders {
     return {
       ngModule: GoogleChartsModule,
       providers: [
-        { provide: GOOGLE_API_KEY, useValue: googleApiKey ? googleApiKey : '' },
-        { provide: CHART_VERSION, useValue: chartVersion ? chartVersion : '46' }
+        { provide: MAPS_API_KEY, useValue: mapsApiKey },
+        { provide: CHART_VERSION, useValue: version }
       ]
     };
   }

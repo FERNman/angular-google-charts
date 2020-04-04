@@ -1,11 +1,12 @@
 # Chart Types
 
-The following document provides the GoogleChart library chart names and how this library wants the Charts to be called. 
+The following document maps the [Google Charts](https://developers.google.com/chart)' chart names to this libraries chart names.
 
-The list is of the following pattern: 
-- Official Chart Name: `'Chart name in GoogleCharts'`.
+The list items are of the following pattern:
 
-For any chart you want to create, use the `Chart name in GoogleCharts` for the type string.
+- Official Chart Name: `'ChartNameInAngularGoogleCharts'`.
+
+For any chart you want to create, use the `ChartNameInAngularGoogleCharts` for the type string.
 
 - Annotation Chart: `'AnnotationChart'`
 - Area Chart: `'AreaChart'`

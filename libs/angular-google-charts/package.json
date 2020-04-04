@@ -1,7 +1,7 @@
 {
   "name": "angular-google-charts",
   "version": "0.1.6",
-  "description": "A wrapper of the Google Charts library written with Angular 6",
+  "description": "A wrapper for the Google Charts library written with Angular",
   "keywords": [
     "Angular",
     "Angular2",

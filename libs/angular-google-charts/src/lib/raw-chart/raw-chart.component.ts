@@ -28,9 +28,7 @@ type Formatter = google.visualization.DefaultFormatter | CustomFormatter[];
   selector: 'raw-chart',
   template: '',
   styles: [':host { width: fit-content; display: block; }'],
-  host: {
-    class: 'raw-chart'
-  },
+  host: { class: 'raw-chart' },
   exportAs: 'raw-chart',
   changeDetection: ChangeDetectionStrategy.OnPush
 })

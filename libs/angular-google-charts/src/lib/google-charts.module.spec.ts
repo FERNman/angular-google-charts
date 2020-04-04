@@ -27,7 +27,7 @@ describe('GoogleChartsModule', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [GoogleChartsModule.forRoot(apiKey)]
+        imports: [GoogleChartsModule.forRoot({ mapsApiKey: apiKey })]
       });
     });
 
@@ -40,7 +40,7 @@ describe('GoogleChartsModule', () => {
     });
 
     it('should have the correct api key set', () => {
-      const injectedKey = (service as any).googleApiKey;
+      const injectedKey = service['googleApiKey'];
       expect(injectedKey).toEqual(apiKey);
     });
   });

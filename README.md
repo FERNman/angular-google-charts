@@ -1,39 +1,22 @@
 # Angular-Google-Charts
 
-This library provides a wrapper of the [Google Charts](https://google-developers.appspot.com/chart/) library for Angular 6 & 7. It is built with the AngularCLI and includes some examples.
+> A wrapper for the [Google Charts library](https://google-developers.appspot.com/chart/) written in Angular.
 
 ## Setup
 
+### Installation
+
 To use Angular-Google-Charts in your project, install the package with npm by calling
 
-```
+```bash
 npm install angular-google-charts
 ```
 
 This will add the package to your package.json and install the required dependencies.
 
-## Usage
+### Importing
 
-Import the `GoogleChartsModule` in your `app.module.ts`:
-
-```typescript
-import { GoogleChartsModule } from 'angular-google-charts';
-
-@NgModule({
-  ...
-  imports: [
-    ...
-    GoogleChartsModule.forRoot(),
-    ...
-  ],
-  ...
-})
-export class AppModule {}
-```
-
-If you want to use GeoCharts, you may want to provide a Maps API Key. More information on this can be found in the [official documentation](https://developers.google.com/chart/interactive/docs/basic_load_libs#load-settings).
-
-To do so, just add your Maps API Key in the `GoogleChartsModule.forRoot()` method like this:
+Next, import the `GoogleChartsModule` in your `app.module.ts`:
 
 ```typescript
 import { GoogleChartsModule } from 'angular-google-charts';
@@ -42,7 +25,7 @@ import { GoogleChartsModule } from 'angular-google-charts';
   ...
   imports: [
     ...
-    GoogleChartsModule.forRoot('my-custom-maps-api-key'),
+    GoogleChartsModule,
     ...
   ],
   ...
@@ -50,28 +33,11 @@ import { GoogleChartsModule } from 'angular-google-charts';
 export class AppModule {}
 ```
 
-If you want to use a specific version of Google Charts, you will need to provide a Maps API Key or an empty string for the first parameter and then the charts version as a string. This must be something like this: '45.2', '45', 'current', 'upcoming', etc... More information on this can be found in the [official documentation](https://developers.google.com/chart/interactive/docs/basic_load_libs).
+This will allow you to use all of the features provided by this library.
 
-To do so, just add your chart version in the `GoogleChartsModule.forRoot()` method like this:
+#### Configuring Angular-Google-Charts
 
-```typescript
-import { GoogleChartsModule } from 'angular-google-charts';
-
-@NgModule({
-  ...
-  imports: [
-    ...
-    GoogleChartsModule.forRoot('my-custom-maps-api-key or not', 'chart-version'),
-    ...
-  ],
-  ...
-})
-export class AppModule {}
-```
-
-_Note:_
-
-It is not necessary to import the `GoogleChartsModule` by calling its `forRoot` method. You can simply import the module as well.
+For some use cases, it might be necessary to use some different config options than the default values. Please read the [config documentation](./docs/Config.md) for more information.
 
 ## Charts
 
@@ -121,14 +87,20 @@ If passing a formatter class instance, every column will be formatted according 
 ```typescript
 // Formats the column with the index 1 and 3 to Date(long)
 myFormatter = [
-  { formatter: new google.visualization.Dateformat({ formatType: 'long' }), colIndex: 1 },
-  { formatter: new google.visualization.Dateformat({ formatType: 'long' }), colIndex: 3 }
+  {
+    formatter: new google.visualization.Dateformat({ formatType: 'long' }),
+    colIndex: 1
+  },
+  {
+    formatter: new google.visualization.Dateformat({ formatType: 'long' }),
+    colIndex: 3
+  }
 ];
 ```
 
 For more information and all formatter types, please refer to the [documentation](https://google-developers.appspot.com/chart/interactive/docs/reference#formatters).
 
-_Note: When you get the error "google is not defined" whilst using the formatter in your component, you probably didn't load the script. Please see [CustomComponents](#custom-components)_.
+_Note: When you get the error "google is not defined" whilst using the formatter in your component, you probably didn't load the google charts script. Please see [CustomComponents](#custom-components)_.
 
 #### Dynamic Resize
 
@@ -175,7 +147,7 @@ The type specifies which type of chart you want to display. It requires a string
 - `'Bubblechart'`
 - etc.
 
-For a full list of the types available, please refer to [ChartTypes.md](./ChartTypes.md).
+For a full list of the types available, please refer to [ChartTypes.md](./docs/ChartTypes.md).
 
 For more chart types and information, please see the [google chart gallery](https://google-developers.appspot.com/chart/interactive/docs/gallery).
 
@@ -414,7 +386,7 @@ export class AppComponent {
 }
 ```
 
-When doing so, you are completely free to create the chart by yourself. Please refer to the (ChartWrapper Documentation)[https://developers.google.com/chart/interactive/docs/reference#chartwrapper-class] on how to do this.
+When doing so, you are completely free to create the chart by yourself. Please refer to the [ChartWrapper Documentation](https://developers.google.com/chart/interactive/docs/reference#chartwrapper-class) on how to do this.
 
 ## Custom Components
 
@@ -442,36 +414,8 @@ ngOnInit() {
 To pass a Chart Type into a Google Chart Package name, you can use the `GoogleChartPackagesHelper`.
 
 ```typescript
-const type = GoogleChartPackagesHelper.getPackageForChartName('BarChart');
+const chartPackage = GoogleChartPackagesHelper.getPackageForChartName('BarChart');
 ```
-
-## AngularCLI
-
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
-
-### Development server
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-### Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-### Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-### Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-### Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-### Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
 ## License
 

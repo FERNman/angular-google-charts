@@ -8,9 +8,11 @@
     "Angular 2",
     "Charts",
     "Google",
+    "Chart",
     "Angular 6",
     "Angular 7",
-    "Chart"
+    "Angular 8",
+    "Angular 9"
   ],
   "homepage": "https://github.com/FERNman/angular-google-charts",
   "repository": {
@@ -27,11 +29,11 @@
     "email": "gabriel.sperrer@gmail.com"
   },
   "dependencies": {
-    "@types/google.visualization": "^0.0.43"
+    "@types/google.visualization": "^0.0.52"
   },
   "peerDependencies": {
-    "@angular/common": "^6.0.0-rc.0 || ^6.0.0 || ^7.0.0 || ^8.0.0",
-    "@angular/core": "^6.0.0-rc.0 || ^6.0.0 || ^7.0.0 || ^8.0.0"
+    "@angular/common": "^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0",
+    "@angular/core": "^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0"
   },
   "main": "src/index.ts"
 }

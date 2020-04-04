@@ -7,16 +7,16 @@ import { RawChartComponent } from './raw-chart/raw-chart.component';
 
 @NgModule({
   declarations: [GoogleChartComponent, RawChartComponent],
-  exports: [GoogleChartComponent, RawChartComponent]
+  exports: [GoogleChartComponent, RawChartComponent],
 })
 export class GoogleChartsModule {
-  public static forRoot({ mapsApiKey, version }: Config = {}): ModuleWithProviders {
+  public static forRoot({ mapsApiKey, version }: Config = {}): ModuleWithProviders<GoogleChartsModule> {
     return {
       ngModule: GoogleChartsModule,
       providers: [
         { provide: MAPS_API_KEY, useValue: mapsApiKey },
-        { provide: CHART_VERSION, useValue: version }
-      ]
+        { provide: CHART_VERSION, useValue: version },
+      ],
     };
   }
 }

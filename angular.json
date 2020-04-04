@@ -2,7 +2,7 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "schematics": {
     "@schematics/angular:component": {
-      "styleext": "scss"
+      "style": "scss"
     }
   },
   "version": 1,
@@ -22,7 +22,8 @@
           },
           "configurations": {
             "production": {
-              "project": "libs/angular-google-charts/ng-package.prod.json"
+              "project": "libs/angular-google-charts/ng-package.prod.json",
+              "tsConfig": "libs/angular-google-charts/tsconfig.lib.prod.json"
             }
           }
         },
@@ -48,6 +49,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "aot": true,
             "outputPath": "dist/playground",
             "index": "apps/playground/src/index.html",
             "main": "apps/playground/src/main.ts",
@@ -79,6 +81,10 @@
                   "type": "initial",
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
                 }
               ]
             }
@@ -105,5 +111,8 @@
       }
     }
   },
-  "defaultProject": "angular-google-charts"
+  "defaultProject": "angular-google-charts",
+  "cli": {
+    "analytics": "d81f7890-056e-4fbd-90be-bc8fb5b6dfaf"
+  }
 }

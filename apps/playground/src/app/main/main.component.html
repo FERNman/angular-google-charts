@@ -1,14 +1,31 @@
-<h1 style="font-family: Arial, Helvetica, sans-serif">Angular Google-Charts Demo</h1>
+<h1 style="font-family: Arial, Helvetica, sans-serif;">Angular Google-Charts Demo</h1>
 <div *ngFor="let chart of charts">
-  <google-chart width="600" [title]="chart.title" [type]="chart.type" [data]="chart.data"
-    [columnNames]="chart.columnNames" [roles]="chart.roles" [options]="chart.options" (ready)="onReady()"
-    (select)="onSelect($event)" (error)="onError($event)" (mouseenter)="onMouseEnter($event)"
-    (mouseleave)="onMouseLeave($event)">
+  <google-chart
+    width="600"
+    [title]="chart.title"
+    [type]="chart.type"
+    [data]="chart.data"
+    [columnNames]="chart.columnNames"
+    [roles]="chart.roles"
+    [options]="chart.options"
+    (ready)="onReady()"
+    (select)="onSelect($event)"
+    (error)="onError($event)"
+    (mouseenter)="onMouseEnter($event)"
+    (mouseleave)="onMouseLeave($event)"
+  >
   </google-chart>
 </div>
 
-<google-chart #chart width="600" [title]="changingChart.title" [type]="changingChart.type" [data]="changingChart.data"
-  [columnNames]="changingChart.columnNames" [options]="changingChart.options">
+<google-chart
+  #chart
+  width="600"
+  [title]="changingChart.title"
+  [type]="changingChart.type"
+  [data]="changingChart.data"
+  [columnNames]="changingChart.columnNames"
+  [options]="changingChart.options"
+>
 </google-chart>
 
 <button (click)="changeChart()">Change Data</button>

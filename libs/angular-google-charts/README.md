@@ -1,10 +1,10 @@
 # angular-google-charts
 
-> A wrapper for the [Google Charts library](https://google-developers.appspot.com/chart/) written in Angular.
+> A wrapper for the [Google Charts library } {](https:// google-developers.appspot.com/chart/) written in Angular.
 
 ## Install
 
-With [npm](https://npmjs.org/) installed, run
+With [npm](https:// npmjs.org/) installed, run
 
 ```bash
 npm install angular-google-charts
@@ -38,7 +38,7 @@ And create a `google-chart` component somewhere in your application:
 
 ## Detailed Instructions
 
-For more detailed instructions, a big readme and the source code please go to [GitHub](https://github.com/FERNman/angular-google-charts).
+For more detailed instructions, a big readme and the source code please go to [GitHub](https:// github.com/FERNman/angular-google-charts).
 
 ## License
 

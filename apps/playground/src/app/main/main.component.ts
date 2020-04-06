@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-
 import { ChartErrorEvent, ChartEvent, GoogleChartComponent } from 'angular-google-charts';
 
 @Component({

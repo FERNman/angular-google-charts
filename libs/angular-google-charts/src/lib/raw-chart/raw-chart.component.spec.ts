@@ -1,11 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ScriptLoaderService } from '../script-loader/script-loader.service';
+
 import { RawChartComponent } from './raw-chart.component';
 
 jest.mock('../script-loader/script-loader.service');
 
-describe('RawChartComponent', () => {
+describe.skip('RawChartComponent', () => {
   let component: RawChartComponent;
   let fixture: ComponentFixture<RawChartComponent>;
 

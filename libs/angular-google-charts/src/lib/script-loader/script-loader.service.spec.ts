@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { CHART_VERSION, MAPS_API_KEY } from '../models/injection-tokens.model';
+import { GOOGLE_CHARTS_CONFIG } from '../models/injection-tokens.model';
 
 import { ScriptLoaderService } from './script-loader.service';
 
@@ -104,10 +104,11 @@ describe('ScriptLoaderService', () => {
 
       service.loadChartPackages(chart).subscribe();
 
-      expect(chartsMock.load).toHaveBeenCalledWith('46', {
+      expect(chartsMock.load).toHaveBeenCalledWith('current', {
         packages: [chart],
         language: 'en-US',
-        mapsApiKey: ''
+        mapsApiKey: '',
+        safeMode: false
       });
     });
 
@@ -131,14 +132,14 @@ describe('ScriptLoaderService', () => {
 
       const version = 'current';
       const mapsApiKey = 'mapsApiKey';
+      const safeMode = true;
       const locale = 'de-DE';
 
       TestBed.configureTestingModule({
         providers: [
           ScriptLoaderService,
           { provide: LOCALE_ID, useValue: locale },
-          { provide: CHART_VERSION, useValue: version },
-          { provide: MAPS_API_KEY, useValue: mapsApiKey }
+          { provide: GOOGLE_CHARTS_CONFIG, useValue: { version, mapsApiKey, safeMode } }
         ]
       });
       service = TestBed.inject(ScriptLoaderService);
@@ -150,7 +151,8 @@ describe('ScriptLoaderService', () => {
       expect(chartsMock.load).toHaveBeenCalledWith(version, {
         packages: [chart],
         language: locale,
-        mapsApiKey: mapsApiKey
+        mapsApiKey,
+        safeMode
       });
     });
   });

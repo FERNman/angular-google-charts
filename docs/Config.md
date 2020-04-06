@@ -21,7 +21,8 @@ export class AppModule {}
 
 ## Providing a Google Maps API Key
 
-When using GeoCharts, it might be necessary to provide a Maps API Key to access full functionality.
+When using Geocharts or Map Charts, it might be necessary to provide a Maps API Key to avoid
+the default request throttling of Googles servers.
 
 The Google Maps API Key can be configured using the `mapsApiKey` property in the config.
 
@@ -31,3 +32,8 @@ You may want to specify a custom version of Google Charts, e.g. `'upcoming'`.
 More information on this can be found in the [official documentation](https://developers.google.com/chart/interactive/docs/basic_load_libs).
 
 The version can be configured using the `version` property in the config.
+
+## Sanitizing unsafe HTML
+
+Since version 47, Google Charts allows you to sanitize generated HTML and will automatically strip unsafe elements.
+You can enable this behaviour by setting `safeMode` to true.

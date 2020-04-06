@@ -1,7 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 
 import { GoogleChartsModule } from './google-charts.module';
-import { CHART_VERSION, MAPS_API_KEY } from './models/injection-tokens.model';
+import { GoogleChartsConfig } from './models/google-charts-config.model';
+import { GOOGLE_CHARTS_CONFIG } from './models/injection-tokens.model';
 import { ScriptLoaderService } from './script-loader/script-loader.service';
 
 describe('GoogleChartsModule', () => {
@@ -23,14 +24,16 @@ describe('GoogleChartsModule', () => {
   describe('config via forRoot', () => {
     const mapsApiKey = 'myMapsApiKey';
     const version = '13.5';
+    const safeMode = false;
 
     it('should provide the given config values', () => {
+      const config: GoogleChartsConfig = { mapsApiKey, version, safeMode };
+
       TestBed.configureTestingModule({
-        imports: [GoogleChartsModule.forRoot({ mapsApiKey, version })]
+        imports: [GoogleChartsModule.forRoot(config)]
       });
 
-      expect(TestBed.inject(CHART_VERSION)).toBe(version);
-      expect(TestBed.inject(MAPS_API_KEY)).toBe(mapsApiKey);
+      expect(TestBed.inject(GOOGLE_CHARTS_CONFIG)).toEqual(config);
     });
 
     it('should accept empty config', () => {
@@ -38,8 +41,7 @@ describe('GoogleChartsModule', () => {
         imports: [GoogleChartsModule.forRoot()]
       });
 
-      expect(TestBed.inject(CHART_VERSION)).toBeUndefined();
-      expect(TestBed.inject(MAPS_API_KEY)).toBeUndefined();
+      expect(TestBed.inject(GOOGLE_CHARTS_CONFIG)).toEqual({});
     });
 
     it('should accept a partial config', () => {
@@ -47,8 +49,7 @@ describe('GoogleChartsModule', () => {
         imports: [GoogleChartsModule.forRoot({ mapsApiKey })]
       });
 
-      expect(TestBed.inject(CHART_VERSION)).toBeUndefined();
-      expect(TestBed.inject(MAPS_API_KEY)).toBe(mapsApiKey);
+      expect(TestBed.inject(GOOGLE_CHARTS_CONFIG)).toMatchObject({ mapsApiKey });
     });
   });
 });

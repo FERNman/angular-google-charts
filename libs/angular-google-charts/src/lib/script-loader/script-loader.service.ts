@@ -2,18 +2,23 @@ import { Inject, Injectable, LOCALE_ID, Optional } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
-import { CHART_VERSION, MAPS_API_KEY } from '../models/injection-tokens.model';
+import { GoogleChartsConfig } from '../models/google-charts-config.model';
+import { GOOGLE_CHARTS_CONFIG } from '../models/injection-tokens.model';
+
+const DEFAULT_CONFIG: GoogleChartsConfig = {
+  mapsApiKey: '',
+  version: 'current',
+  safeMode: false
+};
 
 @Injectable({ providedIn: 'root' })
 export class ScriptLoaderService {
   private readonly scriptSource = 'https://www.gstatic.com/charts/loader.js';
   private readonly onLoadSubject = new Subject<void>();
 
-  constructor(
-    @Inject(LOCALE_ID) private localeId: string,
-    @Inject(MAPS_API_KEY) @Optional() private mapsApiKey?: string,
-    @Inject(CHART_VERSION) @Optional() private chartVersion?: string
-  ) {}
+  constructor(@Inject(LOCALE_ID) private localeId: string, @Inject(GOOGLE_CHARTS_CONFIG) @Optional() private config?: GoogleChartsConfig) {
+    this.config = { ...DEFAULT_CONFIG, ...(config || {}) };
+  }
 
   /**
    * A stream that emits as soon as the google charts script is loaded (i.e. `google.charts` is available).
@@ -59,10 +64,11 @@ export class ScriptLoaderService {
           const config = {
             packages,
             language: this.localeId,
-            mapsApiKey: this.mapsApiKey || ''
+            mapsApiKey: this.config.mapsApiKey,
+            safeMode: this.config.safeMode
           };
 
-          google.charts.load(this.chartVersion || '46', config);
+          google.charts.load(this.config.version, config);
           google.charts.setOnLoadCallback(() => {
             observer.next();
             observer.complete();

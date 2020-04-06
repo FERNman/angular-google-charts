@@ -7,6 +7,7 @@
   },
   "version": 1,
   "newProjectRoot": "apps",
+  "defaultProject": "angular-google-charts",
   "projects": {
     "angular-google-charts": {
       "root": "libs/angular-google-charts",
@@ -28,7 +29,11 @@
           }
         },
         "test": {
-          "builder": "@angular-builders/jest:run"
+          "builder": "@angular-builders/jest:run",
+          "options": {
+            "configPath": "jest.config.js",
+            "projects": ["libs/angular-google-charts"]
+          }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
@@ -111,7 +116,6 @@
       }
     }
   },
-  "defaultProject": "angular-google-charts",
   "cli": {
     "analytics": "d81f7890-056e-4fbd-90be-bc8fb5b6dfaf"
   }

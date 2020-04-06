@@ -32,7 +32,8 @@
           "builder": "@angular-builders/jest:run",
           "options": {
             "configPath": "jest.config.js",
-            "projects": ["libs/angular-google-charts"]
+            "projects": ["libs/angular-google-charts"],
+            "coverageDirectory": "../../coverage"
           }
         },
         "lint": {

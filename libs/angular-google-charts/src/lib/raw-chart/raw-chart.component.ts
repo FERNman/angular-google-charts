@@ -9,7 +9,6 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-
 import { fromEvent, Observable } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
@@ -71,9 +70,7 @@ export class RawChartComponent implements OnInit, OnChanges, AfterViewInit {
       throw new Error("Can't create a Google Chart without data!");
     }
 
-    this.loaderService.onReady.subscribe(() => {
-      this.createChart();
-    });
+    this.createChart();
   }
 
   public ngAfterViewInit() {
@@ -104,7 +101,7 @@ export class RawChartComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   protected loadNeededPackages(): Observable<void> {
-    return this.loaderService.loadChartPackages([GoogleChartPackagesHelper.getPackageForChartName(this.chartData.chartType)]);
+    return this.loaderService.loadChartPackages(GoogleChartPackagesHelper.getPackageForChartName(this.chartData.chartType));
   }
 
   protected updateChart() {

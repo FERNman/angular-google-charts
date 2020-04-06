@@ -1,6 +1,5 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-
 import { GoogleChartPackagesHelper } from 'angular-google-charts';
 import { ScriptLoaderService } from 'angular-google-charts';
 
@@ -49,10 +48,8 @@ export class TestComponent implements OnInit {
   constructor(private location: Location, private loaderService: ScriptLoaderService) {}
 
   public ngOnInit() {
-    this.loaderService.onReady.subscribe(() => {
-      this.loaderService.loadChartPackages([this.areaChartPackage]).subscribe(() => {
-        this.rawFormatter = [{ formatter: new google.visualization.DateFormat({ formatType: 'long' }), colIndex: 0 }];
-      });
+    this.loaderService.loadChartPackages(this.areaChartPackage).subscribe(() => {
+      this.rawFormatter = [{ formatter: new google.visualization.DateFormat({ formatType: 'long' }), colIndex: 0 }];
     });
   }
 

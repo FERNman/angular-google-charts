@@ -388,34 +388,66 @@ export class AppComponent {
 
 When doing so, you are completely free to create the chart by yourself. Please refer to the [ChartWrapper Documentation](https://developers.google.com/chart/interactive/docs/reference#chartwrapper-class) on how to do this.
 
-## Custom Components
+### Using the `ScriptLoaderService`
 
-For some specific types of Google Charts, it may be required to create a custom component. To be able to do so, the ScriptLoaderService (the service that loads the GoogleCharts Library) can be injected into your component.
+For some specific types of Google Charts, you may want to create custom components.
+When doing so, you need to load the chart packages by yourself.
+The `ScriptLoaderService` provides a few methods helping with this.
 
 ```typescript
-constructor( private loaderService: ScriptLoaderService ) {}
+class MyComponent {
+  private readonly chartPackage = GoogleChartPackagesHelper.getPackageForChartName('BarChart');
+
+  @ViewChild('container', { read: ElementRef })
+  private containerEl: ElementRef<HTMLElement>;
+
+  constructor(private loaderService: ScriptLoaderService) {}
+
+  ngOnInit() {
+    this.loaderService.loadChartPackages(this.chartPackage).subscribe(() => {
+      // Start creating your chart now
+      const char = new google.visualization.BarChart(this.containerEl.nativeElement);
+    });
+  }
+}
 ```
 
-And in your OnInit method (or whereever you'd want to create your chart):
+If you don't need a specific chart package but just want to access the `google.charts` namespace,
+you can use the method `ScriptLoaderService.loadGoogleCharts()`.
+It will load the script into the current browser session.
 
 ```typescript
 ngOnInit() {
-  this.loaderService.onReady.subscribe( () => {
-    this.loaderService.loadChartPackages([this.type]).subscribe(() => {
-      // Start creating your chart now
-      // Example:
-      const formatter = new google.visualization.BarFormat();
-    });
+  this.loaderService.loadGoogleCharts().subscribe(() => {
+    console.log(this.loaderService.isGoogleChartsAvailable()); // true
 
+    // You can now use `google.charts`
+    google.charts.load();
   });
 }
 ```
 
-To pass a Chart Type into a Google Chart Package name, you can use the `GoogleChartPackagesHelper`.
+### Preloading the Google Charts script
 
-```typescript
-const chartPackage = GoogleChartPackagesHelper.getPackageForChartName('BarChart');
+If the existence of charts is crucial to your application, you may want to decrease the time it takes until the first chart becomes visible.
+This can be achieved by loading the Google Charts script concurrently with the rest of the application.
+In the playground application, this reduces the time until the first chart appears by roughly 20%, which means for
+example about 4 seconds when using the "Slow 3G" profile in Chrome DevTools.
+
+To achieve this, two scripts have to be added to the `index.html` file in your apps' root folder.
+The first one loads the generic Google Charts script, the second one the version-specific parts of the library needed to load charts.
+
+In the code below, `<chart_version>` has to be replaced with the **exact** of the Google Charts library that you want to use and must match the version you use when importing the `GoogleChartsModule`.
+
+The only exception to this is version `46`. All minor versions of Google Charts v46 require the loader to be of version `46.2`.
+
+```html
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js" async></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/<chart_version>/loader.js" async></script>
 ```
+
+Please note that this can increase the time it takes until Angular is fully loaded.
+I suggest doing some benchmarks with your specific application before deploying this to production.
 
 ## License
 

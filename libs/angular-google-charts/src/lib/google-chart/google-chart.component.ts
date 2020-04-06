@@ -54,9 +54,7 @@ export class GoogleChartComponent extends RawChartComponent implements OnInit, O
       chartType: this.type
     };
 
-    this.loaderService.onReady.subscribe(() => {
-      this.createChart();
-    });
+    this.createChart();
   }
 
   public ngOnChanges() {

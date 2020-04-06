@@ -1,0 +1,25 @@
+<h1>Test Component</h1>
+<button (click)="goBack()">Back</button>
+
+<google-chart
+  width="600"
+  [title]="chart.title"
+  [type]="chart.type"
+  [data]="chart.data"
+  [columnNames]="chart.columnNames"
+  [options]="chart.options"
+>
+</google-chart>
+
+<google-chart
+  style="width: 100%;"
+  title="Width: 100%"
+  type="BarChart"
+  [data]="chart.data"
+  [columnNames]="chart.columnNames"
+  [options]="chart.options"
+  [dynamicResize]="true"
+>
+</google-chart>
+
+<raw-chart [chartData]="rawChartData" [dynamicResize]="true" [formatter]="rawFormatter"></raw-chart>

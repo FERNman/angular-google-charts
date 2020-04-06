@@ -1,0 +1,26 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "chrome",
+      "request": "attach",
+      "name": "Attach to Chrome",
+      "url": "http://localhost:4200",
+      "port": 9222,
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Current Test File",
+      "program": "${workspaceFolder}/node_modules/@angular/cli/bin/ng",
+      "args": ["test", "angular-google-charts", "--runInBand=true", "--coverage=false", "--testPathPattern=${fileBasename}"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "trace": "all"
+    }
+  ]
+}

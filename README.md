@@ -1,39 +1,22 @@
 # Angular-Google-Charts
 
-This library provides a wrapper of the [Google Charts](https://google-developers.appspot.com/chart/) library for Angular 6 & 7. It is built with the AngularCLI and includes some examples.
+> A wrapper for the [Google Charts library](https://google-developers.appspot.com/chart/) written in Angular.
 
 ## Setup
 
+### Installation
+
 To use Angular-Google-Charts in your project, install the package with npm by calling
 
-```
+```bash
 npm install angular-google-charts
 ```
 
 This will add the package to your package.json and install the required dependencies.
 
-## Usage
+### Importing
 
-Import the `GoogleChartsModule` in your `app.module.ts`:
-
-```typescript
-import { GoogleChartsModule } from 'angular-google-charts';
-
-@NgModule({
-  ...
-  imports: [
-    ...
-    GoogleChartsModule.forRoot(),
-    ...
-  ],
-  ...
-})
-export class AppModule {}
-```
-
-If you want to use GeoCharts, you may want to provide a Maps API Key. More information on this can be found in the [official documentation](https://developers.google.com/chart/interactive/docs/basic_load_libs#load-settings).
-
-To do so, just add your Maps API Key in the `GoogleChartsModule.forRoot()` method like this:
+Next, import the `GoogleChartsModule` in your `app.module.ts`:
 
 ```typescript
 import { GoogleChartsModule } from 'angular-google-charts';
@@ -42,7 +25,7 @@ import { GoogleChartsModule } from 'angular-google-charts';
   ...
   imports: [
     ...
-    GoogleChartsModule.forRoot('my-custom-maps-api-key'),
+    GoogleChartsModule,
     ...
   ],
   ...
@@ -50,28 +33,11 @@ import { GoogleChartsModule } from 'angular-google-charts';
 export class AppModule {}
 ```
 
-If you want to use a specific version of Google Charts, you will need to provide a Maps API Key or an empty string for the first parameter and then the charts version as a string. This must be something like this: '45.2', '45', 'current', 'upcoming', etc... More information on this can be found in the [official documentation](https://developers.google.com/chart/interactive/docs/basic_load_libs).
+This will allow you to use all of the features provided by this library.
 
-To do so, just add your chart version in the `GoogleChartsModule.forRoot()` method like this:
+#### Configuring Angular-Google-Charts
 
-```typescript
-import { GoogleChartsModule } from 'angular-google-charts';
-
-@NgModule({
-  ...
-  imports: [
-    ...
-    GoogleChartsModule.forRoot('my-custom-maps-api-key or not', 'chart-version'),
-    ...
-  ],
-  ...
-})
-export class AppModule {}
-```
-
-*Note:*
-
-It is not necessary to import the `GoogleChartsModule` by calling its `forRoot` method. You can simply import the module as well.
+For some use cases, it might be necessary to use some different config options than the default values. Please read the [config documentation](./docs/Config.md) for more information.
 
 ## Charts
 
@@ -87,6 +53,7 @@ This component is really not more than a wrapper around the basic Google-Charts 
 resizing when the width of the parent changes.
 
 #### Chart Data
+
 `google.visualization.ChartSpecs`
 
 ```html
@@ -97,6 +64,7 @@ The chart data is an object that allows you to pass all chart configuration opti
 passed here as well.
 
 #### First Row is Data
+
 `boolean`
 
 ```html
@@ -106,6 +74,7 @@ passed here as well.
 This property is necessary when you want to create a raw chart that has the first row as data row. Defaults to false as for most charts the first row is the header row.
 
 #### Formatter
+
 `Array<{formatter: google.visualization.DefaultFormatter, colIndex: number}> | google.visualization.DefaultFormatter`
 
 ```html
@@ -118,16 +87,23 @@ If passing a formatter class instance, every column will be formatted according 
 ```typescript
 // Formats the column with the index 1 and 3 to Date(long)
 myFormatter = [
-  { formatter: new google.visualization.Dateformat({formatType: 'long'}), colIndex: 1 },
-  { formatter: new google.visualization.Dateformat({formatType: 'long'}), colIndex: 3 }
+  {
+    formatter: new google.visualization.Dateformat({ formatType: 'long' }),
+    colIndex: 1
+  },
+  {
+    formatter: new google.visualization.Dateformat({ formatType: 'long' }),
+    colIndex: 3
+  }
 ];
 ```
 
 For more information and all formatter types, please refer to the [documentation](https://google-developers.appspot.com/chart/interactive/docs/reference#formatters).
 
-*Note: When you get the error "google is not defined" whilst using the formatter in your component, you probably didn't load the script. Please see [CustomComponents](#custom-components)*.
+_Note: When you get the error "google is not defined" whilst using the formatter in your component, you probably didn't load the google charts script. Please see [CustomComponents](#custom-components)_.
 
 #### Dynamic Resize
+
 `boolean`
 
 ```html
@@ -155,6 +131,7 @@ The component provides a few input properties for convenience. It extends the Ra
 that's possible in the `RawChartComponent` also works in the `GoogleChartComponent`.
 
 #### Type (required)
+
 `string`
 
 ```html
@@ -162,6 +139,7 @@ that's possible in the `RawChartComponent` also works in the `GoogleChartCompone
 ```
 
 The type specifies which type of chart you want to display. It requires a string. Examples include:
+
 - `'BarChart'`
 - `'PieChart'`
 - `'ColumnChart'`
@@ -169,11 +147,12 @@ The type specifies which type of chart you want to display. It requires a string
 - `'Bubblechart'`
 - etc.
 
-For a full list of the types available, please refer to [ChartTypes.md](./ChartTypes.md).
+For a full list of the types available, please refer to [ChartTypes.md](./docs/ChartTypes.md).
 
 For more chart types and information, please see the [google chart gallery](https://google-developers.appspot.com/chart/interactive/docs/gallery).
 
 #### Data (required)
+
 `Array<Array<any>>`
 
 ```html
@@ -206,6 +185,7 @@ myData = [
 For further information, please see the official [google documentation](https://google-developers.appspot.com/chart/interactive/docs/reference#arraytodatatable) on `arraytodatatable`, which is the function used internally, or read the examples included.
 
 ### ColumnNames (required for most charts)
+
 `Array<string>`
 
 ```html
@@ -220,6 +200,7 @@ myColumnNames = ['City', 'Inhabitants'];
 ```
 
 ### Roles
+
 `Array<{ role: string, type: string, index?: number, p?: object }>`
 
 ```html
@@ -227,16 +208,13 @@ myColumnNames = ['City', 'Inhabitants'];
 ```
 
 The `roles` property is optional and can be used for additional, row specific styling options. If provided, the length of the array must match the length of the roles provided in each of the inner arrays of the data object.
-The optional `index` attribute can be used to place roles relative to columns. When specified, the role will be inserted **after** 
-after the `ColumnName` at the given index. If it is not specified (*default*), all roles will be appended at the back of the `ColumnNames`. 
+The optional `index` attribute can be used to place roles relative to columns. When specified, the role will be inserted **after**
+after the `ColumnName` at the given index. If it is not specified (_default_), all roles will be appended at the back of the `ColumnNames`.
 The optional `p` attribute is used e.g. when you want to use html in a tooltip.
 In that case you have to set `p` with `{html: true}`.
 
-
 ```typescript
-myRoles = [
-  { role: 'style', type: 'string', index: 2 }
-];
+myRoles = [{ role: 'style', type: 'string', index: 2 }];
 
 myData = [
   ['Element', 10.5, '#ffaaff'] // The last entry in the array is the role
@@ -246,7 +224,9 @@ myData = [
 For further information, please see the [google documentation](https://google-developers.appspot.com/chart/interactive/docs/roles).
 
 For further information on the `p` attribute, please see the [google documentation](https://developers.google.com/chart/interactive/docs/reference#methods).
+
 ### Title
+
 `string`
 
 ```html
@@ -256,6 +236,7 @@ For further information on the `p` attribute, please see the [google documentati
 The `title` property is optional and provided for convenice. It can also be included in the `options` property.
 
 ### Width
+
 `number`
 
 ```html
@@ -266,6 +247,7 @@ The `width` property is optional and allows to set the width of the chart. The n
 You can also set the width using css, which has the advantage of allowing `%` values instead of only pixels. For more information on that, see [dynamic resize](#dynamic-resize).
 
 ### Height
+
 `number`
 
 ```html
@@ -276,6 +258,7 @@ The `height` property is optional and allows to set the height of the chart. The
 You can also set the height using css, which has the advantage of allowing `%` values instead of only pixels. For more information on that, see [dynamic resize](#dynamic-resize).
 
 ### Options
+
 `object`
 
 ```html
@@ -383,86 +366,88 @@ The event is of type `ChartEvent`, where column is the index of the hovered colu
 For advanced actions, one may need to access to the underlying `ChartWrapper` creating the charts.
 
 ```html
-<google-chart #chart></google-chart>
+<google-chart #chart (ready)="chartReady(chart)"></google-chart>
 ```
 
 ```typescript
-import { ViewChild } from '@angular/core';
 import { GoogleChartComponent } from 'angular-google-charts';
 
 @Component({
   ...
 })
-export class AppComponent implements OnInit {
-  @ViewChild('chart')
-  chart: GoogleChartComponent;
+export class AppComponent {
+  private myAdvancedData: any; // Initialized somewhere else
 
-  ngOnInit() {
-    const wrapper = this.chart.wrapper;
+  public chartReady(chart: GoogleChartComponent) {
+    const wrapper = chart.wrapper;
 
     wrapper.draw(myAdvancedData);
   }
 }
 ```
 
-When doing so, you are completely free to create the chart by yourself. Please refer to the (ChartWrapper Documentation)[https://developers.google.com/chart/interactive/docs/reference#chartwrapper-class] on how to do this.
+When doing so, you are completely free to create the chart by yourself. Please refer to the [ChartWrapper Documentation](https://developers.google.com/chart/interactive/docs/reference#chartwrapper-class) on how to do this.
 
-## Custom Components
+### Using the `ScriptLoaderService`
 
-For some specific types of Google Charts, it may be required to create a custom component. To be able to do so, the ScriptLoaderService (the service that loads the GoogleCharts Library) can be injected into your component.
+For some specific types of Google Charts, you may want to create custom components.
+When doing so, you need to load the chart packages by yourself.
+The `ScriptLoaderService` provides a few methods helping with this.
 
 ```typescript
-constructor( private loaderService: ScriptLoaderService ) {}
+class MyComponent {
+  private readonly chartPackage = GoogleChartPackagesHelper.getPackageForChartName('BarChart');
+
+  @ViewChild('container', { read: ElementRef })
+  private containerEl: ElementRef<HTMLElement>;
+
+  constructor(private loaderService: ScriptLoaderService) {}
+
+  ngOnInit() {
+    this.loaderService.loadChartPackages(this.chartPackage).subscribe(() => {
+      // Start creating your chart now
+      const char = new google.visualization.BarChart(this.containerEl.nativeElement);
+    });
+  }
+}
 ```
 
-And in your OnInit method (or whereever you'd want to create your chart):
+If you don't need a specific chart package but just want to access the `google.charts` namespace,
+you can use the method `ScriptLoaderService.loadGoogleCharts()`.
+It will load the script into the current browser session.
 
 ```typescript
 ngOnInit() {
-  this.loaderService.onReady.subscribe( () => {
-    this.loaderService.loadChartPackages(this.type).subscribe(() => {
-      // Start creating your chart now
-      // Example:
-      const formatter = new google.visualization.BarFormat();
-    });
+  this.loaderService.loadGoogleCharts().subscribe(() => {
+    console.log(this.loaderService.isGoogleChartsAvailable()); // true
 
+    // You can now use `google.charts`
+    google.charts.load();
   });
 }
 ```
 
-To pass a Chart Type into a Google Chart Package name, you can use the `GoogleChartPackagesHelper`.
+### Preloading the Google Charts script
 
-```typescript
-const type = GoogleChartPackagesHelper.getPackageForChartName('BarChart');
+If the existence of charts is crucial to your application, you may want to decrease the time it takes until the first chart becomes visible.
+This can be achieved by loading the Google Charts script concurrently with the rest of the application.
+In the playground application, this reduces the time until the first chart appears by roughly 20%, which means for
+example about 4 seconds when using the "Slow 3G" profile in Chrome DevTools.
+
+To achieve this, two scripts have to be added to the `index.html` file in your apps' root folder.
+The first one loads the generic Google Charts script, the second one the version-specific parts of the library needed to load charts.
+
+In the code below, `<chart_version>` has to be replaced with the **exact** of the Google Charts library that you want to use and must match the version you use when importing the `GoogleChartsModule`.
+
+The only exception to this is version `46`. All minor versions of Google Charts v46 require the loader to be of version `46.2`.
+
+```html
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js" async></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/<chart_version>/loader.js" async></script>
 ```
 
-## AngularCLI
-
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
-
-### Development server
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-### Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-### Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-### Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-### Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-### Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Please note that this can increase the time it takes until Angular is fully loaded.
+I suggest doing some benchmarks with your specific application before deploying this to production.
 
 ## License
 

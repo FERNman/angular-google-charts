@@ -1,4 +1,4 @@
-import { Inject, Injectable, LOCALE_ID, Optional } from '@angular/core';
+import { Inject, Injectable, LOCALE_ID, NgZone, Optional } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
@@ -16,7 +16,11 @@ export class ScriptLoaderService {
   private readonly scriptSource = 'https://www.gstatic.com/charts/loader.js';
   private readonly onLoadSubject = new Subject<void>();
 
-  constructor(@Inject(LOCALE_ID) private localeId: string, @Inject(GOOGLE_CHARTS_CONFIG) @Optional() private config?: GoogleChartsConfig) {
+  constructor(
+    private zone: NgZone,
+    @Inject(LOCALE_ID) private localeId: string,
+    @Inject(GOOGLE_CHARTS_CONFIG) @Optional() private config?: GoogleChartsConfig
+  ) {
     this.config = { ...DEFAULT_CONFIG, ...(config || {}) };
   }
 
@@ -70,8 +74,10 @@ export class ScriptLoaderService {
 
           google.charts.load(this.config.version, config);
           google.charts.setOnLoadCallback(() => {
-            observer.next();
-            observer.complete();
+            this.zone.run(() => {
+              observer.next();
+              observer.complete();
+            });
           });
         });
       })
@@ -93,13 +99,17 @@ export class ScriptLoaderService {
     if (!this.isGoogleChartsAvailable() && !this.isLoadingGoogleCharts()) {
       const script = this.createGoogleChartsScript();
       script.onload = () => {
-        this.onLoadSubject.next();
-        this.onLoadSubject.complete();
+        this.zone.run(() => {
+          this.onLoadSubject.next();
+          this.onLoadSubject.complete();
+        });
       };
 
       script.onerror = () => {
-        console.error('Failed to load the google chart script!');
-        this.onLoadSubject.error('Failed to load the google chart script!');
+        this.zone.run(() => {
+          console.error('Failed to load the google chart script!');
+          this.onLoadSubject.error('Failed to load the google chart script!');
+        });
       };
     }
 

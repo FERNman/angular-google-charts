@@ -26,7 +26,7 @@ export class TestComponent {
     }
   };
 
-  public rawChartData: google.visualization.ChartSpecs = {
+  public chartWrapperSpecs: google.visualization.ChartSpecs = {
     chartType: ChartType.AreaChart,
     dataTable: [
       ['SMR CV', 'US Cents/KG'],

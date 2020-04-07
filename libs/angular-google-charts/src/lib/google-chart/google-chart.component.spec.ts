@@ -124,6 +124,32 @@ describe('GoogleChartComponent', () => {
     expect(chartWrapperMock.draw).toHaveBeenCalledTimes(1);
   });
 
+  it('should not redraw the chart if nothing changed', () => {
+    const service = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
+    service.loadChartPackages.mockReturnValueOnce(of(void 0));
+
+    const data = [
+      ['First Row', 10],
+      ['Second Row', 11]
+    ];
+    component.data = data;
+
+    const columns = ['Some data', 'Some values'];
+    component.columns = columns;
+
+    const chartType = ChartType.BarChart;
+    component.type = chartType;
+    component.ngOnChanges({
+      type: new SimpleChange(null, chartType, true),
+      data: new SimpleChange(null, data, true),
+      columns: new SimpleChange(null, columns, true)
+    });
+
+    component.ngOnChanges({});
+
+    expect(chartWrapperMock.draw).toHaveBeenCalledTimes(1);
+  });
+
   it('should assume the first row is data if no columns are provided', () => {
     const service = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
     service.loadChartPackages.mockReturnValueOnce(of(void 0));

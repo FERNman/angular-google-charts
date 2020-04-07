@@ -161,7 +161,7 @@ myOptions = {
 ### Formatters
 
 ```html
-<raw-chart [formatters]="myFormatters"></raw-chart>
+<google-chart [formatters]="myFormatters"></google-chart>
 ```
 
 The `formatter` property is optional and allows to format the chart data. It requires an array of objects containing a formatter and an index.
@@ -187,7 +187,7 @@ _Note: When you get the error "google is not defined" whilst using the formatter
 ### Dynamic Resize
 
 ```html
-<raw-chart [dynamicResize]="dynamicResize"></raw-chart>
+<google-chart [dynamicResize]="dynamicResize"></google-chart>
 ```
 
 The `dynamicResize` property is optional and makes your chart redraw every time the window is resized.
@@ -197,7 +197,7 @@ Otherwise, the chart gets redrawn unnecessary and therefore slows down the site.
 ### Styling
 
 ```html
-<raw-chart style="width: 100%;"></raw-chart>
+<google-chart style="width: 100%;"></google-chart>
 ```
 
 Most CSS properties should work exactly as you would expect them to.
@@ -261,14 +261,14 @@ The event is of type `ChartMouseLeaveEvent`, where `column` is the index of the 
 
 ### Accessing the chart wrapper directly
 
-I case you don't need any of the special features the `GoogleChartsComponent` provides, the `RawChartComponent` can be used.
+I case you don't need any of the special features the `GoogleChartsComponent` provides, the `ChartWrapperComponent` can be used.
 It is a direct wrapper of the [`ChartWrapper`](https://developers.google.com/chart/interactive/docs/reference#chartwrapper-class)..
 
 ```html
-<raw-chart [specs]="chartWrapperSpecs"></raw-chart>
+<chart-wrapper [specs]="chartWrapperSpecs"></chart-wrapper>
 ```
 
-The `RawChartComponent` should be used if you need fine-grained control over the data you are providing or you want to use e.g.
+The `ChartWrapperComponent` should be used if you need fine-grained control over the data you are providing or you want to use e.g.
 the query feature that Google Charts provides, which is not supported using the `GoogleChartComponent`.
 
 ### Using the `ScriptLoaderService`

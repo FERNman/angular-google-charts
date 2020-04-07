@@ -8,14 +8,14 @@ import { ChartErrorEvent, ChartReadyEvent, ChartSelectionChangedEvent } from '..
 import { ScriptLoaderService } from '../script-loader/script-loader.service';
 
 @Component({
-  selector: 'raw-chart',
+  selector: 'chart-wrapper',
   template: '',
   styles: [':host { width: fit-content; display: block; }'],
-  host: { class: 'raw-chart' },
-  exportAs: 'raw-chart',
+  host: { class: 'chart-wrapper' },
+  exportAs: 'chart-wrapper',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RawChartComponent implements ChartBase, OnChanges {
+export class ChartWrapperComponent implements ChartBase, OnChanges {
   /**
    * Either a JSON object defining the chart, or a serialized string version of that object.
    * The format of this object is shown in the

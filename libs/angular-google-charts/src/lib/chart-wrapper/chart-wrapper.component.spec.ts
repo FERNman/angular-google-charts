@@ -5,7 +5,7 @@ import { EMPTY, of } from 'rxjs';
 import { ChartType } from '../models/chart-type.model';
 import { ScriptLoaderService } from '../script-loader/script-loader.service';
 
-import { RawChartComponent } from './raw-chart.component';
+import { ChartWrapperComponent } from './chart-wrapper.component';
 
 jest.mock('../script-loader/script-loader.service');
 
@@ -22,9 +22,9 @@ const visualizationMock = {
   }
 };
 
-describe('RawChartComponent', () => {
-  let component: RawChartComponent;
-  let fixture: ComponentFixture<RawChartComponent>;
+describe('ChartWrapperComponent', () => {
+  let component: ChartWrapperComponent;
+  let fixture: ComponentFixture<ChartWrapperComponent>;
 
   beforeEach(() => {
     visualizationMock.ChartWrapper.mockReturnValue(chartWrapperMock);
@@ -33,13 +33,13 @@ describe('RawChartComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [RawChartComponent],
+      declarations: [ChartWrapperComponent],
       providers: [ScriptLoaderService]
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RawChartComponent);
+    fixture = TestBed.createComponent(ChartWrapperComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

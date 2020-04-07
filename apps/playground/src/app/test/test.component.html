@@ -6,7 +6,7 @@
   [title]="chart.title"
   [type]="chart.type"
   [data]="chart.data"
-  [columnNames]="chart.columnNames"
+  [columns]="chart.columnNames"
   [options]="chart.options"
 >
 </google-chart>
@@ -16,10 +16,10 @@
   title="Width: 100%"
   type="BarChart"
   [data]="chart.data"
-  [columnNames]="chart.columnNames"
+  [columns]="chart.columnNames"
   [options]="chart.options"
   [dynamicResize]="true"
 >
 </google-chart>
 
-<raw-chart [chartData]="rawChartData" [dynamicResize]="true" [formatter]="rawFormatter"></raw-chart>
+<raw-chart [chartData]="rawChartData"></raw-chart>

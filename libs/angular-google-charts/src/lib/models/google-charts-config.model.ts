@@ -1,7 +1,7 @@
 export interface GoogleChartsConfig {
   /**
    * This setting lets you specify a key that you may use with Geochart and Map Chart.
-   * You may want to do this rather than use the default behavior which may result in
+   * You may want to do this rather than using the default behavior which may result in
    * occasional throttling of service for your users.
    *
    * Only available when using Google Charts 45 or higher.

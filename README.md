@@ -18,7 +18,7 @@ This will add the package to your package.json and install the required dependen
 
 ### Importing
 
-Next, import the `GoogleChartsModule` in your `app.module.ts`:
+Import the `GoogleChartsModule` in your `app.module.ts`:
 
 ```typescript
 import { GoogleChartsModule } from 'angular-google-charts';
@@ -37,131 +37,46 @@ export class AppModule {}
 
 This will allow you to use all of the features provided by this library.
 
-#### Configuring Angular-Google-Charts
+#### Configuring
 
-For some use cases, it might be necessary to use some different config options than the default values. Please read the [config documentation](./docs/Config.md) for more information.
+For some use cases, it might be necessary to use some different config options than the default values.
+
+All config options for Angular Google Charts are provided through a config object, which
+can be passed to the library by importing the `GoogleChartsModule` using its `forRoot` method.
+
+```typescript
+GoogleChartsModule.forRoot({ version: 'chart-version' }),
+```
 
 ## Charts
 
-To create a chart, you have two possible components to use, the `RawChartComponent` and the `GoogleChartComponent`.
-
-### Raw Chart Component
-
-```html
-<raw-chart></raw-chart>
-```
-
-This component is really not more than a wrapper around the basic Google-Charts `ChartWrapper`. It provides a bit of extra functionality, such as automatically
-resizing when the width of the parent changes.
-
-#### Chart Data
-
-`google.visualization.ChartSpecs`
-
-```html
-<raw-chart [chartData]="myChartData"></raw-chart>
-```
-
-The chart data is an object that allows you to pass all chart configuration options at once. Please refer to the [Google documentation](https://developers.google.com/chart/interactive/docs/drawing_charts#chartwrapper) for more information. Everything you can pass to the ChartWrapper can be
-passed here as well.
-
-#### First Row is Data
-
-`boolean`
-
-```html
-<raw-chart [firstRowIsData]="true"></raw-chart>
-```
-
-This property is necessary when you want to create a raw chart that has the first row as data row. Defaults to false as for most charts the first row is the header row.
-
-#### Formatter
-
-`Array<{formatter: google.visualization.DefaultFormatter, colIndex: number}> | google.visualization.DefaultFormatter`
-
-```html
-<raw-chart [formatter]="myFormatter"></raw-chart>
-```
-
-The `formatter` property is optional and allows to format the chart data. You can pass in either a formatter class instance or an array of objects containing a formatter and an index.
-If passing a formatter class instance, every column will be formatted according to it. When passing in an array, you can specify which columns to format.
-
-```typescript
-// Formats the column with the index 1 and 3 to Date(long)
-myFormatter = [
-  {
-    formatter: new google.visualization.Dateformat({ formatType: 'long' }),
-    colIndex: 1
-  },
-  {
-    formatter: new google.visualization.Dateformat({ formatType: 'long' }),
-    colIndex: 3
-  }
-];
-```
-
-For more information and all formatter types, please refer to the [documentation](https://google-developers.appspot.com/chart/interactive/docs/reference#formatters).
-
-_Note: When you get the error "google is not defined" whilst using the formatter in your component, you probably didn't load the google charts script. Please see [CustomComponents](#custom-components)_.
-
-#### Dynamic Resize
-
-`boolean`
-
-```html
-<raw-chart [dynamicResize]="dynamicResize"></raw-chart>
-```
-
-The `dynamicResize` property is optional and makes your chart listen on `window.resize` events to adapt it's size.
-Defaults to `false` and should only be used when setting the width or height of the chart to a percentage value. Otherwise, the chart gets redrawn unnecessary and therefore slows down the site.
-
-#### Styling
-
-```html
-<raw-chart style="width: 100%;"></raw-chart>
-```
-
-Many CSS properties work - exactly as you would expect them to - for the `raw-chart`. If you want to have the chart full-width, just set the width to 100% and it will work.
-
-### Google Chart Component
+The easiest way to create a chart is using the `GoogleChartComponent`.
 
 ```html
 <google-chart></google-chart>
 ```
 
-The component provides a few input properties for convenience. It extends the RawChartComponent under the hood, so everything
-that's possible in the `RawChartComponent` also works in the `GoogleChartComponent`.
+Using the component, it is possible to create every chart in the Google Charts library.
+It has a few important input properties, which are explained below.
 
-#### Type (required)
-
-`string`
+### Type
 
 ```html
 <google-chart [type]="myType"></google-chart>
 ```
 
-The type specifies which type of chart you want to display. It requires a string. Examples include:
+The type of chart you want to create. Must be of type `ChartType`.
 
-- `'BarChart'`
-- `'PieChart'`
-- `'ColumnChart'`
-- `'AreaChart'`
-- `'Bubblechart'`
-- etc.
+To see examples for all chart types and more information, visit the [google chart gallery](https://google-developers.appspot.com/chart/interactive/docs/gallery).
 
-For a full list of the types available, please refer to [ChartTypes.md](./docs/ChartTypes.md).
-
-For more chart types and information, please see the [google chart gallery](https://google-developers.appspot.com/chart/interactive/docs/gallery).
-
-#### Data (required)
-
-`Array<Array<any>>`
+### Data
 
 ```html
 <google-chart [data]="myData"></google-chart>
 ```
 
-The data property expects an object of type `Array<Array<any>>`. The first object in the inner array should be the name of the data entry, and the following objects should be the data you want to display. The inner Array must contain the name of the entry and the data value(s). Every inner array must be of the same length.
+The data property expects a two-dimensional array.
+How the array should look like in detail depends on the chart type you want to create and what you want to display.
 
 ```typescript
 myData = [
@@ -174,7 +89,9 @@ myData = [
 ];
 ```
 
-The data object can also include formatters for the given data. To use these, pass an object of type `{v: any, f: string}` as the data values in the inner array. The property `v` should contain the real value, and the property `f` the formatted value.
+The data object can also include formatters for the given data. To use these, pass an object of type `{ v: any, f: string }` as the data values in the inner array. The property `v` should contain the real value, and the property `f` the formatted value.
+
+Formatters can also be passed as a separate input property, see [Formatters](#formatters);
 
 ```typescript
 myData = [
@@ -184,148 +101,125 @@ myData = [
 ];
 ```
 
-For further information, please see the official [google documentation](https://google-developers.appspot.com/chart/interactive/docs/reference#arraytodatatable) on `arraytodatatable`, which is the function used internally, or read the examples included.
+For further information, please see the official [documentation](https://google-developers.appspot.com/chart/interactive/docs/reference#arraytodatatable) on `ArrayToDataTable`, which is the function used internally.
 
-### ColumnNames (required for most charts)
-
-`Array<string>`
+### Columns
 
 ```html
-<google-chart [columnNames]="myColumnNames"></google-chart>
+<google-chart [columns]="chartColumns"></google-chart>
 ```
 
-The `columnNames` property expects an `Array<string>` containing the names for each column of the chart data. The number of entries must match the length of the inner array passed in the `data` property.
-Some charts don't require columnNames. Whether your chart requires it can be check in the official documentation.
+The `columns` property expects an `Array<string>` containing the names for each column of the chart data. The number of entries must match the length of the inner array passed in the `data` property.
+Some charts don't require columns. Whether your chart requires it can be check in the official documentation.
 
 ```typescript
-myColumnNames = ['City', 'Inhabitants'];
+chartColumns = ['City', 'Inhabitants'];
 ```
-
-### Roles
-
-`Array<{ role: string, type: string, index?: number, p?: object }>`
-
-```html
-<google-chart [roles]="myRoles"></google-chart>
-```
-
-The `roles` property is optional and can be used for additional, row specific styling options. If provided, the length of the array must match the length of the roles provided in each of the inner arrays of the data object.
-The optional `index` attribute can be used to place roles relative to columns. When specified, the role will be inserted **after**
-after the `ColumnName` at the given index. If it is not specified (_default_), all roles will be appended at the back of the `ColumnNames`.
-The optional `p` attribute is used e.g. when you want to use html in a tooltip.
-In that case you have to set `p` with `{html: true}`.
-
-```typescript
-myRoles = [{ role: 'style', type: 'string', index: 2 }];
-
-myData = [
-  ['Element', 10.5, '#ffaaff'] // The last entry in the array is the role
-];
-```
-
-For further information, please see the [google documentation](https://google-developers.appspot.com/chart/interactive/docs/roles).
-
-For further information on the `p` attribute, please see the [google documentation](https://developers.google.com/chart/interactive/docs/reference#methods).
 
 ### Title
-
-`string`
 
 ```html
 <google-chart [title]="myTitle"></google-chart>
 ```
 
-The `title` property is optional and provided for convenice. It can also be included in the `options` property.
+The `title` property is optional and provided for convenience. It can also be included in the `options` property.
 
 ### Width
-
-`number`
 
 ```html
 <google-chart [width]="myWidth"></google-chart>
 ```
 
 The `width` property is optional and allows to set the width of the chart. The number provided will be converted to a pixel value. The default is `undefined`, which makes the chart figure out its width by itself.
-You can also set the width using css, which has the advantage of allowing `%` values instead of only pixels. For more information on that, see [dynamic resize](#dynamic-resize).
+You can also set the width using CSS, which has the advantage of allowing `%` values instead of only pixels. For more information on that, see [dynamic resize](#dynamic-resize).
 
 ### Height
-
-`number`
 
 ```html
 <google-chart [height]="myHeight"></google-chart>
 ```
 
 The `height` property is optional and allows to set the height of the chart. The number provided will be converted to a pixel value. The default is `undefined`, which makes the chart figure out its height by itself.
-You can also set the height using css, which has the advantage of allowing `%` values instead of only pixels. For more information on that, see [dynamic resize](#dynamic-resize).
+You can also set the height using CSS, which has the advantage of allowing `%` values instead of only pixels. For more information on that, see [dynamic resize](#dynamic-resize).
 
 ### Options
-
-`object`
 
 ```html
 <google-chart [options]="myOptions"></google-chart>
 ```
 
-The `options` property is optional and allows to customize the chart to a great extent. For more information, please see the [google documentation](https://google-developers.appspot.com/chart/interactive/docs/customizing_charts).
+The `options` property is optional and allows to customize the chart to a great extent. How and what you can customize depends on the type of chart. For more information, please see the [google documentation](https://google-developers.appspot.com/chart/interactive/docs/customizing_charts).
 
 ```typescript
+// example
 myOptions = {
   colors: ['#e0440e', '#e6693e', '#ec8f6e', '#f3b49f', '#f6c7b6'],
   is3D: true
 };
 ```
 
-## Animations
+### Formatters
 
-To animate your charts, simply add the property `animation` to your chart's `options` object.
-
-```typescript
-const myOptions = {
-  ...
-  animation: {
-    duration: 1000,
-    easing: 'out',
-  },
-  ...
-};
+```html
+<raw-chart [formatters]="myFormatters"></raw-chart>
 ```
 
-For more information, please read the [official documentation](https://google-developers.appspot.com/chart/interactive/docs/animation).
+The `formatter` property is optional and allows to format the chart data. It requires an array of objects containing a formatter and an index.
+
+For more information and all formatter types, please refer to the [documentation](https://google-developers.appspot.com/chart/interactive/docs/reference#formatters).
+
+```typescript
+// Formats the column with the index 1 and 3 to Date(long)
+myFormatters = [
+  {
+    formatter: new google.visualization.Dateformat({ formatType: 'long' }),
+    colIndex: 1
+  },
+  {
+    formatter: new google.visualization.Dateformat({ formatType: 'long' }),
+    colIndex: 3
+  }
+];
+```
+
+_Note: When you get the error "google is not defined" whilst using the formatter in your component, you probably didn't load the google charts script. Please read the chapter on using the [ScriptLoaderService](#using-the-scriptloaderservice`)._
+
+### Dynamic Resize
+
+```html
+<raw-chart [dynamicResize]="dynamicResize"></raw-chart>
+```
+
+The `dynamicResize` property is optional and makes your chart redraw every time the window is resized.
+Defaults to `false` and should only be used when setting the width or height of the chart to a percentage value.
+Otherwise, the chart gets redrawn unnecessary and therefore slows down the site.
+
+### Styling
+
+```html
+<raw-chart style="width: 100%;"></raw-chart>
+```
+
+Most CSS properties should work exactly as you would expect them to.
+If you want to have the chart full-width for example, set the width to `100%`.
 
 ## Events
 
-The `GoogleChartComponent` provides bindings for the most common Google Chart events. It also includes two interfaces for those two events:
+The `GoogleChartComponent` provides bindings for the most common Google Chart events.
 
-```typescript
-interface ChartEvent {
-  column: number;
-  row: number;
-}
-```
+### Ready
 
-```typescript
-interface ChartErrorEvent {
-  id: string;
-  message: string;
-  detailedMessage: string;
-  options: object;
-}
-```
-
-### Ready Event
-
-The `ready` event fires as soon as a chart is fully loaded and rendered. It can be bound to like this:
+The [`ready` event](https://developers.google.com/chart/interactive/docs/events#the-ready-event) is emitted as soon as the chart got drawn and after every subsequent redraw.
 
 ```html
-<google-chart (ready)="onReady()"></google-chart>
+<google-chart (ready)="onReady($event)"></google-chart>
 ```
 
-The event doesn't have any parameters.
+The event is of type `ChartReadyEvent`.
 
-### Error Event
+### Error
 
-The `error` event fires when an internal error occurs. However, since the newer versions of google-charts, most errors are displayed in the chart HTML as well. It can be bound to like this:
+The [`error` event](https://developers.google.com/chart/interactive/docs/events#the-error-event) is emitted when an internal error occurs. However, since the newer versions of google-charts, most errors are displayed in the chart HTML as well. It can be bound to like this:
 
 ```html
 <google-chart (error)="onError($event)"></google-chart>
@@ -333,72 +227,60 @@ The `error` event fires when an internal error occurs. However, since the newer 
 
 The event is of type `ChartErrorEvent`.
 
-### Select Event
+### Select
 
-The `select` event fires when an element in the chart (i. e. a bar in a bar chart or a segment in a pie chart) gets selected. It can be bound to like this:
+The [`select` event](https://developers.google.com/chart/interactive/docs/events#the-select-event) is emitted when an element in the chart gets selected.
 
 ```html
 <google-chart (select)="onSelect($event)"></google-chart>
 ```
 
-The event is either of type `ChartEvent`, where column is the selected column in the data and row is the selected row, or it's `undefined`. If it's `undefined`, the selection got cancelled.
+The event of type `ChartSelectionChangedEvent` containing an array of selected values.
 
-### Mouseenter Event
+### Mouseover
 
-The `mouseenter` event fires when the mouse enters the bounding box of one of the charts elements (i. e. a bar in a bar chart or a segment in a pie chart). It can be bound to like this:
+The `mouseover` event fires when the mouse hovers over one of the charts elements (i. e. a bar in a bar chart or a segment in a pie chart).
 
 ```html
-<google-chart (mouseenter)="onMouseEnter($event)"></google-chart>
+<google-chart (mouseover)="OnMouseOver($event)"></google-chart>
 ```
 
-The event is of type `ChartEvent`, where column is the index of the hovered column and row is the index of the hovered row.
+The event is of type `ChartMouseOverEvent`, where `column` is the index of the hovered column and `row` is the index of the hovered row.
 
-### Mouseleave Event
+### Mouseleave
 
-The `mouseleave` event fires when the mouse leaves the bounding box of one of the charts elements (i. e. a bar in a bar chart or a segment in a pie chart). It can be bound to like this:
+The `mouseleave` event fires when the mouse stops hovering one of the charts elements (i. e. a bar in a bar chart or a segment in a pie chart).
 
 ```html
 <google-chart (mouseleave)="onMouseLeave($event)"></google-chart>
 ```
 
-The event is of type `ChartEvent`, where column is the index of the hovered column and row is the index of the hovered row.
+The event is of type `ChartMouseLeaveEvent`, where `column` is the index of the no-longer hovered column and `row` is the index of the no-longer hovered row.
 
 ## Advanced
 
-For advanced actions, one may need to access to the underlying `ChartWrapper` creating the charts.
+### Accessing the chart wrapper directly
+
+I case you don't need any of the special features the `GoogleChartsComponent` provides, the `RawChartComponent` can be used.
+It is a direct wrapper of the [`ChartWrapper`](https://developers.google.com/chart/interactive/docs/reference#chartwrapper-class)..
 
 ```html
-<google-chart #chart (ready)="chartReady(chart)"></google-chart>
+<raw-chart [chartData]="myChartdata"></raw-chart>
 ```
 
-```typescript
-import { GoogleChartComponent } from 'angular-google-charts';
-
-@Component({
-  ...
-})
-export class AppComponent {
-  private myAdvancedData: any; // Initialized somewhere else
-
-  public chartReady(chart: GoogleChartComponent) {
-    const wrapper = chart.wrapper;
-
-    wrapper.draw(myAdvancedData);
-  }
-}
-```
-
-When doing so, you are completely free to create the chart by yourself. Please refer to the [ChartWrapper Documentation](https://developers.google.com/chart/interactive/docs/reference#chartwrapper-class) on how to do this.
+The `RawChartComponent` should be used if you need more fine-grained control over the data you are providing or you want to use
+the query feature that Google Charts provides, which is not supported using the `GoogleChartComponent`.
 
 ### Using the `ScriptLoaderService`
 
-For some specific types of Google Charts, you may want to create custom components.
+If a specific chart is created a lot in your application, you may want to create custom components.
+
 When doing so, you need to load the chart packages by yourself.
 The `ScriptLoaderService` provides a few methods helping with this.
 
 ```typescript
 class MyComponent {
-  private readonly chartPackage = GoogleChartPackagesHelper.getPackageForChartName('BarChart');
+  private readonly chartPackage = getPackageForChart(ChartType.BarChart);
 
   @ViewChild('container', { read: ElementRef })
   private containerEl: ElementRef<HTMLElement>;

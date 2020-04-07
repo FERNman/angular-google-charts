@@ -1,6 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { ChartErrorEvent, ChartEvent, GoogleChartComponent } from 'angular-google-charts';
+import {
+  ChartErrorEvent,
+  ChartMouseLeaveEvent,
+  ChartMouseOverEvent,
+  ChartSelectionChangedEvent,
+  ChartType,
+  Column,
+  GoogleChartComponent
+} from 'angular-google-charts';
 
 @Component({
   selector: 'app-main',
@@ -10,23 +18,22 @@ import { ChartErrorEvent, ChartEvent, GoogleChartComponent } from 'angular-googl
 export class MainComponent implements OnInit {
   public charts: {
     title: string;
-    type: string;
-    data: (string | number | {})[][];
-    roles: { type: string; role: string; index?: number }[];
-    columnNames?: string[];
+    type: ChartType;
+    data: any[][];
+    columns?: Column[];
     options?: {};
   }[] = [];
 
   public changingChart = {
     title: 'Changing Chart',
-    type: 'BarChart',
+    type: ChartType.BarChart,
     data: [
       ['Copper', 8.94],
       ['Silver', 10.49],
       ['Gold', 19.3],
       ['Platinum', 21.45]
     ],
-    columnNames: ['Element', 'Density'],
+    columns: ['Element', 'Density'],
     options: {
       animation: {
         duration: 250,
@@ -42,23 +49,21 @@ export class MainComponent implements OnInit {
   constructor(private router: Router) {
     this.charts.push({
       title: 'Pie Chart',
-      type: 'PieChart',
-      columnNames: ['Task', 'Hours per Day'],
+      type: ChartType.PieChart,
+      columns: ['Task', 'Hours per Day'],
       data: [
         ['Work', 11],
         ['Eat', 2],
         ['Commute', 2],
         ['Watch TV', 2],
         ['Sleep', 7]
-      ],
-      roles: []
+      ]
     });
 
     this.charts.push({
       title: 'Bar Chart',
-      type: 'BarChart',
-      columnNames: ['Element', 'Density'],
-      roles: [{ role: 'style', type: 'string' }],
+      type: ChartType.BarChart,
+      columns: ['Element', 'Density', { role: 'style', type: 'string' }],
       data: [
         ['Copper', 8.94, '#b87333'],
         ['Silver', 10.49, 'silver'],
@@ -69,11 +74,13 @@ export class MainComponent implements OnInit {
 
     this.charts.push({
       title: 'Bar Chart',
-      type: 'BarChart',
-      columnNames: ['City', '2010 Population', '2000 Population'],
-      roles: [
-        { role: 'annotation', type: 'string', index: 1 },
-        { role: 'annotation', type: 'string', index: 2 }
+      type: ChartType.BarChart,
+      columns: [
+        'City',
+        '2010 Population',
+        { role: 'annotation', type: 'string' },
+        '2000 Population',
+        { role: 'annotation', type: 'string' }
       ],
       data: [
         ['New York City, NY', 8175000, '8.1M', 8008000, '8M'],
@@ -115,9 +122,10 @@ export class MainComponent implements OnInit {
 
     this.charts.push({
       title: 'Styled Line Chart',
-      type: 'LineChart',
-      columnNames: ['Element', 'Density'],
-      roles: [
+      type: ChartType.LineChart,
+      columns: [
+        'Element',
+        'Density',
         { type: 'number', role: 'interval' },
         { type: 'number', role: 'interval' },
         { type: 'string', role: 'annotation' },
@@ -134,9 +142,8 @@ export class MainComponent implements OnInit {
 
     this.charts.push({
       title: 'Material Bar Chart',
-      type: 'Bar',
-      columnNames: ['Year', 'Sales', 'Expenses', 'Profit'],
-      roles: [],
+      type: ChartType.Bar,
+      columns: ['Year', 'Sales', 'Expenses', 'Profit'],
       data: [
         ['2014', 1000, 400, 200],
         ['2015', 1170, 460, 250],
@@ -154,21 +161,20 @@ export class MainComponent implements OnInit {
 
     this.charts.push({
       title: 'Area Chart',
-      type: 'AreaChart',
-      columnNames: ['Year', 'Sales', 'Expenses'],
+      type: ChartType.AreaChart,
+      columns: ['Year', 'Sales', 'Expenses'],
       data: [
         ['2013', 1000, 400],
         ['2014', 1170, 460],
         ['2015', 660, 1120],
         ['2016', 1030, 540]
-      ],
-      roles: []
+      ]
     });
 
     this.charts.push({
       title: 'Bubble Chart',
-      type: 'BubbleChart',
-      columnNames: ['ID', 'X', 'Y'],
+      type: ChartType.BubbleChart,
+      columns: ['ID', 'X', 'Y'],
       data: [
         ['Hallo', 80, 167],
         ['', 79, 136],
@@ -177,28 +183,26 @@ export class MainComponent implements OnInit {
         ['', 81, 200],
         ['', 72, 170],
         ['', 68, 477]
-      ],
-      roles: []
+      ]
     });
 
     this.charts.push({
       title: 'Candlestick Chart',
-      type: 'CandlestickChart',
-      columnNames: null,
+      type: ChartType.CandlestickChart,
+      columns: null,
       data: [
         ['Mon', 20, 28, 38, 45],
         ['Tue', 31, 38, 55, 66],
         ['Wed', 50, 55, 77, 80],
         ['Thu', 77, 77, 66, 50],
         ['Fri', 68, 66, 22, 15]
-      ],
-      roles: null
+      ]
     });
 
     this.charts.push({
       title: 'Combo Chart',
-      type: 'ComboChart',
-      columnNames: ['Month', 'Bolivia', 'Ecuador', 'Madagascar', 'Papua New Guinea', 'Rwanda', 'Average'],
+      type: ChartType.ComboChart,
+      columns: ['Month', 'Bolivia', 'Ecuador', 'Madagascar', 'Papua New Guinea', 'Rwanda', 'Average'],
       data: [
         ['2004/05', 165, 938, 522, 998, 450, 614.6],
         ['2005/06', 135, 1120, 599, 1268, 288, 682],
@@ -206,7 +210,6 @@ export class MainComponent implements OnInit {
         ['2007/08', 139, 1110, 615, 968, 215, 609.4],
         ['2008/09', 136, 691, 629, 1026, 366, 569.6]
       ],
-      roles: [],
       options: {
         vAxis: { title: 'Cups' },
         hAxis: { title: 'Month' },
@@ -217,8 +220,8 @@ export class MainComponent implements OnInit {
 
     this.charts.push({
       title: 'Histogram',
-      type: 'Histogram',
-      columnNames: ['Dinosaur', 'Length'],
+      type: ChartType.Histogram,
+      columns: ['Dinosaur', 'Length'],
       data: [
         ['Acrocanthosaurus (top-spined lizard)', 12.2],
         ['Albertosaurus (Alberta lizard)', 9.1],
@@ -248,14 +251,13 @@ export class MainComponent implements OnInit {
         ['Tyrannosaurus (tyrant lizard)', 15.2],
         ['Ultrasaurus (ultra lizard)', 30.5],
         ['Velociraptor (swift robber)', 1.8]
-      ],
-      roles: []
+      ]
     });
 
     this.charts.push({
       title: 'Scatter Chart',
-      type: 'ScatterChart',
-      columnNames: ['Age', 'Weight'],
+      type: ChartType.ScatterChart,
+      columns: ['Age', 'Weight'],
       data: [
         [8, 12],
         [4, 5.5],
@@ -264,7 +266,6 @@ export class MainComponent implements OnInit {
         [3, 3.5],
         [6.5, 7]
       ],
-      roles: [],
       options: {
         explorer: {
           actions: ['dragToZoom', 'rightClickToReset'],
@@ -284,21 +285,20 @@ export class MainComponent implements OnInit {
     console.error('Error: ' + error.message.toString());
   }
 
-  public onSelect(event: ChartEvent) {
+  public onSelect(event: ChartSelectionChangedEvent) {
     console.log('Selected: ' + event.toString());
   }
 
-  public onMouseEnter(event: ChartEvent) {
+  public onMouseEnter(event: ChartMouseOverEvent) {
     console.log('Hovering ' + event.toString());
   }
 
-  public onMouseLeave(event: ChartEvent) {
+  public onMouseLeave(event: ChartMouseLeaveEvent) {
     console.log('No longer hovering ' + event.toString());
   }
 
   public ngOnInit() {
     console.log(this.chart);
-    console.log(this.chart.wrapper);
   }
 
   public changeChart() {

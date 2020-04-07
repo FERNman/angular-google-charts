@@ -8,7 +8,6 @@
       "type": "chrome",
       "request": "attach",
       "name": "Attach to Chrome",
-      "url": "http://localhost:4200",
       "port": 9222,
       "webRoot": "${workspaceFolder}"
     },

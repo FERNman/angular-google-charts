@@ -5,8 +5,7 @@
     [title]="chart.title"
     [type]="chart.type"
     [data]="chart.data"
-    [columnNames]="chart.columnNames"
-    [roles]="chart.roles"
+    [columns]="chart.columns"
     [options]="chart.options"
     (ready)="onReady()"
     (select)="onSelect($event)"
@@ -23,7 +22,7 @@
   [title]="changingChart.title"
   [type]="changingChart.type"
   [data]="changingChart.data"
-  [columnNames]="changingChart.columnNames"
+  [columns]="changingChart.columns"
   [options]="changingChart.options"
 >
 </google-chart>

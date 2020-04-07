@@ -1,16 +1,15 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { GoogleChartPackagesHelper } from 'angular-google-charts';
-import { ScriptLoaderService } from 'angular-google-charts';
+import { Component } from '@angular/core';
+import { ChartType } from 'angular-google-charts';
 
 @Component({
   selector: 'app-test',
   templateUrl: './test.component.html'
 })
-export class TestComponent implements OnInit {
+export class TestComponent {
   public chart = {
     title: 'Test Chart',
-    type: 'BarChart',
+    type: ChartType.BarChart,
     data: [
       ['Copper', 8.94],
       ['Silver', 10.49],
@@ -28,7 +27,7 @@ export class TestComponent implements OnInit {
   };
 
   public rawChartData: google.visualization.ChartSpecs = {
-    chartType: 'AreaChart',
+    chartType: ChartType.AreaChart,
     dataTable: [
       ['SMR CV', 'US Cents/KG'],
       [new Date(1990, 1, 1), 10],
@@ -42,16 +41,7 @@ export class TestComponent implements OnInit {
     ]
   };
 
-  public rawFormatter: any;
-  private areaChartPackage = GoogleChartPackagesHelper.getPackageForChartName('AreaChart');
-
-  constructor(private location: Location, private loaderService: ScriptLoaderService) {}
-
-  public ngOnInit() {
-    this.loaderService.loadChartPackages(this.areaChartPackage).subscribe(() => {
-      this.rawFormatter = [{ formatter: new google.visualization.DateFormat({ formatType: 'long' }), colIndex: 0 }];
-    });
-  }
+  constructor(private location: Location) {}
 
   public goBack() {
     this.location.back();

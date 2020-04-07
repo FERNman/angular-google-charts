@@ -2,9 +2,9 @@
  * Public API Surface of angular-google-charts
  */
 
-export { GoogleChartComponent } from './lib/google-chart/google-chart.component';
-export { RawChartComponent } from './lib/raw-chart/raw-chart.component';
-export { ChartEvent, ChartErrorEvent } from './lib/models/events.model';
-export { GoogleChartsModule } from './lib/google-charts.module';
-export { ScriptLoaderService } from './lib/script-loader/script-loader.service';
-export { GoogleChartPackagesHelper } from './lib/helpers/google-chart-packages.helper';
+export * from './lib/google-chart/google-chart.component';
+export * from './lib/helpers/chart.helper';
+export * from './lib/models/events.model';
+export * from './lib/models/chart-type.model';
+export * from './lib/script-loader/script-loader.service';
+export * from './lib/google-charts.module';

@@ -265,10 +265,10 @@ I case you don't need any of the special features the `GoogleChartsComponent` pr
 It is a direct wrapper of the [`ChartWrapper`](https://developers.google.com/chart/interactive/docs/reference#chartwrapper-class)..
 
 ```html
-<raw-chart [chartData]="myChartdata"></raw-chart>
+<raw-chart [specs]="chartWrapperSpecs"></raw-chart>
 ```
 
-The `RawChartComponent` should be used if you need more fine-grained control over the data you are providing or you want to use
+The `RawChartComponent` should be used if you need fine-grained control over the data you are providing or you want to use e.g.
 the query feature that Google Charts provides, which is not supported using the `GoogleChartComponent`.
 
 ### Using the `ScriptLoaderService`

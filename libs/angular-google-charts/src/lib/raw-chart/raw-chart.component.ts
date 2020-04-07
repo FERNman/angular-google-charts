@@ -1,25 +1,11 @@
 import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { fromEvent, Observable, Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 import { getPackageForChart } from '../helpers/chart.helper';
 import { ChartBase } from '../models/chart-base.model';
 import { ChartType } from '../models/chart-type.model';
-import {
-  ChartErrorEvent,
-  ChartMouseLeaveEvent,
-  ChartMouseOverEvent,
-  ChartReadyEvent,
-  ChartSelectionChangedEvent
-} from '../models/events.model';
+import { ChartErrorEvent, ChartReadyEvent, ChartSelectionChangedEvent } from '../models/events.model';
 import { ScriptLoaderService } from '../script-loader/script-loader.service';
-
-interface CustomFormatter {
-  formatter: google.visualization.DefaultFormatter;
-  colIndex: number;
-}
-
-type Formatter = google.visualization.DefaultFormatter | CustomFormatter[];
 
 @Component({
   selector: 'raw-chart',
@@ -30,17 +16,16 @@ type Formatter = google.visualization.DefaultFormatter | CustomFormatter[];
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RawChartComponent implements ChartBase, OnChanges {
+  /**
+   * Either a JSON object defining the chart, or a serialized string version of that object.
+   * The format of this object is shown in the
+   * {@link https://developers.google.com/chart/interactive/docs/reference#google.visualization.drawchart `drawChart()`} documentation.
+   *
+   * The `container` and `containerId` will be overwritten by this component to allow
+   * rendering the chart into the components' template.
+   */
   @Input()
-  public chartData: google.visualization.ChartSpecs;
-
-  @Input()
-  public formatter: Formatter;
-
-  @Input()
-  public dynamicResize = false;
-
-  @Input()
-  public firstRowIsData = false;
+  public specs: google.visualization.ChartSpecs;
 
   @Output()
   public error = new EventEmitter<ChartErrorEvent>();
@@ -51,133 +36,62 @@ export class RawChartComponent implements ChartBase, OnChanges {
   @Output()
   public select = new EventEmitter<ChartSelectionChangedEvent>();
 
-  @Output()
-  public mouseenter = new EventEmitter<ChartMouseOverEvent>();
+  private wrapper: google.visualization.ChartWrapper;
 
-  @Output()
-  public mouseleave = new EventEmitter<ChartMouseLeaveEvent>();
-
-  public wrapper: google.visualization.ChartWrapper;
-
-  private dataTable: google.visualization.DataTable;
-  private resizeSubscription: Subscription;
-
-  constructor(protected element: ElementRef, protected loaderService: ScriptLoaderService) {}
+  constructor(private element: ElementRef, private loaderService: ScriptLoaderService) {}
 
   public get chart(): google.visualization.ChartBase | null {
-    if (this.wrapper == null) {
+    if (!this.wrapper) {
       return null;
     }
 
     return this.wrapper.getChart();
   }
 
+  /**
+   * The underlying chart wrapper of this component or `null`.
+   */
+  public get chartWrapper(): google.visualization.ChartWrapper | null {
+    return this.wrapper;
+  }
+
   public ngOnChanges(changes: SimpleChanges) {
-    if (changes.chartData || changes.formatters) {
-    }
-    this.createChart();
-
-    if (changes.dynamicResize) {
-      this.updateResizeListener();
+    if (changes.specs) {
+      this.createChart();
     }
   }
 
-  public getChartElement(): HTMLElement {
-    return this.element.nativeElement.firstElementChild;
-  }
-
-  public clearChart(): void {
-    if (this.wrapper && this.wrapper.getChart()) {
-      this.wrapper.getChart().clearChart();
-    }
-  }
-
-  protected createChart() {
+  private createChart() {
     this.loadNeededPackages().subscribe(() => {
-      this.wrapper = new google.visualization.ChartWrapper();
-      this.updateChart();
+      this.createWrapper();
     });
   }
 
-  protected loadNeededPackages(): Observable<void> {
-    return this.loaderService.loadChartPackages(getPackageForChart(this.chartData.chartType as ChartType));
+  private loadNeededPackages(): Observable<void> {
+    return this.loaderService.loadChartPackages(getPackageForChart(this.specs.chartType as ChartType));
   }
 
-  protected updateChart() {
-    // This check here is important to allow passing of a created dataTable as well as just an array
-    if (!(this.chartData.dataTable instanceof google.visualization.DataTable)) {
-      this.dataTable = google.visualization.arrayToDataTable(<any[]>this.chartData.dataTable, this.firstRowIsData);
-    } else {
-      this.dataTable = this.chartData.dataTable;
-    }
+  private createWrapper() {
+    const { container, containerId, ...chartSpecs } = this.specs;
+    this.wrapper = new google.visualization.ChartWrapper(chartSpecs);
 
-    this.wrapper.setDataTable(this.dataTable);
-    this.wrapper.setChartType(this.chartData.chartType);
-    this.wrapper.setOptions(this.chartData.options);
-    this.wrapper.setDataSourceUrl(this.chartData.dataSourceUrl);
-    this.wrapper.setQuery(this.chartData.query);
-    this.wrapper.setRefreshInterval(this.chartData.refreshInterval);
-    this.wrapper.setView(this.chartData.view);
-
-    this.removeChartEvents();
     this.registerChartEvents();
-
-    if (this.formatter) {
-      this.formatData(this.dataTable);
-    }
 
     this.wrapper.draw(this.element.nativeElement);
   }
 
-  protected formatData(dataTable: google.visualization.DataTable) {
-    if (this.formatter instanceof Array) {
-      this.formatter.forEach(value => {
-        value.formatter.format(dataTable, value.colIndex);
-      });
-    } else {
-      for (let i = 0; i < dataTable.getNumberOfColumns(); i++) {
-        this.formatter.format(dataTable, i);
-      }
-    }
-  }
-
-  private updateResizeListener() {
-    if (this.resizeSubscription) {
-      this.resizeSubscription.unsubscribe();
-      this.resizeSubscription = null;
-    }
-
-    if (this.dynamicResize) {
-      this.resizeSubscription = fromEvent(window, 'resize')
-        .pipe(debounceTime(100))
-        .subscribe(() => {
-          if (this.wrapper) {
-            this.updateChart();
-          }
-        });
-    }
-  }
-
-  private removeChartEvents() {
-    google.visualization.events.removeAllListeners(this.wrapper);
-  }
-
   private registerChartEvents() {
-    this.registerChartEvent(this.wrapper, 'ready', () => {
-      this.registerChartEvent(this.wrapper.getChart(), 'onmouseover', (event: ChartMouseOverEvent) => this.mouseenter.emit(event));
-      this.registerChartEvent(this.wrapper.getChart(), 'onmouseout', (event: ChartMouseLeaveEvent) => this.mouseleave.emit(event));
+    google.visualization.events.removeAllListeners(this.wrapper);
 
-      this.ready.emit({ chart: this.chart });
+    const registerChartEvent = (object: any, eventName: string, callback: Function) => {
+      google.visualization.events.addListener(object, eventName, callback);
+    };
+
+    registerChartEvent(this.wrapper, 'ready', () => this.ready.emit({ chart: this.chart }));
+    registerChartEvent(this.wrapper, 'error', (error: ChartErrorEvent) => this.error.emit(error));
+    registerChartEvent(this.wrapper, 'select', () => {
+      const selection = this.chart.getSelection();
+      this.select.emit({ selection });
     });
-
-    this.registerChartEvent(this.wrapper, 'error', (error: ChartErrorEvent) => this.error.emit(error));
-    this.registerChartEvent(this.wrapper, 'select', () => {
-      const selection = this.wrapper.getChart().getSelection();
-      this.select.emit(selection);
-    });
-  }
-
-  private registerChartEvent(object: any, eventName: string, callback: Function) {
-    google.visualization.events.addListener(object, eventName, callback);
   }
 }

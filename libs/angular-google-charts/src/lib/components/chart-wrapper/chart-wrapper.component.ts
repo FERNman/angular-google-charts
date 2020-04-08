@@ -1,18 +1,18 @@
 import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { getPackageForChart } from '../helpers/chart.helper';
-import { ChartBase } from '../models/chart-base.model';
-import { ChartType } from '../models/chart-type.model';
-import { ChartErrorEvent, ChartReadyEvent, ChartSelectionChangedEvent } from '../models/events.model';
-import { ScriptLoaderService } from '../script-loader/script-loader.service';
+import { getPackageForChart } from '../../helpers/chart.helper';
+import { ChartBase } from '../../models/chart-base.model';
+import { ChartType } from '../../models/chart-type.model';
+import { ChartErrorEvent, ChartReadyEvent, ChartSelectionChangedEvent } from '../../models/events.model';
+import { ScriptLoaderService } from '../../script-loader/script-loader.service';
 
 @Component({
   selector: 'chart-wrapper',
   template: '',
   styles: [':host { width: fit-content; display: block; }'],
   host: { class: 'chart-wrapper' },
-  exportAs: 'chart-wrapper',
+  exportAs: 'chartWrapper',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChartWrapperComponent implements ChartBase, OnChanges {
@@ -48,9 +48,6 @@ export class ChartWrapperComponent implements ChartBase, OnChanges {
     return this.wrapper.getChart();
   }
 
-  /**
-   * The underlying chart wrapper of this component or `null`.
-   */
   public get chartWrapper(): google.visualization.ChartWrapper | null {
     return this.wrapper;
   }

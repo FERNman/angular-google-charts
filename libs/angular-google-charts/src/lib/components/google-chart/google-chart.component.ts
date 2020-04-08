@@ -4,20 +4,17 @@ import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, On
 import { fromEvent, Observable, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
-import { getPackageForChart } from '../helpers/chart.helper';
-import { ChartBase } from '../models/chart-base.model';
-import { ChartType } from '../models/chart-type.model';
+import { getPackageForChart } from '../../helpers/chart.helper';
+import { ChartBase, Column, Row } from '../../models/chart-base.model';
+import { ChartType } from '../../models/chart-type.model';
 import {
   ChartErrorEvent,
   ChartMouseLeaveEvent,
   ChartMouseOverEvent,
   ChartReadyEvent,
   ChartSelectionChangedEvent
-} from '../models/events.model';
-import { ScriptLoaderService } from '../script-loader/script-loader.service';
-
-export type Column = string | google.visualization.ColumnSpec;
-export type Row = (string | number | Date)[];
+} from '../../models/events.model';
+import { ScriptLoaderService } from '../../script-loader/script-loader.service';
 
 export interface Formatter {
   formatter: google.visualization.DefaultFormatter;
@@ -29,7 +26,7 @@ export interface Formatter {
   template: '',
   styles: [':host { width: fit-content; display: block; }'],
   host: { class: 'google-chart' },
-  exportAs: 'google-chart',
+  exportAs: 'googleChart',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GoogleChartComponent implements ChartBase, OnChanges {
@@ -135,6 +132,10 @@ export class GoogleChartComponent implements ChartBase, OnChanges {
     return this.wrapper.getChart();
   }
 
+  public get chartWrapper(): google.visualization.ChartWrapper | null {
+    return this.wrapper;
+  }
+
   public ngOnChanges(changes: SimpleChanges) {
     if (changes.dynamicResize) {
       this.updateResizeListener();
@@ -174,6 +175,10 @@ export class GoogleChartComponent implements ChartBase, OnChanges {
   }
 
   private createDataTable() {
+    if (this.data == null) {
+      return;
+    }
+
     let firstRowIsData = true;
     if (this.columns != null) {
       firstRowIsData = false;

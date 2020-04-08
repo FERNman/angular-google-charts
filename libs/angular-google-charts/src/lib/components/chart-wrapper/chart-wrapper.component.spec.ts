@@ -2,12 +2,12 @@ import { SimpleChange } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { EMPTY, of } from 'rxjs';
 
-import { ChartType } from '../models/chart-type.model';
-import { ScriptLoaderService } from '../script-loader/script-loader.service';
+import { ChartType } from '../../models/chart-type.model';
+import { ScriptLoaderService } from '../../script-loader/script-loader.service';
 
 import { ChartWrapperComponent } from './chart-wrapper.component';
 
-jest.mock('../script-loader/script-loader.service');
+jest.mock('../../script-loader/script-loader.service');
 
 const chartWrapperMock = {
   draw: jest.fn(),

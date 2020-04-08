@@ -2,6 +2,9 @@ import { EventEmitter } from '@angular/core';
 
 import { ChartErrorEvent, ChartReadyEvent, ChartSelectionChangedEvent } from './events.model';
 
+export type Column = string | google.visualization.ColumnSpec;
+export type Row = (string | number | Date)[];
+
 export interface ChartBase {
   /**
    * The chart is ready for external method calls.
@@ -11,12 +14,12 @@ export interface ChartBase {
   ready: EventEmitter<ChartReadyEvent>;
 
   /**
-   * Fired when an error occurs when attempting to render the chart.
+   * Emits when an error occurs when attempting to render the chart.
    */
   error: EventEmitter<ChartErrorEvent>;
 
   /**
-   * Fired when the user clicks a bar or legend.
+   * Emits when the user clicks a bar or legend.
    *
    * When a chart element is selected, the corresponding cell
    * in the data table is selected; when a legend is selected,
@@ -28,4 +31,9 @@ export interface ChartBase {
    * The drawn chart or `null`.
    */
   chart: google.visualization.ChartBase | null;
+
+  /**
+   * The underlying chart wrapper or `null`.
+   */
+  chartWrapper: google.visualization.ChartWrapper | null;
 }

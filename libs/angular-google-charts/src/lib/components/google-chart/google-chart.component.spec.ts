@@ -2,12 +2,12 @@ import { SimpleChange } from '@angular/core';
 import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { EMPTY, of } from 'rxjs';
 
-import { ChartType } from '../models/chart-type.model';
-import { ScriptLoaderService } from '../script-loader/script-loader.service';
+import { ChartType } from '../../models/chart-type.model';
+import { ScriptLoaderService } from '../../script-loader/script-loader.service';
 
 import { GoogleChartComponent } from './google-chart.component';
 
-jest.mock('../script-loader/script-loader.service');
+jest.mock('../../script-loader/script-loader.service');
 
 const chartWrapperMock = {
   setChartType: jest.fn(),
@@ -310,6 +310,7 @@ describe('GoogleChartComponent', () => {
     it('should apply the provided formatters', () => {
       const formatter = { formatter: { format: jest.fn() }, colIndex: 1 };
       component.formatters = [formatter];
+      component.data = [];
 
       const dataTableMock = {};
       visualizationMock.arrayToDataTable.mockReturnValueOnce(dataTableMock);

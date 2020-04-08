@@ -296,20 +296,8 @@ class MyComponent {
 }
 ```
 
-If you don't need a specific chart package but just want to access the `google.charts` namespace,
-you can use the method `ScriptLoaderService.loadGoogleCharts()`.
-It will load the script into the current browser session.
-
-```typescript
-ngOnInit() {
-  this.loaderService.loadGoogleCharts().subscribe(() => {
-    console.log(this.loaderService.isGoogleChartsAvailable()); // true
-
-    // You can now use `google.charts`
-    google.charts.load();
-  });
-}
-```
+The `loadChartPackages` method can also be called without any parameters. This way, only the default
+google charts packages will be loaded. These include the namespaces `google.charts` and `google.visualization`, but no charts.
 
 ### Preloading the Google Charts script
 

@@ -43,9 +43,15 @@ describe('GoogleChartComponent', () => {
   }));
 
   beforeEach(() => {
+    const scriptLoaderService = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
+    scriptLoaderService.loadChartPackages.mockReturnValue(EMPTY);
+  });
+
+  beforeEach(() => {
     fixture = TestBed.createComponent(GoogleChartComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    // No change detection here, we want to invoke the
+    // lifecycle methods in the unit tests
   });
 
   it('should be created', () => {
@@ -56,20 +62,20 @@ describe('GoogleChartComponent', () => {
     expect(() => component.chart).not.toThrow();
   });
 
-  it('should load the packges needed for the chart type', () => {
+  it('should load the google chart library', () => {
     const service = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
     service.loadChartPackages.mockReturnValueOnce(EMPTY);
 
-    changeInput('type', ChartType.BarChart);
+    component.ngOnInit();
 
-    expect(service.loadChartPackages).toHaveBeenCalledWith('corechart');
+    expect(service.loadChartPackages).toHaveBeenCalled();
   });
 
   it('should not throw if only the type, but no data is provided', async(() => {
     const service = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
-    service.loadChartPackages.mockReturnValueOnce(of(void 0));
+    service.loadChartPackages.mockReturnValueOnce(of(null));
 
-    changeInput('type', ChartType.BarChart);
+    component.ngOnInit();
 
     expect(component['wrapper']).toBeDefined();
     expect(chartWrapperMock.draw).toHaveBeenCalledTimes(1);
@@ -77,7 +83,7 @@ describe('GoogleChartComponent', () => {
 
   it('should create the chart with the provided data and column names', () => {
     const service = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
-    service.loadChartPackages.mockReturnValueOnce(of(void 0));
+    service.loadChartPackages.mockReturnValueOnce(of(null));
 
     const data = [
       ['First Row', 10],
@@ -92,7 +98,9 @@ describe('GoogleChartComponent', () => {
     visualizationMock.arrayToDataTable.mockReturnValueOnce(dataTableMock);
 
     const chartType = ChartType.BarChart;
-    changeInput('type', chartType);
+    component.type = chartType;
+
+    component.ngOnInit();
 
     expect(visualizationMock.arrayToDataTable).toHaveBeenCalledWith([columns, ...data], false);
     expect(chartWrapperMock.setDataTable).toHaveBeenCalledWith(dataTableMock);
@@ -102,7 +110,9 @@ describe('GoogleChartComponent', () => {
 
   it('should draw the chart only once if `type`, `data` and `columns` changed all at once', () => {
     const service = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
-    service.loadChartPackages.mockReturnValueOnce(of(void 0));
+    service.loadChartPackages.mockReturnValueOnce(of(null));
+
+    component.ngOnInit();
 
     const data = [
       ['First Row', 10],
@@ -121,7 +131,7 @@ describe('GoogleChartComponent', () => {
       columns: new SimpleChange(null, columns, true)
     });
 
-    expect(chartWrapperMock.draw).toHaveBeenCalledTimes(1);
+    expect(chartWrapperMock.draw).toHaveBeenCalledTimes(2);
   });
 
   it('should not redraw the chart if nothing changed', () => {
@@ -139,11 +149,7 @@ describe('GoogleChartComponent', () => {
 
     const chartType = ChartType.BarChart;
     component.type = chartType;
-    component.ngOnChanges({
-      type: new SimpleChange(null, chartType, true),
-      data: new SimpleChange(null, data, true),
-      columns: new SimpleChange(null, columns, true)
-    });
+    component.ngOnInit();
 
     component.ngOnChanges({});
 
@@ -164,7 +170,9 @@ describe('GoogleChartComponent', () => {
     visualizationMock.arrayToDataTable.mockReturnValueOnce(dataTableMock);
 
     const chartType = ChartType.BarChart;
-    changeInput('type', chartType);
+    component.type = chartType;
+
+    component.ngOnInit();
 
     expect(visualizationMock.arrayToDataTable).toHaveBeenCalledWith(data, true);
     expect(chartWrapperMock.setDataTable).toHaveBeenCalledWith(dataTableMock);
@@ -189,7 +197,8 @@ describe('GoogleChartComponent', () => {
     visualizationMock.arrayToDataTable.mockReturnValueOnce(dataTableMock);
 
     const chartType = ChartType.BarChart;
-    changeInput('type', chartType);
+    component.type = chartType;
+    component.ngOnInit();
 
     const newData = [...data, ['Third Row', 12]];
     changeInput('data', newData);
@@ -215,7 +224,8 @@ describe('GoogleChartComponent', () => {
     visualizationMock.arrayToDataTable.mockReturnValueOnce(dataTableMock);
 
     const chartType = ChartType.BarChart;
-    changeInput('type', chartType);
+    component.type = chartType;
+    component.ngOnInit();
 
     const newColumns = ['New label', 'Some values'];
     changeInput('columns', newColumns);
@@ -224,23 +234,41 @@ describe('GoogleChartComponent', () => {
     expect(chartWrapperMock.draw).toHaveBeenCalledTimes(2);
   });
 
+  it('should not throw if anything changed but the chart wrapper was not yet initialized', () => {
+    const data = [
+      ['First Row', 10],
+      ['Second Row', 11]
+    ];
+    component.data = data;
+
+    const columns = ['Some label', 'Some values'];
+    component.columns = columns;
+
+    expect(() => {
+      component.ngOnChanges({
+        data: new SimpleChange(null, data, true),
+        columns: new SimpleChange(null, columns, true)
+      });
+    }).not.toThrow();
+  });
+
   describe('options', () => {
     beforeEach(() => {
       const service = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
-      service.loadChartPackages.mockReturnValueOnce(of(void 0));
+      service.loadChartPackages.mockReturnValueOnce(of(null));
     });
 
     it('should use the provided options', () => {
       const options = { test: 'test' };
       component.options = options;
 
-      changeInput('type', ChartType.BarChart);
+      component.ngOnInit();
 
       expect(chartWrapperMock.setOptions).toHaveBeenCalledWith(options);
     });
 
     it('should redraw the chart if options changed', () => {
-      changeInput('type', ChartType.BarChart);
+      component.ngOnInit();
 
       const options = { test: 'test' };
       changeInput('options', options);
@@ -253,13 +281,13 @@ describe('GoogleChartComponent', () => {
       const title = 'some title';
       component.title = title;
 
-      changeInput('type', ChartType.BarChart);
+      component.ngOnInit();
 
       expect(chartWrapperMock.setOptions).toHaveBeenLastCalledWith({ title });
     });
 
     it('should redraw the chart if the title changed', () => {
-      changeInput('type', ChartType.BarChart);
+      component.ngOnInit();
 
       const title = 'some title';
       changeInput('title', title);
@@ -275,13 +303,13 @@ describe('GoogleChartComponent', () => {
       const height = 200;
       component.height = height;
 
-      changeInput('type', ChartType.BarChart);
+      component.ngOnInit();
 
       expect(chartWrapperMock.setOptions).toHaveBeenLastCalledWith({ width, height });
     });
 
     it('should redraw the chart if the width changed', () => {
-      changeInput('type', ChartType.BarChart);
+      component.ngOnInit();
 
       const width = 100;
       changeInput('width', width);
@@ -291,7 +319,7 @@ describe('GoogleChartComponent', () => {
     });
 
     it('should redraw the chart if the height changed', () => {
-      changeInput('type', ChartType.BarChart);
+      component.ngOnInit();
 
       const height = 100;
       changeInput('height', height);
@@ -304,7 +332,7 @@ describe('GoogleChartComponent', () => {
   describe('formatters', () => {
     beforeEach(() => {
       const service = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
-      service.loadChartPackages.mockReturnValueOnce(of(void 0));
+      service.loadChartPackages.mockReturnValueOnce(of(null));
     });
 
     it('should apply the provided formatters', () => {
@@ -315,13 +343,13 @@ describe('GoogleChartComponent', () => {
       const dataTableMock = {};
       visualizationMock.arrayToDataTable.mockReturnValueOnce(dataTableMock);
 
-      changeInput('type', ChartType.BarChart);
+      component.ngOnInit();
 
       expect(formatter.formatter.format).toHaveBeenCalledWith(dataTableMock, formatter.colIndex);
     });
 
     it('should redraw the chart if the formatters changed', () => {
-      changeInput('type', ChartType.BarChart);
+      component.ngOnInit();
 
       const formatter = { formatter: { format: jest.fn() }, colIndex: 1 };
       changeInput('formatters', [formatter]);
@@ -358,15 +386,17 @@ describe('GoogleChartComponent', () => {
     }));
 
     it('should redraw the chart if the window was resized', fakeAsync(() => {
-      changeInput('dynamicResize', true);
+      const scriptLoaderService = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
+      scriptLoaderService.loadChartPackages.mockReturnValue(of(null));
 
-      const drawSpy = jest.fn();
-      component['wrapper'] = { draw: drawSpy } as any;
+      component.ngOnInit();
+
+      changeInput('dynamicResize', true);
 
       window.dispatchEvent(new Event('resize'));
       tick(100);
 
-      expect(drawSpy).toHaveBeenCalled();
+      expect(chartWrapperMock.draw).toHaveBeenCalled();
     }));
 
     describe('events', () => {
@@ -376,13 +406,13 @@ describe('GoogleChartComponent', () => {
       });
 
       it('should remove all event handlers before redrawing the chart', () => {
-        changeInput('type', ChartType.BarChart);
+        component.ngOnInit();
 
         expect(visualizationMock.events.removeAllListeners).toHaveBeenCalled();
       });
 
       it('should register chart wrapper event handlers', () => {
-        changeInput('type', ChartType.BarChart);
+        component.ngOnInit();
 
         expect(visualizationMock.events.addListener).toHaveBeenCalledWith(chartWrapperMock, 'ready', expect.any(Function));
         expect(visualizationMock.events.addListener).toHaveBeenCalledWith(chartWrapperMock, 'error', expect.any(Function));
@@ -401,7 +431,7 @@ describe('GoogleChartComponent', () => {
         const chartMock = {};
         chartWrapperMock.getChart.mockReturnValue(chartMock);
 
-        changeInput('type', ChartType.BarChart);
+        component.ngOnInit();
 
         expect(visualizationMock.events.addListener).not.toHaveBeenCalledWith(chartWrapperMock, 'onmouseover', expect.any(Function));
         expect(visualizationMock.events.addListener).not.toHaveBeenCalledWith(chartWrapperMock, 'onmouseout', expect.any(Function));
@@ -433,7 +463,7 @@ describe('GoogleChartComponent', () => {
         const selectSpy = jest.fn();
         component.select.subscribe(event => selectSpy(event));
 
-        changeInput('type', ChartType.BarChart);
+        component.ngOnInit();
 
         expect(selectSpy).not.toHaveBeenCalled();
 

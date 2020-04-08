@@ -1,11 +1,19 @@
 /// <reference types="google.visualization"/>
 
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { fromEvent, Observable, Subscription } from 'rxjs';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges
+} from '@angular/core';
+import { fromEvent, Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
-import { getPackageForChart } from '../../helpers/chart.helper';
-import { ChartBase, Column, Row } from '../../models/chart-base.model';
 import { ChartType } from '../../models/chart-type.model';
 import {
   ChartErrorEvent,
@@ -15,6 +23,7 @@ import {
   ChartSelectionChangedEvent
 } from '../../models/events.model';
 import { ScriptLoaderService } from '../../script-loader/script-loader.service';
+import { ChartBase, Column, Row } from '../chart-base/chart-base.component';
 
 export interface Formatter {
   formatter: google.visualization.DefaultFormatter;
@@ -29,7 +38,7 @@ export interface Formatter {
   exportAs: 'googleChart',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GoogleChartComponent implements ChartBase, OnChanges {
+export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
   /**
    * The type of the chart to create.
    */
@@ -118,11 +127,14 @@ export class GoogleChartComponent implements ChartBase, OnChanges {
   @Output()
   public mouseleave = new EventEmitter<ChartMouseLeaveEvent>();
 
-  private wrapper: google.visualization.ChartWrapper;
   private dataTable: google.visualization.DataTable;
   private resizeSubscription: Subscription;
 
-  constructor(private element: ElementRef, private loaderService: ScriptLoaderService) {}
+  private wrapper: google.visualization.ChartWrapper;
+  private wrapperReadySubject = new Subject<google.visualization.ChartWrapper>();
+  private initialized = false;
+
+  constructor(private element: ElementRef, private scriptLoaderService: ScriptLoaderService) {}
 
   public get chart(): google.visualization.ChartBase | null {
     if (!this.wrapper) {
@@ -132,8 +144,27 @@ export class GoogleChartComponent implements ChartBase, OnChanges {
     return this.wrapper.getChart();
   }
 
+  public get wrapperReady$() {
+    return this.wrapperReadySubject.asObservable();
+  }
+
   public get chartWrapper(): google.visualization.ChartWrapper | null {
     return this.wrapper;
+  }
+
+  public ngOnInit() {
+    // We don't need to load any chart packages, the chart wrapper will handle this else for us
+    this.scriptLoaderService.loadChartPackages().subscribe(() => {
+      // Only ever create the wrapper once to allow animations to happen when someting changes.
+      this.wrapper = new google.visualization.ChartWrapper();
+
+      // We have to create the chart from scratch here always because all other methods
+      // only work after the google.visulation package finished loading.
+      this.createDataTable();
+      this.createChart();
+
+      this.initialized = true;
+    });
   }
 
   public ngOnChanges(changes: SimpleChanges) {
@@ -141,37 +172,16 @@ export class GoogleChartComponent implements ChartBase, OnChanges {
       this.updateResizeListener();
     }
 
-    if (changes.type && this.type != null) {
-      this.createChart();
-      // Don't update the chart when creating it from scratch.
-      return;
-    }
-
-    if (this.wrapper != null) {
+    if (this.initialized) {
       const dataChanged = changes.data || changes.columns;
       if (dataChanged) {
         this.createDataTable();
       }
 
-      if (dataChanged || changes.options || changes.width || changes.height || changes.title || changes.formatters) {
-        this.updateChart();
+      if (dataChanged || changes.options || changes.type || changes.width || changes.height || changes.title || changes.formatters) {
+        this.createChart();
       }
     }
-  }
-
-  private createChart() {
-    this.loadNeededPackages().subscribe(() => {
-      this.wrapper = new google.visualization.ChartWrapper();
-
-      // We have to create the chart from scratch here always because all other methods
-      // Only work after the google.visulation package finished loading.
-      this.createDataTable();
-      this.updateChart();
-    });
-  }
-
-  private loadNeededPackages(): Observable<void> {
-    return this.loaderService.loadChartPackages(getPackageForChart(this.type));
   }
 
   private createDataTable() {
@@ -205,14 +215,14 @@ export class GoogleChartComponent implements ChartBase, OnChanges {
       this.resizeSubscription = fromEvent(window, 'resize')
         .pipe(debounceTime(100))
         .subscribe(() => {
-          if (this.wrapper != null) {
+          if (this.initialized) {
             this.redrawChart();
           }
         });
     }
   }
 
-  private updateChart() {
+  private createChart() {
     this.wrapper.setChartType(this.type);
     this.wrapper.setDataTable(this.dataTable);
     this.applyFormatters(this.dataTable);
@@ -222,6 +232,7 @@ export class GoogleChartComponent implements ChartBase, OnChanges {
 
     this.registerChartEvents();
 
+    this.wrapperReadySubject.next(this.wrapper);
     this.redrawChart();
   }
 

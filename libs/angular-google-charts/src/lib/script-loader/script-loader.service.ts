@@ -14,7 +14,7 @@ const DEFAULT_CONFIG: GoogleChartsConfig = {
 @Injectable({ providedIn: 'root' })
 export class ScriptLoaderService {
   private readonly scriptSource = 'https://www.gstatic.com/charts/loader.js';
-  private readonly onLoadSubject = new Subject<void>();
+  private readonly scriptLoadSubject = new Subject<void>();
 
   constructor(
     private zone: NgZone,
@@ -25,24 +25,9 @@ export class ScriptLoaderService {
   }
 
   /**
-   * A stream that emits as soon as the google charts script is loaded (i.e. `google.charts` is available).
-   * Emits immediately if the script is already loaded.
-   *
-   * *This does not indicate if loading a chart package is done.*
-   */
-  public get loadingComplete$(): Observable<void> {
-    if (this.isGoogleChartsAvailable()) {
-      return of(null);
-    }
-
-    return this.onLoadSubject.asObservable();
-  }
-
-  /**
    * Checks whether `google.charts` is available.
    *
-   * If not, it can be loaded by calling {@link ScriptLoaderService#loadChartPackages loadChartPackages()} or
-   * {@link ScriptLoaderService#loadGoogleCharts loadGoogleCharts()}.
+   * If not, it can be loaded by calling `loadChartPackages`.
    *
    * @returns `true` if `google.charts` is available, `false` otherwise.
    */
@@ -57,6 +42,9 @@ export class ScriptLoaderService {
   /**
    * Loads the Google Chart script and the provided chart packages.
    * Can be called multiple times to load more packages.
+   *
+   * When called without any arguments, this will just load the default package
+   * containing the namespaces `google.charts` and `google.visualization` without any charts.
    *
    * @param packages The packages to load.
    * @returns A stream emitting as soon as the chart packages are loaded.
@@ -85,35 +73,32 @@ export class ScriptLoaderService {
   }
 
   /**
-   * Loads the Google Charts script. After the script is loaded, `google.charts` is defined
-   * and individual chart packages can be loaded.
-   *
-   * This should be used if you want only the Google Charts script without a chart package.
-   * Most of the times, you want to use {@link ScriptLoaderService#loadChartPackages loadChartPackages()} instead,
-   * which uses this method to load chart packages.
+   * Loads the Google Charts script. After the script is loaded, `google.charts` is defined.
    *
    * @returns A stream emitting as soon as loading has completed.
    * If the google charts script is already loaded, the stream emits immediately.
    */
-  public loadGoogleCharts() {
-    if (!this.isGoogleChartsAvailable() && !this.isLoadingGoogleCharts()) {
+  private loadGoogleCharts() {
+    if (this.isGoogleChartsAvailable()) {
+      return of(null);
+    } else if (!this.isLoadingGoogleCharts()) {
       const script = this.createGoogleChartsScript();
       script.onload = () => {
         this.zone.run(() => {
-          this.onLoadSubject.next();
-          this.onLoadSubject.complete();
+          this.scriptLoadSubject.next();
+          this.scriptLoadSubject.complete();
         });
       };
 
       script.onerror = () => {
         this.zone.run(() => {
-          console.error('Failed to load the google chart script!');
-          this.onLoadSubject.error('Failed to load the google chart script!');
+          console.error('Failed to load the google charts script!');
+          this.scriptLoadSubject.error(new Error('Failed to load the google charts script!'));
         });
       };
     }
 
-    return this.loadingComplete$;
+    return this.scriptLoadSubject.asObservable();
   }
 
   private isLoadingGoogleCharts() {

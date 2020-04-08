@@ -25,27 +25,6 @@ describe('ScriptLoaderService', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('loadingComplete$', () => {
-    it('should emit immediately if `google.charts` is available', () => {
-      globalThis.google = {
-        charts: { load: () => {} }
-      } as any;
-
-      const spy = jest.fn();
-      service.loadingComplete$.subscribe(() => spy());
-      expect(spy).toHaveBeenCalled();
-    });
-
-    it('should return the `onLoadSubject` if `google.charts` is not yet available', () => {
-      const spy = jest.fn();
-      service.loadingComplete$.subscribe(() => spy());
-      expect(spy).not.toHaveBeenCalled();
-
-      service['onLoadSubject'].next();
-      expect(spy).toHaveBeenCalled();
-    });
-  });
-
   describe('isGoogleChartsAvailable', () => {
     it('should be false if `google` is not available', () => {
       expect(service.isGoogleChartsAvailable()).toBeFalsy();
@@ -57,9 +36,10 @@ describe('ScriptLoaderService', () => {
       expect(service.isGoogleChartsAvailable()).toBeFalsy();
     });
 
-    it('should successfully load the google charts script', () => {
+    it('should be true if `google.charts` and `google.visulization` is available', () => {
       globalThis.google = {
-        charts: { load: () => {} }
+        charts: { load: () => {} },
+        visulization: { arrayToDataTable: () => {} }
       } as any;
 
       expect(service.isGoogleChartsAvailable()).toBeTruthy();
@@ -67,18 +47,7 @@ describe('ScriptLoaderService', () => {
   });
 
   describe('loadChartPackages', () => {
-    const chartsMock = {
-      load: jest.fn(),
-      setOnLoadCallback: jest.fn()
-    };
-
-    beforeEach(() => {
-      globalThis.google = { charts: chartsMock } as any;
-    });
-
-    it('should load `google.charts` before trying to load packages', () => {
-      globalThis.google = undefined;
-
+    it('should load the google charts script before trying to load packages', () => {
       const createElementSpy = jest.spyOn(document, 'createElement').mockReturnValue({} as any);
 
       const headMock = { appendChild: jest.fn() };
@@ -99,150 +68,171 @@ describe('ScriptLoaderService', () => {
       );
     });
 
-    it('should load the chart packages if `google.charts` is available', () => {
-      const chart = 'corechart';
+    describe('loading the charts script', () => {
+      let createElementSpy: jest.SpyInstance;
+      let getElementsByTagNameSpy: jest.SpyInstance;
 
-      service.loadChartPackages(chart).subscribe();
-
-      expect(chartsMock.load).toHaveBeenCalledWith('current', {
-        packages: [chart],
-        language: 'en-US',
-        mapsApiKey: '',
-        safeMode: false
+      beforeEach(() => {
+        createElementSpy = jest.spyOn(document, 'createElement').mockImplementation();
+        getElementsByTagNameSpy = jest.spyOn(document, 'getElementsByTagName').mockImplementation();
       });
-    });
 
-    it('should emit after loading the charts', () => {
-      const chart = 'corechart';
-      let loadCallback: Function;
+      it('should not load the script if it is already loaded', () => {
+        globalThis.google = {
+          charts: { load: () => {} }
+        } as any;
 
-      chartsMock.setOnLoadCallback.mockImplementation(callback => (loadCallback = callback));
+        service.loadChartPackages().subscribe();
 
-      const loadedSpy = jest.fn();
-      service.loadChartPackages(chart).subscribe(() => loadedSpy());
-
-      expect(loadedSpy).not.toHaveBeenCalled();
-
-      loadCallback();
-      expect(loadedSpy).toHaveBeenCalled();
-    });
-
-    it('should use injected config values', () => {
-      TestBed.resetTestingModule();
-
-      const version = 'current';
-      const mapsApiKey = 'mapsApiKey';
-      const safeMode = true;
-      const locale = 'de-DE';
-
-      TestBed.configureTestingModule({
-        providers: [
-          ScriptLoaderService,
-          { provide: LOCALE_ID, useValue: locale },
-          { provide: GOOGLE_CHARTS_CONFIG, useValue: { version, mapsApiKey, safeMode } }
-        ]
+        expect(createElementSpy).not.toHaveBeenCalled();
       });
-      service = TestBed.inject(ScriptLoaderService);
 
-      const chart = 'corechart';
+      it('should not load the script if it is currently being loaded', () => {
+        getElementsByTagNameSpy.mockReturnValue([{ src: service['scriptSource'] }]);
 
-      service.loadChartPackages(chart).subscribe();
+        service.loadChartPackages().subscribe();
 
-      expect(chartsMock.load).toHaveBeenCalledWith(version, {
-        packages: [chart],
-        language: locale,
-        mapsApiKey,
-        safeMode
+        expect(createElementSpy).not.toHaveBeenCalled();
       });
-    });
-  });
 
-  describe('loadGoogleCharts', () => {
-    let createElementSpy: jest.SpyInstance;
-    let getElementsByTagNameSpy: jest.SpyInstance;
+      it('should load the google charts script', () => {
+        createElementSpy.mockReturnValue({});
 
-    beforeEach(() => {
-      createElementSpy = jest.spyOn(document, 'createElement').mockImplementation();
-      getElementsByTagNameSpy = jest.spyOn(document, 'getElementsByTagName').mockImplementation();
-    });
+        const headMock = { appendChild: jest.fn() };
+        getElementsByTagNameSpy.mockReturnValueOnce([]).mockReturnValueOnce([headMock]);
 
-    it('should do nothing if `google.charts` is available', () => {
-      globalThis.google = {
-        charts: { load: () => {} }
-      } as any;
+        service.loadChartPackages().subscribe();
 
-      service.loadGoogleCharts().subscribe();
-
-      expect(createElementSpy).not.toHaveBeenCalled();
-    });
-
-    it('should do nothing if script is already being loaded', () => {
-      getElementsByTagNameSpy.mockReturnValue([{ src: service['scriptSource'] }]);
-
-      service.loadGoogleCharts().subscribe();
-
-      expect(createElementSpy).not.toHaveBeenCalled();
-    });
-
-    it('should create the google charts script', () => {
-      createElementSpy.mockReturnValue({});
-
-      const headMock = { appendChild: jest.fn() };
-      getElementsByTagNameSpy.mockReturnValueOnce([]).mockReturnValueOnce([headMock]);
-
-      service.loadGoogleCharts().subscribe();
-
-      expect(createElementSpy).toHaveBeenCalledWith('script');
-      expect(headMock.appendChild).toHaveBeenCalledWith(
-        expect.objectContaining({
-          type: 'text/javascript',
-          src: service['scriptSource'],
-          async: true
-        })
-      );
-    });
-
-    it('should emit as soon as the script is fully loaded', () => {
-      const scriptMock = { onload: () => {} };
-      createElementSpy.mockReturnValue(scriptMock);
-
-      const headMock = { appendChild: jest.fn() };
-      getElementsByTagNameSpy.mockReturnValueOnce([]).mockReturnValueOnce([headMock]);
-
-      const loadedSpy = jest.fn();
-      service.loadGoogleCharts().subscribe(() => loadedSpy());
-
-      expect(loadedSpy).not.toHaveBeenCalled();
-      scriptMock.onload();
-
-      expect(loadedSpy).toHaveBeenCalled();
-    });
-
-    it('should emit error if the script fails to load', () => {
-      const scriptMock = { onerror: () => void 0 };
-      createElementSpy.mockReturnValue(scriptMock);
-
-      const headMock = { appendChild: jest.fn() };
-      getElementsByTagNameSpy.mockReturnValueOnce([]).mockReturnValueOnce([headMock]);
-
-      const errorSpy = jest.fn();
-      service
-        .loadGoogleCharts()
-        .pipe(
-          catchError(error => {
-            errorSpy();
-            return throwError(error);
+        expect(createElementSpy).toHaveBeenCalledWith('script');
+        expect(headMock.appendChild).toHaveBeenCalledWith(
+          expect.objectContaining({
+            type: 'text/javascript',
+            src: service['scriptSource'],
+            async: true
           })
-        )
-        .subscribe();
+        );
+      });
 
-      expect(errorSpy).not.toHaveBeenCalled();
+      it('should emit an error if the script fails to load', () => {
+        const scriptMock = { onerror: () => void 0 };
+        createElementSpy.mockReturnValue(scriptMock);
 
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
-      scriptMock.onerror();
-      consoleSpy.mockReset();
+        const headMock = { appendChild: jest.fn() };
+        getElementsByTagNameSpy.mockReturnValueOnce([]).mockReturnValueOnce([headMock]);
 
-      expect(errorSpy).toHaveBeenCalled();
+        const errorSpy = jest.fn();
+        service
+          .loadChartPackages()
+          .pipe(
+            catchError(error => {
+              errorSpy();
+              return throwError(error);
+            })
+          )
+          .subscribe();
+
+        expect(errorSpy).not.toHaveBeenCalled();
+
+        const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
+        scriptMock.onerror();
+        consoleSpy.mockReset();
+
+        expect(errorSpy).toHaveBeenCalled();
+      });
+    });
+
+    describe('loading chart packages', () => {
+      const chartsMock = {
+        load: jest.fn(),
+        setOnLoadCallback: jest.fn()
+      };
+
+      it('should load the chart packages after loading the google charts script', () => {
+        const scriptMock = { onload: () => {} };
+
+        jest.spyOn(document, 'createElement').mockReturnValue(scriptMock as any);
+
+        const headMock = { appendChild: jest.fn() };
+        jest
+          .spyOn(document, 'getElementsByTagName')
+          .mockReturnValueOnce([] as any)
+          .mockReturnValueOnce([headMock] as any);
+
+        service.loadChartPackages().subscribe();
+
+        globalThis.google = { charts: chartsMock } as any;
+        scriptMock.onload();
+
+        expect(chartsMock.load).toHaveBeenCalledWith('current', {
+          packages: [],
+          language: 'en-US',
+          mapsApiKey: '',
+          safeMode: false
+        });
+      });
+
+      it('should immediately load the chart packages if the google charts script is already loaded', () => {
+        globalThis.google = { charts: chartsMock } as any;
+
+        const chart = 'corechart';
+
+        service.loadChartPackages(chart).subscribe();
+
+        expect(chartsMock.load).toHaveBeenCalledWith('current', {
+          packages: [chart],
+          language: 'en-US',
+          mapsApiKey: '',
+          safeMode: false
+        });
+      });
+
+      it('should emit after loading the charts', () => {
+        globalThis.google = { charts: chartsMock } as any;
+
+        const chart = 'corechart';
+        let loadCallback: Function;
+
+        chartsMock.setOnLoadCallback.mockImplementation(callback => (loadCallback = callback));
+
+        const loadedSpy = jest.fn();
+        service.loadChartPackages(chart).subscribe(() => loadedSpy());
+
+        expect(loadedSpy).not.toHaveBeenCalled();
+
+        loadCallback();
+        expect(loadedSpy).toHaveBeenCalled();
+      });
+
+      it('should use injected config values', () => {
+        globalThis.google = { charts: chartsMock } as any;
+
+        TestBed.resetTestingModule();
+
+        const version = 'current';
+        const mapsApiKey = 'mapsApiKey';
+        const safeMode = true;
+        const locale = 'de-DE';
+
+        TestBed.configureTestingModule({
+          providers: [
+            ScriptLoaderService,
+            { provide: LOCALE_ID, useValue: locale },
+            { provide: GOOGLE_CHARTS_CONFIG, useValue: { version, mapsApiKey, safeMode } }
+          ]
+        });
+        service = TestBed.inject(ScriptLoaderService);
+
+        const chart = 'corechart';
+
+        service.loadChartPackages(chart).subscribe();
+
+        expect(chartsMock.load).toHaveBeenCalledWith(version, {
+          packages: [chart],
+          language: locale,
+          mapsApiKey,
+          safeMode
+        });
+      });
     });
   });
 });

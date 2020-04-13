@@ -436,11 +436,11 @@ describe('GoogleChartComponent', () => {
   describe('events', () => {
     beforeEach(() => {
       const service = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
-      service.loadChartPackages.mockReturnValueOnce(of(void 0));
+      service.loadChartPackages.mockReturnValueOnce(of(null));
     });
 
     it('should register mouse event handlers after the chart is drawn', () => {
-      const chartMock = {};
+      const chartMock = { draw: jest.fn() };
       chartWrapperMock.getChart.mockReturnValue(chartMock);
 
       component.ngOnInit();
@@ -455,8 +455,22 @@ describe('GoogleChartComponent', () => {
       expect(visualizationMock.events.addListener).toHaveBeenCalledWith(chartMock, 'onmouseout', expect.any(Function));
     });
 
+    it('should remove all listeners from the chart before subscribing again', () => {
+      const chartMock = { draw: jest.fn() };
+      chartWrapperMock.getChart.mockReturnValue(chartMock);
+
+      component.ngOnInit();
+
+      expect(visualizationMock.events.removeAllListeners).toHaveBeenCalledWith(chartWrapperMock);
+
+      const readyCallback = visualizationMock.events.addListener.mock.calls[0][2];
+      readyCallback();
+
+      expect(visualizationMock.events.removeAllListeners).toHaveBeenCalledWith(chartMock);
+    });
+
     it('should emit ready event after the chart is ready', () => {
-      const chartMock = {};
+      const chartMock = { draw: jest.fn() };
       chartWrapperMock.getChart.mockReturnValue(chartMock);
 
       component.ngOnInit();

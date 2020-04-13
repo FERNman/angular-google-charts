@@ -275,6 +275,8 @@ export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
     };
 
     registerChartEvent(this.wrapper, 'ready', () => {
+      // This could also be done by checking if we already subscribed to the events
+      google.visualization.events.removeAllListeners(this.chart);
       registerChartEvent(this.chart, 'onmouseover', (event: ChartMouseOverEvent) => this.mouseover.emit(event));
       registerChartEvent(this.chart, 'onmouseout', (event: ChartMouseLeaveEvent) => this.mouseleave.emit(event));
 

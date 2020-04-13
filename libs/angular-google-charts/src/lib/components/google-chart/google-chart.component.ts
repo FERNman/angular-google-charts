@@ -161,16 +161,22 @@ export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
   public ngOnInit() {
     // We don't need to load any chart packages, the chart wrapper will handle this for us
     this.scriptLoaderService.loadChartPackages().subscribe(() => {
+      this.createDataTable();
+
       // Only ever create the wrapper once to allow animations to happen when someting changes.
       this.wrapper = new google.visualization.ChartWrapper({
+        container: this.element.nativeElement,
         chartType: this.type,
-        container: this.element.nativeElement
+        dataTable: this.dataTable,
+        options: this.mergeOptions()
       });
 
-      this.createDataTable();
-      this.createChart();
+      this.registerChartEvents();
 
+      this.wrapperReadySubject.next(this.wrapper);
       this.initialized = true;
+
+      this.drawChart();
     });
   }
 
@@ -180,13 +186,25 @@ export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
     }
 
     if (this.initialized) {
-      const dataChanged = changes.data || changes.columns;
-      if (dataChanged) {
+      let shouldRedraw = false;
+      if (changes.data || changes.columns || changes.formatters) {
         this.createDataTable();
+        this.wrapper.setDataTable(this.dataTable);
+        shouldRedraw = true;
       }
 
-      if (dataChanged || changes.options || changes.type || changes.width || changes.height || changes.title || changes.formatters) {
-        this.createChart();
+      if (changes.type) {
+        this.wrapper.setChartType(this.type);
+        shouldRedraw = true;
+      }
+
+      if (changes.options || changes.width || changes.height || changes.title) {
+        this.wrapper.setOptions(this.mergeOptions());
+        shouldRedraw = true;
+      }
+
+      if (shouldRedraw) {
+        this.drawChart();
       }
     }
   }
@@ -202,6 +220,7 @@ export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
     }
 
     this.dataTable = google.visualization.arrayToDataTable(this.getDataAsTable(), firstRowIsData);
+    this.applyFormatters(this.dataTable);
   }
 
   private getDataAsTable(): (Row | Column[])[] {
@@ -223,24 +242,10 @@ export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
         .pipe(debounceTime(100))
         .subscribe(() => {
           if (this.initialized) {
-            this.redrawChart();
+            this.drawChart();
           }
         });
     }
-  }
-
-  private createChart() {
-    this.wrapper.setChartType(this.type);
-    this.wrapper.setDataTable(this.dataTable);
-    this.applyFormatters(this.dataTable);
-
-    const mergedOptions = this.mergeOptions();
-    this.wrapper.setOptions(mergedOptions);
-
-    this.registerChartEvents();
-
-    this.wrapperReadySubject.next(this.wrapper);
-    this.redrawChart();
   }
 
   private mergeOptions(): object {
@@ -283,12 +288,12 @@ export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
     });
   }
 
-  private redrawChart() {
+  private drawChart() {
     if (this.dashboard != null) {
       // If this chart is part of a dashboard, the dashboard takes care of drawing
       return;
     }
 
-    this.wrapper.draw(this.element.nativeElement);
+    this.wrapper.draw();
   }
 }

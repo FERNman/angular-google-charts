@@ -1,15 +1,17 @@
 <h1>Test Component</h1>
 <button (click)="goBack()">Back</button>
 
-<google-chart
-  width="600"
-  [title]="chart.title"
-  [type]="chart.type"
-  [data]="chart.data"
-  [columns]="chart.columnNames"
-  [options]="chart.options"
->
-</google-chart>
+<dashboard [columns]="['Name', 'Donuts eaten']" [data]="dashboardData">
+  <control-wrapper
+    [for]="myChart"
+    [type]="filterType"
+    [state]="{ lowValue: 3, highValue: 8 }"
+    [options]="{ filterColumnLabel: 'Donuts eaten', minValue: 1, maxValue: 10 }"
+  ></control-wrapper>
+  <google-chart #myChart type="PieChart" [width]="300" [height]="300" [options]="{ pieSliceText: 'value' }"> </google-chart>
+</dashboard>
+
+<chart-wrapper [specs]="chartWrapperSpecs"></chart-wrapper>
 
 <google-chart
   style="width: 100%;"
@@ -21,5 +23,3 @@
   [dynamicResize]="true"
 >
 </google-chart>
-
-<chart-wrapper [specs]="chartWrapperSpecs"></chart-wrapper>

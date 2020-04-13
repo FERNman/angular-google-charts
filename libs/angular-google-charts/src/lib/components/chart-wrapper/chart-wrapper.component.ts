@@ -9,7 +9,7 @@ import {
   Output,
   SimpleChanges
 } from '@angular/core';
-import { Subject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 
 import { ChartErrorEvent, ChartReadyEvent, ChartSelectionChangedEvent } from '../../models/events.model';
 import { ScriptLoaderService } from '../../script-loader/script-loader.service';
@@ -45,7 +45,7 @@ export class ChartWrapperComponent implements ChartBase, OnChanges, OnInit {
   public select = new EventEmitter<ChartSelectionChangedEvent>();
 
   private wrapper: google.visualization.ChartWrapper;
-  private wrapperReadySubject = new Subject<google.visualization.ChartWrapper>();
+  private wrapperReadySubject = new ReplaySubject<google.visualization.ChartWrapper>(1);
   private initialized = false;
 
   constructor(private element: ElementRef, private scriptLoaderService: ScriptLoaderService) {}

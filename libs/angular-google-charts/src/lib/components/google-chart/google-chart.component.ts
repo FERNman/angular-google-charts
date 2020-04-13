@@ -8,10 +8,11 @@ import {
   Input,
   OnChanges,
   OnInit,
+  Optional,
   Output,
   SimpleChanges
 } from '@angular/core';
-import { fromEvent, Subject, Subscription } from 'rxjs';
+import { fromEvent, ReplaySubject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 import { ChartType } from '../../models/chart-type.model';
@@ -24,6 +25,7 @@ import {
 } from '../../models/events.model';
 import { ScriptLoaderService } from '../../script-loader/script-loader.service';
 import { ChartBase, Column, Row } from '../chart-base/chart-base.component';
+import { DashboardComponent } from '../dashboard/dashboard.component';
 
 export interface Formatter {
   formatter: google.visualization.DefaultFormatter;
@@ -131,10 +133,14 @@ export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
   private resizeSubscription: Subscription;
 
   private wrapper: google.visualization.ChartWrapper;
-  private wrapperReadySubject = new Subject<google.visualization.ChartWrapper>();
+  private wrapperReadySubject = new ReplaySubject<google.visualization.ChartWrapper>(1);
   private initialized = false;
 
-  constructor(private element: ElementRef, private scriptLoaderService: ScriptLoaderService) {}
+  constructor(
+    private element: ElementRef,
+    private scriptLoaderService: ScriptLoaderService,
+    @Optional() private dashboard?: DashboardComponent
+  ) {}
 
   public get chart(): google.visualization.ChartBase | null {
     if (!this.wrapper) {
@@ -153,13 +159,14 @@ export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
   }
 
   public ngOnInit() {
-    // We don't need to load any chart packages, the chart wrapper will handle this else for us
+    // We don't need to load any chart packages, the chart wrapper will handle this for us
     this.scriptLoaderService.loadChartPackages().subscribe(() => {
       // Only ever create the wrapper once to allow animations to happen when someting changes.
-      this.wrapper = new google.visualization.ChartWrapper();
+      this.wrapper = new google.visualization.ChartWrapper({
+        chartType: this.type,
+        container: this.element.nativeElement
+      });
 
-      // We have to create the chart from scratch here always because all other methods
-      // only work after the google.visulation package finished loading.
       this.createDataTable();
       this.createChart();
 
@@ -277,6 +284,11 @@ export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
   }
 
   private redrawChart() {
+    if (this.dashboard != null) {
+      // If this chart is part of a dashboard, the dashboard takes care of drawing
+      return;
+    }
+
     this.wrapper.draw(this.element.nativeElement);
   }
 }

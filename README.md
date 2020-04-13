@@ -257,6 +257,23 @@ The `mouseleave` event fires when the mouse stops hovering one of the charts ele
 
 The event is of type `ChartMouseLeaveEvent`, where `column` is the index of the no-longer hovered column and `row` is the index of the no-longer hovered row.
 
+## Controls and Dashboards
+
+Google Charts supports combining multiple charts into dashboards and giving users controls to manipulate what data they show, see [their documentation](https://developers.google.com/chart/interactive/docs/gallery/controls). Using this library, dashboards can be created easily.
+
+A dashboard component can be instantiated, which can contain child controls and charts. Every control must specify one or more charts they are controlling via their `for` property. It accepts a single chart as well as an array of charts, and one chart can be controlled by multiple controls.
+
+```html
+<dashboard [columns]="dashboardColumns" [data]="dashboardData">
+  <control-wrapper [for]="dashboardChart" [type]="controlFilterType" [options]="controlOptions"></control-wrapper>
+  <google-chart #dashboardChart type="PieChart" [width]="300" [height]="300"> </google-chart>
+</dashboard>
+```
+
+When creating dashboards, the charts themselves are not responsible for drawing, which means their `columns` and `data` properties are unused. Instead, the dashboard is responsible for drawing. It therefore accepts data in the same format as charts do through the `columns` and `data` properties.
+
+Note that charts in a dashboard will not be visible if they are not referenced in at least one control.
+
 ## Advanced
 
 ### Accessing the chart wrapper directly

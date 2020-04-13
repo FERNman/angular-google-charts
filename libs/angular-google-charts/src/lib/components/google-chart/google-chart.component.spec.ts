@@ -108,6 +108,20 @@ describe('GoogleChartComponent', () => {
     expect(chartWrapperMock.draw).toHaveBeenCalledTimes(1);
   });
 
+  it('should not draw the chart if the chart is part of a dashboard', () => {
+    const service = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
+    service.loadChartPackages.mockReturnValueOnce(of(null));
+
+    const chartType = ChartType.BarChart;
+    component.type = chartType;
+
+    component['dashboard'] = {} as any;
+
+    component.ngOnInit();
+
+    expect(chartWrapperMock.draw).not.toHaveBeenCalled();
+  });
+
   it('should draw the chart only once if `type`, `data` and `columns` changed all at once', () => {
     const service = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
     service.loadChartPackages.mockReturnValueOnce(of(null));

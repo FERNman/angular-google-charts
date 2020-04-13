@@ -152,19 +152,36 @@ describe('ChartWrapperComponent', () => {
       expect(visualizationMock.events.addListener).toHaveBeenCalledWith(chartWrapperMock, 'select', expect.any(Function));
     });
 
-    it.todo('should emit ready event after the chart is ready');
+    it('should emit ready event after the chart is ready', () => {
+      const chartMock = { draw: jest.fn() };
+      chartWrapperMock.getChart.mockReturnValue(chartMock);
 
-    it.todo('should emit error event if the chart caused an error');
+      component.ngOnInit();
+
+      const readySpy = jest.fn();
+      component.ready.subscribe(event => readySpy(event));
+
+      const readyCallback = visualizationMock.events.addListener.mock.calls[0][2];
+      readyCallback();
+
+      expect(readySpy).toHaveBeenCalledWith({ chart: chartMock });
+    });
+
+    it('should emit error event if the chart caused an error', () => {
+      component.ngOnInit();
+
+      const errorSpy = jest.fn();
+      component.error.subscribe(event => errorSpy(event));
+
+      const errorCallback = visualizationMock.events.addListener.mock.calls[1][2];
+
+      const error = 'someerror';
+      errorCallback(error);
+
+      expect(errorSpy).toHaveBeenCalledWith(error);
+    });
 
     it('should emit select event if a value was selected', () => {
-      let selectCallback: Function;
-
-      visualizationMock.events.addListener.mockImplementation((_, name, callback) => {
-        if (name === 'select') {
-          selectCallback = callback;
-        }
-      });
-
       const selection = [{ column: 1, row: 2 }] as google.visualization.VisualizationSelectionArray[];
 
       const chartMock = { getSelection: jest.fn(() => selection) };
@@ -172,9 +189,12 @@ describe('ChartWrapperComponent', () => {
 
       const selectSpy = jest.fn();
       component.select.subscribe(event => selectSpy(event));
+
       component.ngOnInit();
 
       expect(selectSpy).not.toHaveBeenCalled();
+
+      const selectCallback = visualizationMock.events.addListener.mock.calls[2][2];
 
       selectCallback();
 

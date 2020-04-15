@@ -8,6 +8,7 @@
     "member-ordering": [true, { "order": "fields-first" }],
     "member-access": true,
     "array-type": [true, "array"],
-    "no-host-metadata-property": false
+    "no-host-metadata-property": false,
+    "unified-signatures": false
   }
 }

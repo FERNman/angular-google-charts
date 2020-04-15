@@ -1,6 +1,6 @@
 import { SimpleChange } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
+import { EMPTY, of } from 'rxjs';
 
 import { ChartType } from '../../models/chart-type.model';
 import { ScriptLoaderService } from '../../script-loader/script-loader.service';
@@ -48,11 +48,6 @@ describe('ChartWrapperComponent', () => {
   }));
 
   beforeEach(() => {
-    const scriptLoaderService = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
-    scriptLoaderService.loadChartPackages.mockReturnValue(of(null));
-  });
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(ChartWrapperComponent);
     component = fixture.componentInstance;
     // No change detection here, we want to invoke the
@@ -63,51 +58,157 @@ describe('ChartWrapperComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should load google charts', () => {
-    component.ngOnInit();
+  describe('ngOnInit', () => {
+    it('should load the google charts package', () => {
+      const scriptLoaderService = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
+      scriptLoaderService.loadChartPackages.mockReturnValue(EMPTY);
 
-    const scriptLoaderService = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
-    expect(scriptLoaderService.loadChartPackages).toHaveBeenCalled();
+      component.ngOnInit();
+
+      expect(scriptLoaderService.loadChartPackages).toHaveBeenCalled();
+    });
+
+    it('should create the chart wrapper using the provided specs', () => {
+      const scriptLoaderService = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
+      scriptLoaderService.loadChartPackages.mockReturnValue(of(null));
+
+      const specs = { chartType: ChartType.AreaChart, dataTable: [] };
+      component.specs = specs;
+      component.ngOnInit();
+
+      expect(visualizationMock.ChartWrapper).toHaveBeenCalledWith(expect.objectContaining(specs));
+    });
+
+    it('should not throw if the specs are `null`', async(() => {
+      const scriptLoaderService = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
+      scriptLoaderService.loadChartPackages.mockReturnValue(of(null));
+      component.specs = null;
+
+      expect(() => component.ngOnInit()).not.toThrow();
+    }));
+
+    it('should not use container or containerId if present in the chart specs', () => {
+      const scriptLoaderService = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
+      scriptLoaderService.loadChartPackages.mockReturnValue(of(null));
+
+      const specs = { chartType: ChartType.AreaChart, container: { innerHTML: '' } as HTMLElement, containerId: 'test' };
+      component.specs = specs;
+      component.ngOnInit();
+
+      expect(visualizationMock.ChartWrapper).not.toHaveBeenCalledWith(expect.objectContaining({ container: specs.container }));
+      expect(visualizationMock.ChartWrapper).not.toHaveBeenCalledWith(expect.objectContaining({ containerId: specs.containerId }));
+    });
+
+    it('should register chart wrapper event handlers', () => {
+      const scriptLoaderService = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
+      scriptLoaderService.loadChartPackages.mockReturnValue(of(null));
+
+      component.specs = { chartType: ChartType.AreaChart };
+
+      component.ngOnInit();
+
+      expect(visualizationMock.events.removeAllListeners).toHaveBeenCalled();
+      expect(visualizationMock.events.addListener).toHaveBeenCalledWith(chartWrapperMock, 'ready', expect.any(Function));
+      expect(visualizationMock.events.addListener).toHaveBeenCalledWith(chartWrapperMock, 'error', expect.any(Function));
+      expect(visualizationMock.events.addListener).toHaveBeenCalledWith(chartWrapperMock, 'select', expect.any(Function));
+    });
+
+    it('should emit ready event', () => {
+      const scriptLoaderService = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
+      scriptLoaderService.loadChartPackages.mockReturnValue(of(null));
+
+      component.specs = { chartType: ChartType.AreaChart };
+
+      const readySpy = jest.fn();
+      component.wrapperReady$.subscribe(event => readySpy(event));
+
+      component.ngOnInit();
+
+      expect(readySpy).toHaveBeenCalledWith(chartWrapperMock);
+    });
+
+    it('should draw the chart', () => {
+      const scriptLoaderService = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
+      scriptLoaderService.loadChartPackages.mockReturnValue(of(null));
+
+      component.specs = { chartType: ChartType.AreaChart };
+
+      component.ngOnInit();
+
+      expect(chartWrapperMock.draw).toHaveBeenCalled();
+    });
   });
 
-  it('should draw a chart using the provided specs', () => {
-    const specs = { chartType: ChartType.AreaChart, dataTable: [] };
-    component.specs = specs;
-    component.ngOnInit();
+  describe('ngOnChanges', () => {
+    beforeEach(() => {
+      component['wrapper'] = chartWrapperMock as any;
+      component['initialized'] = true;
+    });
 
-    expect(visualizationMock.ChartWrapper).toHaveBeenCalled();
-    expect(chartWrapperMock.setChartType).toBeCalledWith(specs.chartType);
-    expect(chartWrapperMock.setDataTable).toHaveBeenCalledWith(specs.dataTable);
-    expect(chartWrapperMock.draw).toHaveBeenCalled();
-  });
+    it('should not throw if the wrapper is not yet initialized', () => {
+      component['wrapper'] = null;
+      component['initialized'] = false;
 
-  it('should redraw the chart if the specs change', () => {
-    const specs = { chartType: ChartType.AreaChart, dataTable: [] } as google.visualization.ChartSpecs;
-    component.specs = specs;
-    component.ngOnInit();
+      const specs = {
+        chartType: ChartType.AreaChart
+      };
 
-    const newSpecs = { ...specs, chartType: ChartType.GeoChart };
-    changeSpecs(newSpecs);
+      expect(() => changeSpecs(specs)).not.toThrow();
+    });
 
-    expect(chartWrapperMock.draw).toHaveBeenCalledTimes(2);
-  });
+    it('should update the chart wrapper with the provided specs', () => {
+      const specs = {
+        chartType: ChartType.AreaChart,
+        dataSourceUrl: 'www.data.de',
+        dataTable: [],
+        options: { test: 'any' },
+        query: 'query',
+        refreshInterval: 100,
+        view: 'testview'
+      } as google.visualization.ChartSpecs;
 
-  it("should not redraw the chart if the specs didn't change", () => {
-    const specs = { chartType: ChartType.AreaChart, dataTable: [] } as google.visualization.ChartSpecs;
-    component.specs = specs;
-    component.ngOnInit();
+      changeSpecs(specs);
 
-    component.ngOnChanges({});
+      expect(chartWrapperMock.setChartType).toHaveBeenCalledWith(specs.chartType);
+      expect(chartWrapperMock.setDataSourceUrl).toHaveBeenCalledWith(specs.dataSourceUrl);
+      expect(chartWrapperMock.setDataTable).toHaveBeenCalledWith(specs.dataTable);
+      expect(chartWrapperMock.setOptions).toHaveBeenCalledWith(specs.options);
+      expect(chartWrapperMock.setQuery).toHaveBeenCalledWith(specs.query);
+      expect(chartWrapperMock.setRefreshInterval).toHaveBeenCalledWith(specs.refreshInterval);
+      expect(chartWrapperMock.setView).toHaveBeenCalledWith(specs.view);
+    });
 
-    expect(chartWrapperMock.draw).toHaveBeenCalledTimes(1);
-  });
+    it('should ignore `container` and `containerId` if given', () => {
+      const specs = { containerId: 'test', container: {} } as google.visualization.ChartSpecs;
+      component.specs = specs;
 
-  it('should ignore `container` and `containerId` if given', () => {
-    const specs = { chartType: ChartType.AreaChart, containerId: 'test', container: {} } as google.visualization.ChartSpecs;
-    component.specs = specs;
-    component.ngOnInit();
+      expect(chartWrapperMock.setContainerId).not.toHaveBeenCalled();
+    });
 
-    expect(chartWrapperMock.setContainerId).not.toBeCalled();
+    it('should not throw if the specs are `null`', () => {
+      expect(() => changeSpecs(null)).not.toThrow();
+
+      expect(chartWrapperMock.draw).toHaveBeenCalled();
+    });
+
+    it('should redraw the chart if the specs change', () => {
+      const specs = { chartType: ChartType.AreaChart } as google.visualization.ChartSpecs;
+      component.specs = specs;
+
+      const newSpecs = { ...specs, chartType: ChartType.GeoChart };
+      changeSpecs(newSpecs);
+
+      expect(chartWrapperMock.draw).toHaveBeenCalled();
+    });
+
+    it("should not redraw the chart if the specs didn't change", () => {
+      const specs = { chartType: ChartType.AreaChart } as google.visualization.ChartSpecs;
+      component.specs = specs;
+
+      component.ngOnChanges({});
+
+      expect(chartWrapperMock.draw).not.toHaveBeenCalled();
+    });
   });
 
   describe('chart', () => {
@@ -122,34 +223,23 @@ describe('ChartWrapperComponent', () => {
     });
 
     it('should return the chart wrapper', () => {
-      const specs = { chartType: ChartType.AreaChart, dataTable: [] } as google.visualization.ChartSpecs;
-      component.specs = specs;
-      component.ngOnInit();
+      component['wrapper'] = chartWrapperMock as any;
 
       const wrapper = component.chartWrapper;
       expect(wrapper).toBe(chartWrapperMock);
     });
+
+    it('should redraw if changed', () => {
+      component.chartWrapper = chartWrapperMock as any;
+
+      expect(chartWrapperMock.draw).toHaveBeenCalled();
+    });
   });
 
   describe('events', () => {
-    const specs = { chartType: ChartType.AreaChart } as google.visualization.ChartSpecs;
-
     beforeEach(() => {
-      component.specs = specs;
-    });
-
-    it('should remove all event handlers before redrawing the chart', () => {
-      component.ngOnInit();
-
-      expect(visualizationMock.events.removeAllListeners).toHaveBeenCalled();
-    });
-
-    it('should register chart wrapper event handlers', () => {
-      component.ngOnInit();
-
-      expect(visualizationMock.events.addListener).toHaveBeenCalledWith(chartWrapperMock, 'ready', expect.any(Function));
-      expect(visualizationMock.events.addListener).toHaveBeenCalledWith(chartWrapperMock, 'error', expect.any(Function));
-      expect(visualizationMock.events.addListener).toHaveBeenCalledWith(chartWrapperMock, 'select', expect.any(Function));
+      const service = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
+      service.loadChartPackages.mockReturnValueOnce(of(null));
     });
 
     it('should emit ready event after the chart is ready', () => {

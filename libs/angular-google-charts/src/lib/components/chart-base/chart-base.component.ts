@@ -44,7 +44,7 @@ export class ChartBase {
   public chartWrapper: google.visualization.ChartWrapper | null;
 
   /**
-   * Emits every time the `ChartWrapper` is recreated.
+   * Emits after the `ChartWrapper` is created, but before the chart is drawn for the first time.
    */
   public wrapperReady$: Observable<google.visualization.ChartWrapper>;
 }

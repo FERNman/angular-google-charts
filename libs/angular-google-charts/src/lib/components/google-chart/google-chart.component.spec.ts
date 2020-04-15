@@ -62,6 +62,25 @@ describe('GoogleChartComponent', () => {
     expect(() => component.chart).not.toThrow();
   });
 
+  describe('chartWrapper', () => {
+    it('should not throw if the chart wrapper is `null`', () => {
+      expect(() => component.chartWrapper).not.toThrow();
+    });
+
+    it('should return the chart wrapper', () => {
+      component['wrapper'] = chartWrapperMock as any;
+
+      const wrapper = component.chartWrapper;
+      expect(wrapper).toBe(chartWrapperMock);
+    });
+
+    it('should redraw if changed', () => {
+      component.chartWrapper = chartWrapperMock as any;
+
+      expect(chartWrapperMock.draw).toHaveBeenCalled();
+    });
+  });
+
   describe('ngOnInit', () => {
     it('should load the google chart library', () => {
       const service = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;

@@ -274,6 +274,47 @@ When creating dashboards, the charts themselves are not responsible for drawing,
 
 Note that charts in a dashboard will not be visible if they are not referenced in at least one control.
 
+## Editing Charts
+
+Google Charts comes with a full-fledged [chart editor](https://developers.google.com/chart/interactive/docs/reference#google_visualization_charteditor),
+allowing users to configure charts the way they want.
+
+Angular-Google-Charts includes a component wrapping the native `ChartEditor`, the `ChartEditorComponent`.
+It has to be instantiated in HTML and can be used to edit charts by calling its `editChart` method.
+
+```html
+<!--my.component.html-->
+<chart-editor></chart-editor>
+
+<google-chart #editable></google-chart>
+<button (click)="editChart(editable)">Edit</button>
+```
+
+```typescript
+// my.component.ts
+class MyComp {
+  @ViewChild(ChartEditorComponent)
+  public readonly editor: ChartEditorComponent;
+
+  public editChart(chart: ChartBase) {
+    this.editor
+      .editChart(chart)
+      .afterClosed()
+      .subscribe(result => {
+        if (result) {
+          // Saved
+        } else {
+          // Cancelled
+        }
+      });
+  }
+}
+```
+
+`editChart` returns a handle to the open dialog which can be used to close the edit dialog.
+
+Note that only one chart can be edited by a chart editor at a time.
+
 ## Advanced
 
 ### Accessing the chart wrapper directly

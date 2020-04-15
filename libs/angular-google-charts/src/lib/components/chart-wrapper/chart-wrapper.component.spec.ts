@@ -228,6 +228,12 @@ describe('ChartWrapperComponent', () => {
       const wrapper = component.chartWrapper;
       expect(wrapper).toBe(chartWrapperMock);
     });
+
+    it('should redraw if changed', () => {
+      component.chartWrapper = chartWrapperMock as any;
+
+      expect(chartWrapperMock.draw).toHaveBeenCalled();
+    });
   });
 
   describe('events', () => {

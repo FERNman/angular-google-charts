@@ -2,6 +2,8 @@
  * Public API Surface of angular-google-charts
  */
 
+export * from './lib/components/chart-editor/chart-editor-ref';
+export * from './lib/components/chart-editor/chart-editor.component';
 export * from './lib/components/google-chart/google-chart.component';
 export * from './lib/components/chart-wrapper/chart-wrapper.component';
 export * from './lib/components/dashboard/dashboard.component';

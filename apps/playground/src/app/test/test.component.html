@@ -1,21 +1,30 @@
 <h1>Test Component</h1>
 <button (click)="goBack()">Back</button>
 
-<dashboard [columns]="['Name', 'Donuts eaten']" [data]="dashboardData">
-  <control-wrapper
-    [for]="myChart"
-    [type]="filterType"
-    [state]="{ lowValue: 3, highValue: 8 }"
-    [options]="{ filterColumnLabel: 'Donuts eaten', minValue: 1, maxValue: 10 }"
-  ></control-wrapper>
-  <google-chart #myChart type="PieChart" [width]="300" [height]="300" [options]="{ pieSliceText: 'value' }"> </google-chart>
-</dashboard>
+<div class="inline">
+  <dashboard [columns]="['Name', 'Donuts eaten']" [data]="dashboardData">
+    <control-wrapper
+      [for]="myChart"
+      [type]="filterType"
+      [state]="{ lowValue: 3, highValue: 8 }"
+      [options]="{ filterColumnLabel: 'Donuts eaten', minValue: 1, maxValue: 10 }"
+    ></control-wrapper>
+    <google-chart #myChart type="PieChart" [width]="300" [height]="300" [options]="{ pieSliceText: 'value' }"> </google-chart>
+  </dashboard>
 
-<chart-wrapper [specs]="chartWrapperSpecs"></chart-wrapper>
+  <chart-wrapper [specs]="chartWrapperSpecs"></chart-wrapper>
+
+  <div>
+    <google-chart #editable type="BarChart" [data]="chart.data" [columns]="chart.columnNames"></google-chart>
+
+    <chart-editor></chart-editor>
+    <button (click)="edit(editable)">Edit</button>
+  </div>
+</div>
 
 <google-chart
+  title="Resizing Chart"
   style="width: 100%;"
-  title="Width: 100%"
   type="BarChart"
   [data]="chart.data"
   [columns]="chart.columnNames"

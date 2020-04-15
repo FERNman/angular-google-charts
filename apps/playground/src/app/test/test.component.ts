@@ -1,10 +1,11 @@
 import { Location } from '@angular/common';
-import { Component } from '@angular/core';
-import { ChartType, FilterType } from 'angular-google-charts';
+import { Component, ViewChild } from '@angular/core';
+import { ChartBase, ChartEditorComponent, ChartType, FilterType } from 'angular-google-charts';
 
 @Component({
   selector: 'app-test',
-  templateUrl: './test.component.html'
+  templateUrl: './test.component.html',
+  styles: ['.inline > * { display: inline-block; vertical-align: top; }']
 })
 export class TestComponent {
   public chart = {
@@ -52,7 +53,23 @@ export class TestComponent {
     ]
   };
 
+  @ViewChild(ChartEditorComponent)
+  public readonly editor: ChartEditorComponent;
+
   constructor(private location: Location) {}
+
+  public edit(chart: ChartBase) {
+    this.editor
+      .editChart(chart)
+      .afterClosed()
+      .subscribe(result => {
+        if (result) {
+          console.log(result);
+        } else {
+          console.log('Editing was cancelled');
+        }
+      });
+  }
 
   public goBack() {
     this.location.back();

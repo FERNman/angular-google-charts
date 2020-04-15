@@ -66,6 +66,11 @@ export class ChartWrapperComponent implements ChartBase, OnChanges, OnInit {
     return this.wrapper;
   }
 
+  public set chartWrapper(wrapper: google.visualization.ChartWrapper) {
+    this.wrapper = wrapper;
+    this.drawChart();
+  }
+
   public ngOnInit() {
     // We don't need to load any chart packages, the chart wrapper will handle this else for us
     this.scriptLoaderService.loadChartPackages().subscribe(() => {

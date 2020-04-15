@@ -2,6 +2,8 @@
  * Public API Surface of angular-google-charts
  */
 
+/// <reference path="./types/google.visualization/index.d.ts" />
+
 export * from './lib/components/chart-editor/chart-editor-ref';
 export * from './lib/components/chart-editor/chart-editor.component';
 export * from './lib/components/google-chart/google-chart.component';

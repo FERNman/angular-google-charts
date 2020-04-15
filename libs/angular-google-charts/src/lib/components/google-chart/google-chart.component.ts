@@ -1,5 +1,3 @@
-/// <reference types="google.visualization"/>
-
 import {
   ChangeDetectionStrategy,
   Component,

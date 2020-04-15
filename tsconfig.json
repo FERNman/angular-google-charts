@@ -17,5 +17,6 @@
     "paths": {
       "angular-google-charts": ["libs/angular-google-charts/src/index.ts"]
     }
-  }
+  },
+  "exclude": ["dist/**/*"]
 }

@@ -69,10 +69,22 @@ export class ChartWrapperComponent implements ChartBase, OnChanges, OnInit {
   public ngOnInit() {
     // We don't need to load any chart packages, the chart wrapper will handle this else for us
     this.scriptLoaderService.loadChartPackages().subscribe(() => {
-      // Only ever create the wrapper once to allow animations to happen if something changes.
-      this.wrapper = new google.visualization.ChartWrapper();
-      this.createChart();
+      if (!this.specs) {
+        this.specs = {} as google.visualization.ChartSpecs;
+      }
 
+      const { containerId, container, ...specs } = this.specs;
+
+      // Only ever create the wrapper once to allow animations to happen if something changes.
+      this.wrapper = new google.visualization.ChartWrapper({
+        ...specs,
+        container: this.element.nativeElement
+      });
+      this.registerChartEvents();
+
+      this.wrapperReadySubject.next(this.wrapper);
+
+      this.drawChart();
       this.initialized = true;
     });
   }
@@ -83,11 +95,12 @@ export class ChartWrapperComponent implements ChartBase, OnChanges, OnInit {
     }
 
     if (changes.specs) {
-      this.createChart();
+      this.updateChart();
+      this.drawChart();
     }
   }
 
-  private createChart() {
+  private updateChart() {
     if (!this.specs) {
       // When creating the wrapper with empty specs, the google charts library will show an error
       // If we don't do this, a javascript error will be thrown, which is not as visible to the user
@@ -102,11 +115,10 @@ export class ChartWrapperComponent implements ChartBase, OnChanges, OnInit {
     this.wrapper.setOptions(this.specs.options);
     this.wrapper.setRefreshInterval(this.specs.refreshInterval);
     this.wrapper.setView(this.specs.view);
+  }
 
-    this.registerChartEvents();
-
-    this.wrapperReadySubject.next(this.wrapper);
-    this.wrapper.draw(this.element.nativeElement);
+  private drawChart() {
+    this.wrapper.draw();
   }
 
   private registerChartEvents() {

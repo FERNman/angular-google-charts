@@ -9,6 +9,7 @@
     "build": "ng build --prod angular-google-charts",
     "test": "ng test angular-google-charts",
     "lint": "ng lint",
+    "release": "standard-version",
     "postinstall": "ngcc es2015 browser module main --first-only --create-ivy-entry-points"
   },
   "husky": {
@@ -23,6 +24,10 @@
   },
   "jest-junit": {
     "outputDirectory": "test-results"
+  },
+  "standard-version": {
+    "bumpFiles": "libs/angular-google-charts/package.json",
+    "packageFiles": "libs/angular-google-charts/package.json"
   },
   "dependencies": {
     "@angular/common": "^9.1.0",
@@ -56,6 +61,7 @@
     "lint-staged": "^10.1.1",
     "ng-packagr": "^9.0.0",
     "prettier": "^2.0.2",
+    "standard-version": "^7.1.0",
     "ts-jest": "^25.3.1",
     "ts-node": "~8.8.1",
     "tslint": "^6.1.1",

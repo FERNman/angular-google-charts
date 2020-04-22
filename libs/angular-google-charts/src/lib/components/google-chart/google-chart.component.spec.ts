@@ -265,7 +265,6 @@ describe('GoogleChartComponent', () => {
 
       expect(visualizationMock.events.addListener).toHaveBeenCalledWith(chartWrapperMock, 'ready', expect.any(Function));
       expect(visualizationMock.events.addListener).toHaveBeenCalledWith(chartWrapperMock, 'error', expect.any(Function));
-      expect(visualizationMock.events.addListener).toHaveBeenCalledWith(chartWrapperMock, 'select', expect.any(Function));
     });
   });
 
@@ -458,7 +457,7 @@ describe('GoogleChartComponent', () => {
       service.loadChartPackages.mockReturnValueOnce(of(null));
     });
 
-    it('should register mouse event handlers after the chart is drawn', () => {
+    it('should register chart event handlers after the chart got drawn', () => {
       const chartMock = { draw: jest.fn() };
       chartWrapperMock.getChart.mockReturnValue(chartMock);
 
@@ -466,12 +465,14 @@ describe('GoogleChartComponent', () => {
 
       expect(visualizationMock.events.addListener).not.toHaveBeenCalledWith(chartWrapperMock, 'onmouseover', expect.any(Function));
       expect(visualizationMock.events.addListener).not.toHaveBeenCalledWith(chartWrapperMock, 'onmouseout', expect.any(Function));
+      expect(visualizationMock.events.addListener).not.toHaveBeenCalledWith(chartWrapperMock, 'select', expect.any(Function));
 
       const readyCallback = visualizationMock.events.addListener.mock.calls[0][2];
       readyCallback();
 
       expect(visualizationMock.events.addListener).toHaveBeenCalledWith(chartMock, 'onmouseover', expect.any(Function));
       expect(visualizationMock.events.addListener).toHaveBeenCalledWith(chartMock, 'onmouseout', expect.any(Function));
+      expect(visualizationMock.events.addListener).toHaveBeenCalledWith(chartMock, 'select', expect.any(Function));
     });
 
     it('should remove all listeners from the chart before subscribing again', () => {
@@ -528,10 +529,12 @@ describe('GoogleChartComponent', () => {
 
       component.ngOnInit();
 
+      const readyCallback = visualizationMock.events.addListener.mock.calls[0][2];
+      readyCallback();
+
       expect(selectSpy).not.toHaveBeenCalled();
 
-      const selectCallback = visualizationMock.events.addListener.mock.calls[2][2];
-
+      const selectCallback = visualizationMock.events.addListener.mock.calls[4][2];
       selectCallback();
 
       expect(selectSpy).toHaveBeenCalledWith({ selection });

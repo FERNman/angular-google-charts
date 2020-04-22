@@ -282,15 +282,15 @@ export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
       google.visualization.events.removeAllListeners(this.chart);
       registerChartEvent(this.chart, 'onmouseover', (event: ChartMouseOverEvent) => this.mouseover.emit(event));
       registerChartEvent(this.chart, 'onmouseout', (event: ChartMouseLeaveEvent) => this.mouseleave.emit(event));
+      registerChartEvent(this.chart, 'select', () => {
+        const selection = this.chart.getSelection();
+        this.select.emit({ selection });
+      });
 
       this.ready.emit({ chart: this.chart });
     });
 
     registerChartEvent(this.wrapper, 'error', (error: ChartErrorEvent) => this.error.emit(error));
-    registerChartEvent(this.wrapper, 'select', () => {
-      const selection = this.chart.getSelection();
-      this.select.emit({ selection });
-    });
   }
 
   private drawChart() {

@@ -152,7 +152,7 @@ export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
     return this.wrapperReadySubject.asObservable();
   }
 
-  public get chartWrapper(): google.visualization.ChartWrapper | null {
+  public get chartWrapper(): google.visualization.ChartWrapper {
     return this.wrapper;
   }
 

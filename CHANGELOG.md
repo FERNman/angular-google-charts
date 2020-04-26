@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.4](https://github.com/FERNman/angular-google-charts/compare/v1.1.3...v1.1.4) (2020-04-26)
+
+### Bug Fixes
+
+- compile error when using typescript < 3.7 ([7e9ff39](https://github.com/FERNman/angular-google-charts/commit/7e9ff396ce7a92e4d23d6737f43f6fc050b07cd5)), closes [microsoft/typescript#33939](https://github.com/microsoft/typescript/issues/33939) [#140](https://github.com/FERNman/angular-google-charts/issues/140)
+
 ### [1.1.3](https://github.com/FERNman/angular-google-charts/compare/v1.1.2...v1.1.3) (2020-04-23)
 
 ### Bug Fixes

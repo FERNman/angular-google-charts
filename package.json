@@ -67,6 +67,6 @@
     "tslint": "^6.1.1",
     "tslint-angular": "^3.0.2",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "~3.8.3"
+    "typescript": "~3.6.5"
   }
 }

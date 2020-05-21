@@ -2,7 +2,7 @@
 
 ![CircleCI](https://img.shields.io/circleci/build/gh/FERNman/angular-google-charts) ![David](https://img.shields.io/david/FERNman/angular-google-charts) [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org) ![npm](https://img.shields.io/npm/dm/angular-google-charts)
 
-> A wrapper for the [Google Charts library](https://google-developers.appspot.com/chart/) written in Angular.
+> A wrapper for the [Google Charts library](https://developers.google.com/chart/) written in Angular.
 
 ## Setup
 
@@ -67,7 +67,7 @@ It has a few important input properties, which are explained below.
 
 The type of chart you want to create. Must be of type `ChartType`.
 
-To see examples for all chart types and more information, visit the [google chart gallery](https://google-developers.appspot.com/chart/interactive/docs/gallery).
+To see examples for all chart types and more information, visit the [google chart gallery](https://developers.google.com/chart/interactive/docs/gallery).
 
 ### Data
 
@@ -101,7 +101,7 @@ myData = [
 ];
 ```
 
-For further information, please see the official [documentation](https://google-developers.appspot.com/chart/interactive/docs/reference#arraytodatatable) on `ArrayToDataTable`, which is the function used internally.
+For further information, please see the official [documentation](https://developers.google.com/chart/interactive/docs/reference#arraytodatatable) on `ArrayToDataTable`, which is the function used internally.
 
 ### Columns
 
@@ -148,7 +148,7 @@ You can also set the height using CSS, which has the advantage of allowing `%` v
 <google-chart [options]="myOptions"></google-chart>
 ```
 
-The `options` property is optional and allows to customize the chart to a great extent. How and what you can customize depends on the type of chart. For more information, please see the [google documentation](https://google-developers.appspot.com/chart/interactive/docs/customizing_charts).
+The `options` property is optional and allows to customize the chart to a great extent. How and what you can customize depends on the type of chart. For more information, please see the [google documentation](https://developers.google.com/chart/interactive/docs/customizing_charts).
 
 ```typescript
 // example
@@ -166,7 +166,7 @@ myOptions = {
 
 The `formatter` property is optional and allows to format the chart data. It requires an array of objects containing a formatter and an index.
 
-For more information and all formatter types, please refer to the [documentation](https://google-developers.appspot.com/chart/interactive/docs/reference#formatters).
+For more information and all formatter types, please refer to the [documentation](https://developers.google.com/chart/interactive/docs/reference#formatters).
 
 ```typescript
 // Formats the column with the index 1 and 3 to Date(long)

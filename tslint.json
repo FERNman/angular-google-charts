@@ -4,6 +4,9 @@
   "rules": {
     "directive-selector": [true, "attribute", "camelCase"],
     "component-selector": [true, "element", "kebab-case"],
+    "deprecation": {
+      "severity": "warning"
+    },
     "ordered-imports": [true, { "grouped-imports": true }],
     "member-ordering": [true, { "order": "fields-first" }],
     "member-access": true,

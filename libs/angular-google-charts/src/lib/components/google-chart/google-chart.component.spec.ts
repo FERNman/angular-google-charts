@@ -1,5 +1,5 @@
 import { SimpleChange } from '@angular/core';
-import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { EMPTY, of } from 'rxjs';
 
 import { ChartType } from '../../models/chart-type.model';
@@ -35,12 +35,12 @@ describe('GoogleChartComponent', () => {
     globalThis.google = { visualization: visualizationMock } as any;
   });
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [GoogleChartComponent],
       providers: [ScriptLoaderService]
     }).compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     const scriptLoaderService = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
@@ -91,15 +91,18 @@ describe('GoogleChartComponent', () => {
       expect(service.loadChartPackages).toHaveBeenCalled();
     });
 
-    it('should not throw if only the type, but no data is provided', async(() => {
-      const service = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
-      service.loadChartPackages.mockReturnValueOnce(of(null));
+    it(
+      'should not throw if only the type, but no data is provided',
+      waitForAsync(() => {
+        const service = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
+        service.loadChartPackages.mockReturnValueOnce(of(null));
 
-      component.ngOnInit();
+        component.ngOnInit();
 
-      expect(component['wrapper']).toBeDefined();
-      expect(chartWrapperMock.draw).toHaveBeenCalledTimes(1);
-    }));
+        expect(component['wrapper']).toBeDefined();
+        expect(chartWrapperMock.draw).toHaveBeenCalledTimes(1);
+      })
+    );
 
     it('should create the data table', () => {
       const service = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;

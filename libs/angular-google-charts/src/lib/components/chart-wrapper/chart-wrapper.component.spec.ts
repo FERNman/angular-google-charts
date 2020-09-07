@@ -1,5 +1,5 @@
 import { SimpleChange } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EMPTY, of } from 'rxjs';
 
 import { ChartType } from '../../models/chart-type.model';
@@ -40,12 +40,12 @@ describe('ChartWrapperComponent', () => {
     globalThis.google = { visualization: visualizationMock } as any;
   });
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [ChartWrapperComponent],
       providers: [ScriptLoaderService]
     }).compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ChartWrapperComponent);
@@ -79,13 +79,13 @@ describe('ChartWrapperComponent', () => {
       expect(visualizationMock.ChartWrapper).toHaveBeenCalledWith(expect.objectContaining(specs));
     });
 
-    it('should not throw if the specs are `null`', async(() => {
+    it('should not throw if the specs are `null`', () => {
       const scriptLoaderService = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
       scriptLoaderService.loadChartPackages.mockReturnValue(of(null));
       component.specs = null;
 
       expect(() => component.ngOnInit()).not.toThrow();
-    }));
+    });
 
     it('should not use container or containerId if present in the chart specs', () => {
       const scriptLoaderService = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;

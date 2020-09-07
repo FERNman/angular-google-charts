@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EMPTY, of } from 'rxjs';
 
 import { ScriptLoaderService } from '../../script-loader/script-loader.service';
@@ -34,12 +34,12 @@ describe('ChartEditorComponent', () => {
     globalThis.google = { visualization: visualizationMock } as any;
   });
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [ChartEditorComponent],
       providers: [ScriptLoaderService]
     }).compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ChartEditorComponent);

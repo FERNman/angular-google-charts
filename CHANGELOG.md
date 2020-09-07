@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.5](https://github.com/FERNman/angular-google-charts/compare/v1.1.4...v1.1.5) (2020-09-07)
+
+### Bug Fixes
+
+- incorrect documentation links ([eaba673](https://github.com/FERNman/angular-google-charts/commit/eaba67300582e8a49a03fcf698f5233d18271891))
+
 ### [1.1.4](https://github.com/FERNman/angular-google-charts/compare/v1.1.3...v1.1.4) (2020-04-26)
 
 ### Bug Fixes

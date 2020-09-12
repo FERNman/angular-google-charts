@@ -1,3 +1,5 @@
+/// <reference path="./types.ts" />
+
 import { Observable, Subject } from 'rxjs';
 
 export type EditChartResult = google.visualization.ChartWrapper | null;

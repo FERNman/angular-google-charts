@@ -1,3 +1,5 @@
+/// <reference path="./types.ts" />
+
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 

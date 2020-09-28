@@ -142,6 +142,31 @@ describe('DashboardComponent', () => {
       expect(dashboardMock.bind).toHaveBeenCalledWith(controlTwo.controlWrapper, [chartOne.chartWrapper, chartTwo.chartWrapper]);
     });
 
+    it('should register dashboard wrapper event handlers', () => {
+      const scriptLoaderService = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
+      scriptLoaderService.loadChartPackages.mockReturnValueOnce(of(null));
+
+      const dashboardMock = { bind: jest.fn(), draw: jest.fn() };
+      visualizationMock.Dashboard.mockReturnValueOnce(dashboardMock);
+
+      const dataTableMock = {};
+      visualizationMock.arrayToDataTable.mockReturnValueOnce(dataTableMock);
+
+      globalThis.google = { visualization: visualizationMock } as any;
+
+      // At least one control wrapper is needed to start the drawing
+      const chart = { wrapperReady$: of(null), chartWrapper: {} };
+      const control = { wrapperReady$: of(null), for: chart, controlWrapper: {} };
+      component['controlWrappers'] = [control] as any;
+
+      component.data = [];
+
+      component.ngOnInit();
+
+      expect(visualizationMock.events.removeAllListeners).toHaveBeenCalled();
+      expect(visualizationMock.events.addListener).toHaveBeenCalledWith(dashboardMock, 'ready', expect.any(Function));
+      expect(visualizationMock.events.addListener).toHaveBeenCalledWith(dashboardMock, 'error', expect.any(Function));
+    });
     it('should draw the dashboard using the provided data', () => {
       const scriptLoaderService = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
       scriptLoaderService.loadChartPackages.mockReturnValueOnce(of(null));

@@ -170,7 +170,7 @@ describe('DashboardComponent', () => {
   describe('ngOnChanges', () => {
     function changeInput<K extends keyof DashboardComponent>(property: K, newValue: DashboardComponent[K]) {
       const oldValue = component[property];
-      component[property as any] = newValue;
+      component[property] = newValue;
       component.ngOnChanges({ [property]: new SimpleChange(oldValue, newValue, oldValue == null) });
     }
 

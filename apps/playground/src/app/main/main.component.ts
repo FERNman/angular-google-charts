@@ -44,7 +44,7 @@ export class MainComponent implements OnInit {
   };
 
   @ViewChild('chart', { static: true })
-  public chart: GoogleChartComponent;
+  public chart!: GoogleChartComponent;
 
   constructor(private router: Router) {
     this.charts.push({
@@ -189,7 +189,7 @@ export class MainComponent implements OnInit {
     this.charts.push({
       title: 'Candlestick Chart',
       type: ChartType.CandlestickChart,
-      columns: null,
+      columns: undefined,
       data: [
         ['Mon', 20, 28, 38, 45],
         ['Tue', 31, 38, 55, 66],

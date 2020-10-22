@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EMPTY, of } from 'rxjs';
 
 import { FilterType } from '../../models/control-type.model';
+import { ChartErrorEvent, ChartReadyEvent } from '../../models/events.model';
 import { ScriptLoaderService } from '../../script-loader/script-loader.service';
 
 import { ControlWrapperComponent } from './control-wrapper.component';
@@ -113,7 +114,7 @@ describe('ControlWrapperComponent', () => {
   describe('ngOnChanges', () => {
     function changeInput<K extends keyof ControlWrapperComponent>(property: K, newValue: ControlWrapperComponent[K]) {
       const oldValue = component[property];
-      component[property as any] = newValue;
+      component[property] = newValue;
       component.ngOnChanges({ [property]: new SimpleChange(oldValue, newValue, oldValue == null) });
     }
 
@@ -124,7 +125,6 @@ describe('ControlWrapperComponent', () => {
     it('should update the control type if it changed', () => {
       const controlWrapperMock = { setControlType: jest.fn() };
       component['_controlWrapper'] = controlWrapperMock as any;
-      component['initialized'] = true;
 
       const type = FilterType.Category;
       changeInput('type', type);
@@ -135,7 +135,6 @@ describe('ControlWrapperComponent', () => {
     it('should update the options if they changed', () => {
       const controlWrapperMock = { setOptions: jest.fn() };
       component['_controlWrapper'] = controlWrapperMock as any;
-      component['initialized'] = true;
 
       const options = { key: 'value' };
       changeInput('options', options);
@@ -146,7 +145,6 @@ describe('ControlWrapperComponent', () => {
     it('should update the state if it changed', () => {
       const controlWrapperMock = { setState: jest.fn() };
       component['_controlWrapper'] = controlWrapperMock as any;
-      component['initialized'] = true;
 
       const state = { from: 'to' };
       changeInput('state', state);
@@ -168,7 +166,7 @@ describe('ControlWrapperComponent', () => {
 
     it('should emit ready event', () => {
       const readySpy = jest.fn();
-      component.ready.subscribe(event => readySpy(event));
+      component.ready.subscribe((event: ChartReadyEvent) => readySpy(event));
 
       // This leads to the component subscribing to all events
       component.ngOnInit();
@@ -183,7 +181,7 @@ describe('ControlWrapperComponent', () => {
 
     it('should emit error event', () => {
       const errorSpy = jest.fn();
-      component.error.subscribe(event => errorSpy(event));
+      component.error.subscribe((event: ChartErrorEvent) => errorSpy(event));
 
       // This leads to the component subscribing to all events
       component.ngOnInit();
@@ -198,7 +196,7 @@ describe('ControlWrapperComponent', () => {
 
     it('should emit statechange event', () => {
       const stateChangeSpy = jest.fn();
-      component.stateChange.subscribe(event => stateChangeSpy(event));
+      component.stateChange.subscribe((event: unknown) => stateChangeSpy(event));
 
       // This leads to the component subscribing to all events
       component.ngOnInit();

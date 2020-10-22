@@ -3,6 +3,7 @@ import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angul
 import { EMPTY, of } from 'rxjs';
 
 import { ChartType } from '../../models/chart-type.model';
+import { ChartReadyEvent } from '../../models/events.model';
 import { ScriptLoaderService } from '../../script-loader/script-loader.service';
 
 import { GoogleChartComponent } from './google-chart.component';
@@ -59,12 +60,13 @@ describe('GoogleChartComponent', () => {
   });
 
   it('should not throw when trying to access chart if its not yet drawn', () => {
+    component['wrapper'] = chartWrapperMock as any;
     expect(() => component.chart).not.toThrow();
   });
 
   describe('chartWrapper', () => {
-    it('should not throw if the chart wrapper is `null`', () => {
-      expect(() => component.chartWrapper).not.toThrow();
+    it('should throw if the chart wrapper is `undefined`', () => {
+      expect(() => component.chartWrapper).toThrow();
     });
 
     it('should return the chart wrapper', () => {
@@ -278,7 +280,7 @@ describe('GoogleChartComponent', () => {
     });
 
     it('should not throw if anything changed but the chart wrapper was not yet initialized', () => {
-      component['wrapper'] = null;
+      component['wrapper'] = undefined;
       component['initialized'] = false;
 
       expect(() => {
@@ -426,7 +428,7 @@ describe('GoogleChartComponent', () => {
       changeInput('dynamicResize', false);
 
       expect(subscriptionMock.unsubscribe).toHaveBeenCalled();
-      expect(component['resizeSubscription']).toBeNull();
+      expect(component['resizeSubscription']).toBeUndefined();
     });
 
     it('should do nothing if the window was resized, but the chart is not yet initialized', fakeAsync(() => {
@@ -499,7 +501,7 @@ describe('GoogleChartComponent', () => {
       component.ngOnInit();
 
       const readySpy = jest.fn();
-      component.ready.subscribe(event => readySpy(event));
+      component.ready.subscribe((event: ChartReadyEvent) => readySpy(event));
 
       const readyCallback = visualizationMock.events.addListener.mock.calls[0][2];
       readyCallback();
@@ -511,7 +513,7 @@ describe('GoogleChartComponent', () => {
       component.ngOnInit();
 
       const errorSpy = jest.fn();
-      component.error.subscribe(event => errorSpy(event));
+      component.error.subscribe((event: ChartReadyEvent) => errorSpy(event));
 
       const errorCallback = visualizationMock.events.addListener.mock.calls[1][2];
 
@@ -528,7 +530,7 @@ describe('GoogleChartComponent', () => {
       chartWrapperMock.getChart.mockReturnValue(chartMock);
 
       const selectSpy = jest.fn();
-      component.select.subscribe(event => selectSpy(event));
+      component.select.subscribe((event: ChartReadyEvent) => selectSpy(event));
 
       component.ngOnInit();
 
@@ -546,7 +548,7 @@ describe('GoogleChartComponent', () => {
 
   function changeInput<K extends keyof GoogleChartComponent>(property: K, newValue: GoogleChartComponent[K]) {
     const oldValue = component[property];
-    component[property as any] = newValue;
+    component[property] = newValue;
     component.ngOnChanges({ [property]: new SimpleChange(oldValue, newValue, oldValue == null) });
   }
 });

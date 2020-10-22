@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EMPTY, of } from 'rxjs';
 
 import { ChartType } from '../../models/chart-type.model';
+import { ChartErrorEvent, ChartReadyEvent, ChartSelectionChangedEvent } from '../../models/events.model';
 import { ScriptLoaderService } from '../../script-loader/script-loader.service';
 
 import { ChartWrapperComponent } from './chart-wrapper.component';
@@ -82,7 +83,7 @@ describe('ChartWrapperComponent', () => {
     it('should not throw if the specs are `null`', () => {
       const scriptLoaderService = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
       scriptLoaderService.loadChartPackages.mockReturnValue(of(null));
-      component.specs = null;
+      component.specs = undefined;
 
       expect(() => component.ngOnInit()).not.toThrow();
     });
@@ -146,7 +147,7 @@ describe('ChartWrapperComponent', () => {
     });
 
     it('should not throw if the wrapper is not yet initialized', () => {
-      component['wrapper'] = null;
+      component['wrapper'] = undefined;
       component['initialized'] = false;
 
       const specs = {
@@ -185,8 +186,8 @@ describe('ChartWrapperComponent', () => {
       expect(chartWrapperMock.setContainerId).not.toHaveBeenCalled();
     });
 
-    it('should not throw if the specs are `null`', () => {
-      expect(() => changeSpecs(null)).not.toThrow();
+    it('should not throw if the specs are `undefined`', () => {
+      expect(() => changeSpecs(undefined)).not.toThrow();
 
       expect(chartWrapperMock.draw).toHaveBeenCalled();
     });
@@ -213,13 +214,14 @@ describe('ChartWrapperComponent', () => {
 
   describe('chart', () => {
     it('should not throw when trying to access chart if its not yet drawn', () => {
+      component['wrapper'] = chartWrapperMock as any;
       expect(() => component.chart).not.toThrow();
     });
   });
 
   describe('chartWrapper', () => {
-    it('should not throw if the chart wrapper is `null`', () => {
-      expect(() => component.chartWrapper).not.toThrow();
+    it('should throw if the chart wrapper is `undefined`', () => {
+      expect(() => component.chartWrapper).toThrow();
     });
 
     it('should return the chart wrapper', () => {
@@ -249,7 +251,7 @@ describe('ChartWrapperComponent', () => {
       component.ngOnInit();
 
       const readySpy = jest.fn();
-      component.ready.subscribe(event => readySpy(event));
+      component.ready.subscribe((event: ChartReadyEvent) => readySpy(event));
 
       const readyCallback = visualizationMock.events.addListener.mock.calls[0][2];
       readyCallback();
@@ -261,7 +263,7 @@ describe('ChartWrapperComponent', () => {
       component.ngOnInit();
 
       const errorSpy = jest.fn();
-      component.error.subscribe(event => errorSpy(event));
+      component.error.subscribe((event: ChartErrorEvent) => errorSpy(event));
 
       const errorCallback = visualizationMock.events.addListener.mock.calls[1][2];
 
@@ -278,7 +280,7 @@ describe('ChartWrapperComponent', () => {
       chartWrapperMock.getChart.mockReturnValue(chartMock);
 
       const selectSpy = jest.fn();
-      component.select.subscribe(event => selectSpy(event));
+      component.select.subscribe((event: ChartSelectionChangedEvent) => selectSpy(event));
 
       component.ngOnInit();
 
@@ -292,7 +294,7 @@ describe('ChartWrapperComponent', () => {
     });
   });
 
-  function changeSpecs(newValue: google.visualization.ChartSpecs) {
+  function changeSpecs(newValue?: google.visualization.ChartSpecs) {
     const oldValue = component.specs;
     component.specs = newValue;
     component.ngOnChanges({ specs: new SimpleChange(oldValue, newValue, oldValue == null) });

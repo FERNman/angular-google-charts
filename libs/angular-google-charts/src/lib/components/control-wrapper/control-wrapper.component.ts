@@ -13,7 +13,7 @@ import { ReplaySubject } from 'rxjs';
 
 import { generateRandomId } from '../../helpers/id.helper';
 import { FilterType } from '../../models/control-type.model';
-import { ChartErrorEvent } from '../../models/events.model';
+import { ChartErrorEvent, ChartReadyEvent } from '../../models/events.model';
 import { ScriptLoaderService } from '../../script-loader/script-loader.service';
 import { ChartBase } from '../chart-base/chart-base.component';
 
@@ -87,7 +87,7 @@ export class ControlWrapperComponent implements OnInit, OnChanges {
    * and call control methods only after the event was fired.
    */
   @Output()
-  public ready = new EventEmitter<void>();
+  public ready = new EventEmitter<ChartReadyEvent>();
 
   /**
    * Emits when the user interacts with the control, affecting its state.
@@ -96,7 +96,7 @@ export class ControlWrapperComponent implements OnInit, OnChanges {
    * To retrieve an updated control state after the event fired, call `ControlWrapper.getState()`.
    */
   @Output()
-  public stateChange = new EventEmitter<void>();
+  public stateChange = new EventEmitter<unknown>();
 
   /**
    * A generated id assigned to this components DOM element.
@@ -104,9 +104,8 @@ export class ControlWrapperComponent implements OnInit, OnChanges {
   @HostBinding('id')
   public readonly id = generateRandomId();
 
-  private _controlWrapper: google.visualization.ControlWrapper;
+  private _controlWrapper?: google.visualization.ControlWrapper;
   private wrapperReadySubject = new ReplaySubject<google.visualization.ControlWrapper>(1);
-  private initialized = false;
 
   constructor(private loaderService: ScriptLoaderService) {}
 
@@ -117,19 +116,22 @@ export class ControlWrapperComponent implements OnInit, OnChanges {
     return this.wrapperReadySubject.asObservable();
   }
 
-  public get controlWrapper(): google.visualization.ControlWrapper | null {
+  public get controlWrapper(): google.visualization.ControlWrapper {
+    if (!this._controlWrapper) {
+      throw new Error(`Cannot access the control wrapper before it being initialized.`);
+    }
+
     return this._controlWrapper;
   }
 
   public ngOnInit() {
     this.loaderService.loadChartPackages('controls').subscribe(() => {
       this.createControlWrapper();
-      this.initialized = true;
     });
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    if (!this.initialized) {
+    if (!this._controlWrapper) {
       return;
     }
 
@@ -138,11 +140,11 @@ export class ControlWrapperComponent implements OnInit, OnChanges {
     }
 
     if (changes.options) {
-      this._controlWrapper.setOptions(this.options);
+      this._controlWrapper.setOptions(this.options || {});
     }
 
     if (changes.state) {
-      this._controlWrapper.setState(this.state);
+      this._controlWrapper.setState(this.state || {});
     }
   }
 
@@ -161,8 +163,8 @@ export class ControlWrapperComponent implements OnInit, OnChanges {
   private addEventListeners() {
     google.visualization.events.removeAllListeners(this._controlWrapper);
 
-    google.visualization.events.addListener(this._controlWrapper, 'ready', event => this.ready.emit(event));
-    google.visualization.events.addListener(this._controlWrapper, 'error', event => this.error.emit(event));
-    google.visualization.events.addListener(this._controlWrapper, 'statechange', event => this.stateChange.emit(event));
+    google.visualization.events.addListener(this._controlWrapper, 'ready', (event: ChartReadyEvent) => this.ready.emit(event));
+    google.visualization.events.addListener(this._controlWrapper, 'error', (event: ChartErrorEvent) => this.error.emit(event));
+    google.visualization.events.addListener(this._controlWrapper, 'statechange', (event: unknown) => this.stateChange.emit(event));
   }
 }

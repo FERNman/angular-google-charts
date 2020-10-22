@@ -41,7 +41,7 @@ export class DashboardComponent implements OnInit, OnChanges {
    * If {@link https://developers.google.com/chart/interactive/docs/roles roles} should be applied, they must be included in this array as well.
    */
   @Input()
-  public columns: Column[];
+  public columns?: Column[];
 
   /**
    * The dashboard has completed drawing and is ready to accept changes.
@@ -61,10 +61,10 @@ export class DashboardComponent implements OnInit, OnChanges {
   public error = new EventEmitter<ChartErrorEvent>();
 
   @ContentChildren(ControlWrapperComponent)
-  private controlWrappers: QueryList<ControlWrapperComponent>;
+  private controlWrappers!: QueryList<ControlWrapperComponent>;
 
-  private dashboard: google.visualization.Dashboard;
-  private dataTable: google.visualization.DataTable;
+  private dashboard?: google.visualization.Dashboard;
+  private dataTable?: google.visualization.DataTable;
   private initialized = false;
 
   constructor(private element: ElementRef, private loaderService: ScriptLoaderService) {}
@@ -77,18 +77,18 @@ export class DashboardComponent implements OnInit, OnChanges {
     });
   }
 
-  public ngOnChanges(changes: SimpleChanges) {
+  public ngOnChanges(changes: SimpleChanges): void {
     if (!this.initialized) {
       return;
     }
 
     if (changes.data || changes.columns) {
       this.createDataTable();
-      this.dashboard.draw(this.dataTable);
+      this.dashboard!.draw(this.dataTable!);
     }
   }
 
-  private createDashboard() {
+  private createDashboard(): void {
     // TODO: This should happen in the control wrapper
     // However, I don't yet know how to do this because then `bind()` would get called multiple times
     // for the same control if something changes. This is not supported by google charts as far as I can tell
@@ -110,22 +110,22 @@ export class DashboardComponent implements OnInit, OnChanges {
     combineLatest([...controlWrappersReady$, ...chartsReady$]).subscribe(() => {
       this.dashboard = new google.visualization.Dashboard(this.element.nativeElement);
       this.initializeBindings();
-      this.dashboard.draw(this.dataTable);
+      this.dashboard.draw(this.dataTable!);
     });
   }
 
-  private initializeBindings() {
+  private initializeBindings(): void {
     this.controlWrappers.forEach(control => {
       if (Array.isArray(control.for)) {
         const chartWrappers = control.for.map(chart => chart.chartWrapper);
-        this.dashboard.bind(control.controlWrapper, chartWrappers);
+        this.dashboard!.bind(control.controlWrapper, chartWrappers);
       } else {
-        this.dashboard.bind(control.controlWrapper, control.for.chartWrapper);
+        this.dashboard!.bind(control.controlWrapper, control.for.chartWrapper);
       }
     });
   }
 
-  private createDataTable() {
+  private createDataTable(): void {
     if (this.data == null) {
       return;
     }

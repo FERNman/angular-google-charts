@@ -15,7 +15,7 @@ import { ChartEditorRef } from './chart-editor-ref';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChartEditorComponent implements OnInit {
-  private editor: google.visualization.ChartEditor;
+  private editor: google.visualization.ChartEditor | undefined;
   private initializedSubject = new Subject<google.visualization.ChartEditor>();
 
   constructor(private scriptLoaderService: ScriptLoaderService) {}
@@ -45,6 +45,13 @@ export class ChartEditorComponent implements OnInit {
   public editChart(component: ChartBase): ChartEditorRef;
   public editChart(component: ChartBase, options: google.visualization.ChartEditorOptions): ChartEditorRef;
   public editChart(component: ChartBase, options?: google.visualization.ChartEditorOptions) {
+    if (!component.chartWrapper) {
+      throw new Error('Chart wrapper is `undefined`. Please wait for the `initialized$` observable before trying to edit a chart.');
+    }
+    if (!this.editor) {
+      throw new Error('Chart editor is `undefined`. Please wait for the `initialized$` observable before trying to edit a chart.');
+    }
+
     const handle = new ChartEditorRef(this.editor);
     this.editor.openDialog(component.chartWrapper, options || {});
 

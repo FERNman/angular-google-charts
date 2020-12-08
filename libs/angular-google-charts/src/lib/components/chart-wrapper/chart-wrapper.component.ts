@@ -66,7 +66,7 @@ export class ChartWrapperComponent implements ChartBase, OnChanges, OnInit {
     return this.wrapper;
   }
 
-  public set chartWrapper(wrapper: google.visualization.ChartWrapper) {
+  public set chartWrapper(wrapper: google.visualization.ChartBase | undefined) {
     this.wrapper = wrapper;
     this.drawChart();
   }

@@ -214,6 +214,7 @@ export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
 
   private createDataTable() {
     if (this.data == null) {
+      this.dataTable = undefined;
       return;
     }
 

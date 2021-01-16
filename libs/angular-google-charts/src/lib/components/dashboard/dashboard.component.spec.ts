@@ -2,6 +2,7 @@ import { SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EMPTY, of, Subject } from 'rxjs';
 
+import { DataTableService } from '../../services/data-table.service';
 import { ScriptLoaderService } from '../../services/script-loader.service';
 
 import { DashboardComponent } from './dashboard.component';
@@ -24,7 +25,7 @@ describe('DashboardComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [DashboardComponent],
-      providers: [ScriptLoaderService]
+      providers: [ScriptLoaderService, DataTableService]
     }).compileComponents();
   });
 

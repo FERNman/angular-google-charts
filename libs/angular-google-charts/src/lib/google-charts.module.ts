@@ -7,9 +7,11 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { GoogleChartComponent } from './components/google-chart/google-chart.component';
 import { GoogleChartsConfig } from './models/google-charts-config.model';
 import { GOOGLE_CHARTS_CONFIG } from './models/injection-tokens.model';
+import { ScriptLoaderService } from './script-loader/script-loader.service';
 
 @NgModule({
   declarations: [GoogleChartComponent, ChartWrapperComponent, DashboardComponent, ControlWrapperComponent, ChartEditorComponent],
+  providers: [ScriptLoaderService],
   exports: [GoogleChartComponent, ChartWrapperComponent, DashboardComponent, ControlWrapperComponent, ChartEditorComponent]
 })
 export class GoogleChartsModule {

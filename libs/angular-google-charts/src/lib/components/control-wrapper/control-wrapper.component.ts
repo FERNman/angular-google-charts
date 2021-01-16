@@ -12,9 +12,9 @@ import {
 import { ReplaySubject } from 'rxjs';
 
 import { generateRandomId } from '../../helpers/id.helper';
-import { FilterType } from '../../models/control-type.model';
-import { ChartErrorEvent, ChartReadyEvent } from '../../models/events.model';
-import { ScriptLoaderService } from '../../script-loader/script-loader.service';
+import { ScriptLoaderService } from '../../services/script-loader.service';
+import { FilterType } from '../../types/control-type';
+import { ChartErrorEvent, ChartReadyEvent } from '../../types/events';
 import { ChartBase } from '../chart-base/chart-base.component';
 
 @Component({

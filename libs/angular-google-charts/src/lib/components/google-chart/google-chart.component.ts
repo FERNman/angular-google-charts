@@ -13,22 +13,18 @@ import {
 import { fromEvent, Observable, ReplaySubject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
-import { ChartType } from '../../models/chart-type.model';
+import { ScriptLoaderService } from '../../services/script-loader.service';
+import { ChartType } from '../../types/chart-type';
 import {
   ChartErrorEvent,
   ChartMouseLeaveEvent,
   ChartMouseOverEvent,
   ChartReadyEvent,
   ChartSelectionChangedEvent
-} from '../../models/events.model';
-import { ScriptLoaderService } from '../../script-loader/script-loader.service';
+} from '../../types/events';
+import { Formatter } from '../../types/formatter';
 import { ChartBase, Column, Row } from '../chart-base/chart-base.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
-
-export interface Formatter {
-  formatter: google.visualization.DefaultFormatter;
-  colIndex: number;
-}
 
 @Component({
   selector: 'google-chart',

@@ -1,3 +1,5 @@
+import { InjectionToken } from '@angular/core';
+
 export interface GoogleChartsConfig {
   /**
    * This setting lets you specify a key that you may use with Geochart and Map Chart.
@@ -37,3 +39,5 @@ export interface GoogleChartsConfig {
    */
   safeMode?: boolean;
 }
+
+export const GOOGLE_CHARTS_CONFIG = new InjectionToken<GoogleChartsConfig>('GOOGLE_CHARTS_CONFIG');

@@ -2,13 +2,13 @@ import { SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EMPTY, of } from 'rxjs';
 
-import { FilterType } from '../../models/control-type.model';
-import { ChartErrorEvent, ChartReadyEvent } from '../../models/events.model';
-import { ScriptLoaderService } from '../../script-loader/script-loader.service';
+import { ScriptLoaderService } from '../../services/script-loader.service';
+import { FilterType } from '../../types/control-type';
+import { ChartErrorEvent, ChartReadyEvent } from '../../types/events';
 
 import { ControlWrapperComponent } from './control-wrapper.component';
 
-jest.mock('../../script-loader/script-loader.service');
+jest.mock('../../services/script-loader.service');
 
 const visualizationMock = {
   ControlWrapper: jest.fn(),

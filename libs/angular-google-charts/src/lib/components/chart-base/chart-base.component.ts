@@ -1,7 +1,7 @@
 import { EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { ChartErrorEvent, ChartReadyEvent, ChartSelectionChangedEvent } from '../../models/events.model';
+import { ChartErrorEvent, ChartReadyEvent, ChartSelectionChangedEvent } from '../../types/events';
 
 export type Column = string | google.visualization.ColumnSpec;
 export type Row = (string | number | Date)[];

@@ -3,7 +3,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 
-import { ScriptLoaderService } from '../../script-loader/script-loader.service';
+import { ScriptLoaderService } from '../../services/script-loader.service';
 import { ChartBase } from '../chart-base/chart-base.component';
 
 import { ChartEditorRef } from './chart-editor-ref';

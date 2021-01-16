@@ -13,8 +13,8 @@ import {
 } from '@angular/core';
 import { combineLatest } from 'rxjs';
 
-import { ChartErrorEvent } from '../../models/events.model';
-import { ScriptLoaderService } from '../../script-loader/script-loader.service';
+import { ScriptLoaderService } from '../../services/script-loader.service';
+import { ChartErrorEvent } from '../../types/events';
 import { Column, Row } from '../chart-base/chart-base.component';
 import { ControlWrapperComponent } from '../control-wrapper/control-wrapper.component';
 

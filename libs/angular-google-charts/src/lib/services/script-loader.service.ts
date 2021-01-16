@@ -2,8 +2,7 @@ import { Inject, Injectable, LOCALE_ID, NgZone, Optional } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
-import { GoogleChartsConfig } from '../models/google-charts-config.model';
-import { GOOGLE_CHARTS_CONFIG } from '../models/injection-tokens.model';
+import { GoogleChartsConfig, GOOGLE_CHARTS_CONFIG } from '../types/google-charts-config';
 
 const DEFAULT_CONFIG: GoogleChartsConfig = {
   version: 'current',

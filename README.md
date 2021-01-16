@@ -172,11 +172,11 @@ For more information and all formatter types, please refer to the [documentation
 // Formats the column with the index 1 and 3 to Date(long)
 myFormatters = [
   {
-    formatter: new google.visualization.Dateformat({ formatType: 'long' }),
+    formatter: new google.visualization.DateFormat({ formatType: 'long' }),
     colIndex: 1
   },
   {
-    formatter: new google.visualization.Dateformat({ formatType: 'long' }),
+    formatter: new google.visualization.DateFormat({ formatType: 'long' }),
     colIndex: 3
   }
 ];

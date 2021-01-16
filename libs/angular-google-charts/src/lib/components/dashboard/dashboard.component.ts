@@ -110,8 +110,20 @@ export class DashboardComponent implements OnInit, OnChanges {
     combineLatest([...controlWrappersReady$, ...chartsReady$]).subscribe(() => {
       this.dashboard = new google.visualization.Dashboard(this.element.nativeElement);
       this.initializeBindings();
+      this.registerEvents();
       this.dashboard.draw(this.dataTable!);
     });
+  }
+
+  private registerEvents(): void {
+    google.visualization.events.removeAllListeners(this.dashboard);
+
+    const registerDashEvent = (object: any, eventName: string, callback: Function) => {
+      google.visualization.events.addListener(object, eventName, callback);
+    };
+
+    registerDashEvent(this.dashboard, 'ready', () => this.ready.emit());
+    registerDashEvent(this.dashboard, 'error', (error: ChartErrorEvent) => this.error.emit(error));
   }
 
   private initializeBindings(): void {

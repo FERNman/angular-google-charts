@@ -10,7 +10,7 @@ const DEFAULT_CONFIG: GoogleChartsConfig = {
   safeMode: false
 };
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class ScriptLoaderService {
   private readonly scriptSource = 'https://www.gstatic.com/charts/loader.js';
   private readonly scriptLoadSubject = new Subject<null>();

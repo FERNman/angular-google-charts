@@ -33,7 +33,7 @@ export class ChartWrapperComponent implements ChartBase, OnChanges, OnInit {
    * rendering the chart into the components' template.
    */
   @Input()
-  public specs: google.visualization.ChartSpecs;
+  public specs?: google.visualization.ChartSpecs;
 
   @Output()
   public error = new EventEmitter<ChartErrorEvent>();
@@ -44,25 +44,25 @@ export class ChartWrapperComponent implements ChartBase, OnChanges, OnInit {
   @Output()
   public select = new EventEmitter<ChartSelectionChangedEvent>();
 
-  private wrapper: google.visualization.ChartWrapper;
+  private wrapper: google.visualization.ChartWrapper | undefined;
   private wrapperReadySubject = new ReplaySubject<google.visualization.ChartWrapper>(1);
   private initialized = false;
 
   constructor(private element: ElementRef, private scriptLoaderService: ScriptLoaderService) {}
 
-  public get chart(): google.visualization.ChartBase | null {
-    if (!this.wrapper) {
-      return null;
-    }
-
-    return this.wrapper.getChart();
+  public get chart(): google.visualization.ChartBase | undefined {
+    return this.chartWrapper.getChart();
   }
 
   public get wrapperReady$() {
     return this.wrapperReadySubject.asObservable();
   }
 
-  public get chartWrapper(): google.visualization.ChartWrapper | null {
+  public get chartWrapper(): google.visualization.ChartWrapper {
+    if (!this.wrapper) {
+      throw new Error('Cannot access the chart wrapper before initialization.');
+    }
+
     return this.wrapper;
   }
 
@@ -112,18 +112,23 @@ export class ChartWrapperComponent implements ChartBase, OnChanges, OnInit {
       this.specs = {} as google.visualization.ChartSpecs;
     }
 
-    this.wrapper.setChartType(this.specs.chartType);
-    this.wrapper.setDataTable(this.specs.dataTable as any); // The typing here are not correct, this also accepts plain arrays
-    this.wrapper.setDataSourceUrl(this.specs.dataSourceUrl);
-    this.wrapper.setDataSourceUrl(this.specs.dataSourceUrl);
-    this.wrapper.setQuery(this.specs.query);
-    this.wrapper.setOptions(this.specs.options);
-    this.wrapper.setRefreshInterval(this.specs.refreshInterval);
-    this.wrapper.setView(this.specs.view);
+    // The typing here are not correct. These methods accept `undefined` as well.
+    // That's why we have to cast to `any`
+
+    this.wrapper!.setChartType(this.specs.chartType);
+    this.wrapper!.setDataTable(this.specs.dataTable as any);
+    this.wrapper!.setDataSourceUrl(this.specs.dataSourceUrl as any);
+    this.wrapper!.setDataSourceUrl(this.specs.dataSourceUrl as any);
+    this.wrapper!.setQuery(this.specs.query as any);
+    this.wrapper!.setOptions(this.specs.options as any);
+    this.wrapper!.setRefreshInterval(this.specs.refreshInterval as any);
+    this.wrapper!.setView(this.specs.view);
   }
 
   private drawChart() {
-    this.wrapper.draw();
+    if (this.wrapper) {
+      this.wrapper.draw();
+    }
   }
 
   private registerChartEvents() {
@@ -133,10 +138,10 @@ export class ChartWrapperComponent implements ChartBase, OnChanges, OnInit {
       google.visualization.events.addListener(object, eventName, callback);
     };
 
-    registerChartEvent(this.wrapper, 'ready', () => this.ready.emit({ chart: this.chart }));
+    registerChartEvent(this.wrapper, 'ready', () => this.ready.emit({ chart: this.chart! }));
     registerChartEvent(this.wrapper, 'error', (error: ChartErrorEvent) => this.error.emit(error));
     registerChartEvent(this.wrapper, 'select', () => {
-      const selection = this.chart.getSelection();
+      const selection = this.chart!.getSelection();
       this.select.emit({ selection });
     });
   }

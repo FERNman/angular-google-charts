@@ -6,7 +6,6 @@ import { GoogleChartsConfig } from '../models/google-charts-config.model';
 import { GOOGLE_CHARTS_CONFIG } from '../models/injection-tokens.model';
 
 const DEFAULT_CONFIG: GoogleChartsConfig = {
-  mapsApiKey: '',
   version: 'current',
   safeMode: false
 };
@@ -14,12 +13,13 @@ const DEFAULT_CONFIG: GoogleChartsConfig = {
 @Injectable({ providedIn: 'root' })
 export class ScriptLoaderService {
   private readonly scriptSource = 'https://www.gstatic.com/charts/loader.js';
-  private readonly scriptLoadSubject = new Subject<void>();
+  private readonly scriptLoadSubject = new Subject<null>();
+  private readonly config: GoogleChartsConfig;
 
   constructor(
     private zone: NgZone,
     @Inject(LOCALE_ID) private localeId: string,
-    @Inject(GOOGLE_CHARTS_CONFIG) @Optional() private config?: GoogleChartsConfig
+    @Inject(GOOGLE_CHARTS_CONFIG) @Optional() config?: GoogleChartsConfig
   ) {
     this.config = { ...DEFAULT_CONFIG, ...(config || {}) };
   }
@@ -49,10 +49,10 @@ export class ScriptLoaderService {
    * @param packages The packages to load.
    * @returns A stream emitting as soon as the chart packages are loaded.
    */
-  public loadChartPackages(...packages: string[]): Observable<void> {
+  public loadChartPackages(...packages: string[]): Observable<null> {
     return this.loadGoogleCharts().pipe(
       switchMap(() => {
-        return new Observable<void>(observer => {
+        return new Observable<null>(observer => {
           const config = {
             packages,
             language: this.localeId,
@@ -60,7 +60,7 @@ export class ScriptLoaderService {
             safeMode: this.config.safeMode
           };
 
-          google.charts.load(this.config.version, config);
+          google.charts.load(this.config.version!, config);
           google.charts.setOnLoadCallback(() => {
             this.zone.run(() => {
               observer.next();
@@ -78,7 +78,7 @@ export class ScriptLoaderService {
    * @returns A stream emitting as soon as loading has completed.
    * If the google charts script is already loaded, the stream emits immediately.
    */
-  private loadGoogleCharts() {
+  private loadGoogleCharts(): Observable<null> {
     if (this.isGoogleChartsAvailable()) {
       return of(null);
     } else if (!this.isLoadingGoogleCharts()) {
@@ -105,7 +105,7 @@ export class ScriptLoaderService {
     return this.getGoogleChartsScript() != null;
   }
 
-  private getGoogleChartsScript(): HTMLScriptElement | null {
+  private getGoogleChartsScript(): HTMLScriptElement | undefined {
     const pageScripts = Array.from(document.getElementsByTagName('script'));
     return pageScripts.find(script => script.src === this.scriptSource);
   }

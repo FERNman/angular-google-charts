@@ -12,6 +12,7 @@
     "member-access": true,
     "array-type": [true, "array"],
     "no-host-metadata-property": false,
-    "unified-signatures": false
+    "unified-signatures": false,
+    "no-non-null-assertion": false
   }
 }

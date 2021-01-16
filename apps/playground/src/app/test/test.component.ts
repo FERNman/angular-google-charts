@@ -54,7 +54,7 @@ export class TestComponent {
   };
 
   @ViewChild(ChartEditorComponent)
-  public readonly editor: ChartEditorComponent;
+  public readonly editor!: ChartEditorComponent;
 
   constructor(private location: Location) {}
 

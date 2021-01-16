@@ -10,7 +10,7 @@ import {
   Output,
   SimpleChanges
 } from '@angular/core';
-import { fromEvent, ReplaySubject, Subscription } from 'rxjs';
+import { fromEvent, Observable, ReplaySubject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 import { ChartType } from '../../models/chart-type.model';
@@ -60,7 +60,7 @@ export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
    * If {@link https://developers.google.com/chart/interactive/docs/roles roles} should be applied, they must be included in this array as well.
    */
   @Input()
-  public columns: Column[];
+  public columns?: Column[];
 
   /**
    * A convenience property used to set the title of the chart.
@@ -127,10 +127,10 @@ export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
   @Output()
   public mouseleave = new EventEmitter<ChartMouseLeaveEvent>();
 
-  private dataTable: google.visualization.DataTable;
-  private resizeSubscription: Subscription;
+  private resizeSubscription?: Subscription;
 
-  private wrapper: google.visualization.ChartWrapper;
+  private dataTable: google.visualization.DataTable | undefined;
+  private wrapper: google.visualization.ChartWrapper | undefined;
   private wrapperReadySubject = new ReplaySubject<google.visualization.ChartWrapper>(1);
   private initialized = false;
 
@@ -140,19 +140,19 @@ export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
     @Optional() private dashboard?: DashboardComponent
   ) {}
 
-  public get chart(): google.visualization.ChartBase | null {
-    if (!this.wrapper) {
-      return null;
-    }
-
-    return this.wrapper.getChart();
+  public get chart(): google.visualization.ChartBase {
+    return this.chartWrapper.getChart();
   }
 
-  public get wrapperReady$() {
+  public get wrapperReady$(): Observable<google.visualization.ChartWrapper> {
     return this.wrapperReadySubject.asObservable();
   }
 
   public get chartWrapper(): google.visualization.ChartWrapper {
+    if (!this.wrapper) {
+      throw new Error('Trying to access the chart wrapper before it was fully initialized');
+    }
+
     return this.wrapper;
   }
 
@@ -192,17 +192,17 @@ export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
       let shouldRedraw = false;
       if (changes.data || changes.columns || changes.formatters) {
         this.createDataTable();
-        this.wrapper.setDataTable(this.dataTable);
+        this.wrapper!.setDataTable(this.dataTable!);
         shouldRedraw = true;
       }
 
       if (changes.type) {
-        this.wrapper.setChartType(this.type);
+        this.wrapper!.setChartType(this.type);
         shouldRedraw = true;
       }
 
       if (changes.options || changes.width || changes.height || changes.title) {
-        this.wrapper.setOptions(this.mergeOptions());
+        this.wrapper!.setOptions(this.mergeOptions());
         shouldRedraw = true;
       }
 
@@ -214,6 +214,7 @@ export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
 
   private createDataTable() {
     if (this.data == null) {
+      this.dataTable = undefined;
       return;
     }
 
@@ -237,7 +238,7 @@ export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
   private updateResizeListener() {
     if (this.resizeSubscription != null) {
       this.resizeSubscription.unsubscribe();
-      this.resizeSubscription = null;
+      this.resizeSubscription = undefined;
     }
 
     if (this.dynamicResize) {
@@ -299,6 +300,6 @@ export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
       return;
     }
 
-    this.wrapper.draw();
+    this.wrapper!.draw();
   }
 }

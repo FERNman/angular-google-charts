@@ -18,11 +18,7 @@ describe('ScriptLoaderService', () => {
 
   beforeEach(() => {
     service = TestBed.inject(ScriptLoaderService);
-    globalThis.google = undefined;
-  });
-
-  it('should be created', () => {
-    expect(service).toBeTruthy();
+    (globalThis as any).google = undefined;
   });
 
   describe('isGoogleChartsAvailable', () => {
@@ -166,7 +162,7 @@ describe('ScriptLoaderService', () => {
         expect(chartsMock.load).toHaveBeenCalledWith('current', {
           packages: [],
           language: 'en-US',
-          mapsApiKey: '',
+          mapsApiKey: undefined,
           safeMode: false
         });
       });
@@ -181,7 +177,7 @@ describe('ScriptLoaderService', () => {
         expect(chartsMock.load).toHaveBeenCalledWith('current', {
           packages: [chart],
           language: 'en-US',
-          mapsApiKey: '',
+          mapsApiKey: undefined,
           safeMode: false
         });
       });
@@ -199,7 +195,8 @@ describe('ScriptLoaderService', () => {
 
         expect(loadedSpy).not.toHaveBeenCalled();
 
-        loadCallback();
+        expect(loadCallback!).toBeTruthy();
+        loadCallback!();
         expect(loadedSpy).toHaveBeenCalled();
       });
 

@@ -4,15 +4,10 @@
   "description": "A wrapper for the Google Charts library written with Angular",
   "keywords": [
     "Angular",
-    "Angular2",
     "Angular 2",
     "Charts",
     "Google",
-    "Chart",
-    "Angular 6",
-    "Angular 7",
-    "Angular 8",
-    "Angular 9"
+    "Chart"
   ],
   "homepage": "https://github.com/FERNman/angular-google-charts",
   "repository": {

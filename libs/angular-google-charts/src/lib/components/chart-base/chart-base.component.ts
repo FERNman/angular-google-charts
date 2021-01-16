@@ -29,9 +29,9 @@ export interface ChartBase {
   select: EventEmitter<ChartSelectionChangedEvent>;
 
   /**
-   * The drawn chart or `undefined`.
+   * The drawn chart or `null`.
    */
-  chart: google.visualization.ChartBase | undefined;
+  chart: google.visualization.ChartBase | null;
 
   /**
    * The underlying chart wrapper.

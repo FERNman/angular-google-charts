@@ -140,7 +140,7 @@ export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
     @Optional() private dashboard?: DashboardComponent
   ) {}
 
-  public get chart(): google.visualization.ChartBase {
+  public get chart(): google.visualization.ChartBase | null {
     return this.chartWrapper.getChart();
   }
 
@@ -284,11 +284,11 @@ export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
       registerChartEvent(this.chart, 'onmouseover', (event: ChartMouseOverEvent) => this.mouseover.emit(event));
       registerChartEvent(this.chart, 'onmouseout', (event: ChartMouseLeaveEvent) => this.mouseleave.emit(event));
       registerChartEvent(this.chart, 'select', () => {
-        const selection = this.chart.getSelection();
+        const selection = this.chart!.getSelection();
         this.select.emit({ selection });
       });
 
-      this.ready.emit({ chart: this.chart });
+      this.ready.emit({ chart: this.chart! });
     });
 
     registerChartEvent(this.wrapper, 'error', (error: ChartErrorEvent) => this.error.emit(error));

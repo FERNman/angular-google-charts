@@ -50,7 +50,7 @@ export class ChartWrapperComponent implements ChartBase, OnChanges, OnInit {
 
   constructor(private element: ElementRef, private scriptLoaderService: ScriptLoaderService) {}
 
-  public get chart(): google.visualization.ChartBase | undefined {
+  public get chart(): google.visualization.ChartBase | null {
     return this.chartWrapper.getChart();
   }
 

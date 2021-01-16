@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/FERNman/angular-google-charts/compare/v1.1.6...v2.0.0) (2021-01-16)
+
+### ⚠ BREAKING CHANGES
+
+- compile in strict mode
+
+### Features
+
+- **error-dash-events:** add error and ready listeners ([853dac4](https://github.com/FERNman/angular-google-charts/commit/853dac4c81408bcdb46819b5522196cf36f09755))
+
+### Bug Fixes
+
+- dataTable contains stale values ([4c9f7c6](https://github.com/FERNman/angular-google-charts/commit/4c9f7c69e7f4c7fd829b54687590d7858eb913d0))
+- provide script-loader service in module ([a9dd652](https://github.com/FERNman/angular-google-charts/commit/a9dd65215b1f3e0eb2cf4d10350747cd84412a40))
+
+- compile in strict mode ([d387928](https://github.com/FERNman/angular-google-charts/commit/d38792859231cabf4cf16d62da669fea5dbe7e32))
+
 ### [1.1.6](https://github.com/FERNman/angular-google-charts/compare/v1.1.5...v1.1.6) (2020-09-12)
 
 ### Bug Fixes

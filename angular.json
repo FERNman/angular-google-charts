@@ -7,8 +7,44 @@
   },
   "version": 1,
   "newProjectRoot": "apps",
-  "defaultProject": "playground",
+  "defaultProject": "angular-google-charts",
   "projects": {
+    "angular-google-charts": {
+      "root": "libs/angular-google-charts",
+      "sourceRoot": "libs/angular-google-charts/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "libs/angular-google-charts/tsconfig.lib.json",
+            "project": "libs/angular-google-charts/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "project": "libs/angular-google-charts/ng-package.prod.json",
+              "tsConfig": "libs/angular-google-charts/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-builders/jest:run",
+          "options": {
+            "configPath": "jest.config.js",
+            "projects": ["libs/angular-google-charts"],
+            "coverageDirectory": "../../coverage"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["libs/angular-google-charts/tsconfig.lib.json", "libs/angular-google-charts/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**"]
+          }
+        }
+      }
+    },
     "playground": {
       "projectType": "application",
       "schematics": {},
@@ -21,17 +57,12 @@
           "options": {
             "aot": true,
             "outputPath": "dist/playground",
-            "index": "/src/index.html",
-            "main": "/src/main.ts",
-            "polyfills": "/src/polyfills.ts",
-            "tsConfig": "/tsconfig.app.json",
-            "assets": [
-              "/src/favicon.ico",
-              "/src/assets"
-            ],
-            "styles": [
-              "/src/styles.scss"
-            ],
+            "index": "apps/playground/src/index.html",
+            "main": "apps/playground/src/main.ts",
+            "polyfills": "apps/playground/src/polyfills.ts",
+            "tsConfig": "apps/playground/tsconfig.app.json",
+            "assets": ["apps/playground/src/favicon.ico", "apps/playground/src/assets"],
+            "styles": ["apps/playground/src/styles.scss"],
             "scripts": []
           },
           "configurations": {
@@ -78,55 +109,8 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "apps/playground/tsconfig.app.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
-    "angular-google-charts": {
-      "root": "libs/angular-google-charts",
-      "sourceRoot": "libs/angular-google-charts/src",
-      "projectType": "library",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "tsConfig": "libs/angular-google-charts/tsconfig.lib.json",
-            "project": "libs/angular-google-charts/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "project": "libs/angular-google-charts/ng-package.prod.json",
-              "tsConfig": "libs/angular-google-charts/tsconfig.lib.prod.json"
-            }
-          }
-        },
-        "test": {
-          "builder": "@angular-builders/jest:run",
-          "options": {
-            "configPath": "jest.config.js",
-            "projects": [
-              "libs/angular-google-charts"
-            ],
-            "coverageDirectory": "../../coverage"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "libs/angular-google-charts/tsconfig.lib.json",
-              "libs/angular-google-charts/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "tsConfig": ["apps/playground/tsconfig.app.json"],
+            "exclude": ["**/node_modules/**"]
           }
         }
       }

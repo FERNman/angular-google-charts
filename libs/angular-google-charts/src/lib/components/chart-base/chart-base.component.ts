@@ -38,7 +38,7 @@ export interface ChartBase {
    *
    * This will throw an exception when trying to access the chart wrapper before `wrapperReady$` emits.
    */
-  chartWrapper: google.visualization.ChartWrapper;
+  chartWrapper: google.visualization.ChartWrapper | undefined;
 
   /**
    * Emits after the `ChartWrapper` is created, but before the chart is drawn for the first time.

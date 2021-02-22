@@ -51,14 +51,14 @@ export class ChartWrapperComponent implements ChartBase, OnChanges, OnInit {
   constructor(private element: ElementRef, private scriptLoaderService: ScriptLoaderService) {}
 
   public get chart(): google.visualization.ChartBase | null {
-    return this.chartWrapper.getChart();
+    return this.chartWrapper?.getChart() ?? null;
   }
 
   public get wrapperReady$() {
     return this.wrapperReadySubject.asObservable();
   }
 
-  public get chartWrapper(): google.visualization.ChartWrapper {
+  public get chartWrapper(): google.visualization.ChartWrapper | undefined {
     if (!this.wrapper) {
       throw new Error('Cannot access the chart wrapper before initialization.');
     }
@@ -66,7 +66,7 @@ export class ChartWrapperComponent implements ChartBase, OnChanges, OnInit {
     return this.wrapper;
   }
 
-  public set chartWrapper(wrapper: google.visualization.ChartWrapper) {
+  public set chartWrapper(wrapper: google.visualization.ChartWrapper | undefined) {
     this.wrapper = wrapper;
     this.drawChart();
   }

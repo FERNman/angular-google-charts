@@ -16,6 +16,7 @@ import { combineLatest } from 'rxjs';
 import { DataTableService } from '../../services/data-table.service';
 import { ScriptLoaderService } from '../../services/script-loader.service';
 import { ChartErrorEvent } from '../../types/events';
+import { Formatter } from '../../types/formatter';
 import { Column, Row } from '../chart-base/chart-base.component';
 import { ControlWrapperComponent } from '../control-wrapper/control-wrapper.component';
 
@@ -45,6 +46,15 @@ export class DashboardComponent implements OnInit, OnChanges {
   public columns?: Column[];
 
   /**
+   * Used to change the displayed value of the specified column in all rows.
+   *
+   * Each array element must consist of an instance of a [`formatter`](https://developers.google.com/chart/interactive/docs/reference#formatters)
+   * and the index of the column you want the formatter to get applied to.
+   */
+  @Input()
+  public formatters?: Formatter[];
+
+  /**
    * The dashboard has completed drawing and is ready to accept changes.
    *
    * The ready event will also fire:
@@ -72,7 +82,7 @@ export class DashboardComponent implements OnInit, OnChanges {
 
   public ngOnInit() {
     this.loaderService.loadChartPackages('controls').subscribe(() => {
-      this.createDataTable();
+      this.dataTable = this.dataTableService.create(this.data, this.columns, this.formatters);
       this.createDashboard();
       this.initialized = true;
     });
@@ -83,8 +93,8 @@ export class DashboardComponent implements OnInit, OnChanges {
       return;
     }
 
-    if (changes.data || changes.columns) {
-      this.createDataTable();
+    if (changes.data || changes.columns || changes.formatters) {
+      this.dataTable = this.dataTableService.create(this.data, this.columns, this.formatters);
       this.dashboard!.draw(this.dataTable!);
     }
   }
@@ -136,9 +146,5 @@ export class DashboardComponent implements OnInit, OnChanges {
         this.dashboard!.bind(control.controlWrapper, control.for.chartWrapper);
       }
     });
-  }
-
-  private createDataTable(): void {
-    this.dataTable = this.dataTableService.create(this.data, this.columns);
   }
 }

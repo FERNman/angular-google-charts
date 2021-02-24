@@ -17,7 +17,6 @@ import { ChartErrorEvent } from '../../models/events.model';
 import { ScriptLoaderService } from '../../script-loader/script-loader.service';
 import { Column, Row } from '../chart-base/chart-base.component';
 import { ControlWrapperComponent } from '../control-wrapper/control-wrapper.component';
-import { Formatter } from '../google-chart/google-chart.component';
 
 @Component({
   selector: 'dashboard',
@@ -43,15 +42,6 @@ export class DashboardComponent implements OnInit, OnChanges {
    */
   @Input()
   public columns?: Column[];
-
-  /**
-   * Used to change the displayed value of the specified column in all rows.
-   *
-   * Each array element must consist of an instance of a [`formatter`](https://developers.google.com/chart/interactive/docs/reference#formatters)
-   * and the index of the column you want the formatter to get applied to.
-   */
-  @Input()
-  public formatters?: Formatter[];
 
   /**
    * The dashboard has completed drawing and is ready to accept changes.
@@ -92,7 +82,7 @@ export class DashboardComponent implements OnInit, OnChanges {
       return;
     }
 
-    if (changes.data || changes.columns || changes.formatters) {
+    if (changes.data || changes.columns) {
       this.createDataTable();
       this.dashboard!.draw(this.dataTable!);
     }
@@ -158,7 +148,6 @@ export class DashboardComponent implements OnInit, OnChanges {
     }
 
     this.dataTable = google.visualization.arrayToDataTable(this.getDataAsTable(), firstRowIsData);
-    this.applyFormatters(this.dataTable);
   }
 
   private getDataAsTable(): (Row | Column[])[] {
@@ -166,16 +155,6 @@ export class DashboardComponent implements OnInit, OnChanges {
       return [this.columns, ...this.data];
     } else {
       return this.data;
-    }
-  }
-
-  private applyFormatters(dataTable: google.visualization.DataTable): void {
-    if (this.formatters == null) {
-      return;
-    }
-
-    for (const val of this.formatters) {
-      val.formatter.format(dataTable, val.colIndex);
     }
   }
 }

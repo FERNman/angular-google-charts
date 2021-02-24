@@ -29,6 +29,9 @@
     "bumpFiles": "libs/angular-google-charts/package.json",
     "packageFiles": "libs/angular-google-charts/package.json"
   },
+  "engines": {
+    "node": ">=12.0.0"
+  },
   "dependencies": {
     "@angular/common": "^11.0.9",
     "@angular/compiler": "^11.0.9",

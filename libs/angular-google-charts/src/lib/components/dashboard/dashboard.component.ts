@@ -13,8 +13,9 @@ import {
 } from '@angular/core';
 import { combineLatest } from 'rxjs';
 
-import { ChartErrorEvent } from '../../models/events.model';
-import { ScriptLoaderService } from '../../script-loader/script-loader.service';
+import { DataTableService } from '../../services/data-table.service';
+import { ScriptLoaderService } from '../../services/script-loader.service';
+import { ChartErrorEvent } from '../../types/events';
 import { Column, Row } from '../chart-base/chart-base.component';
 import { ControlWrapperComponent } from '../control-wrapper/control-wrapper.component';
 
@@ -67,7 +68,7 @@ export class DashboardComponent implements OnInit, OnChanges {
   private dataTable?: google.visualization.DataTable;
   private initialized = false;
 
-  constructor(private element: ElementRef, private loaderService: ScriptLoaderService) {}
+  constructor(private element: ElementRef, private loaderService: ScriptLoaderService, private dataTableService: DataTableService) {}
 
   public ngOnInit() {
     this.loaderService.loadChartPackages('controls').subscribe(() => {
@@ -138,23 +139,6 @@ export class DashboardComponent implements OnInit, OnChanges {
   }
 
   private createDataTable(): void {
-    if (this.data == null) {
-      return;
-    }
-
-    let firstRowIsData = true;
-    if (this.columns != null) {
-      firstRowIsData = false;
-    }
-
-    this.dataTable = google.visualization.arrayToDataTable(this.getDataAsTable(), firstRowIsData);
-  }
-
-  private getDataAsTable(): (Row | Column[])[] {
-    if (this.columns) {
-      return [this.columns, ...this.data];
-    } else {
-      return this.data;
-    }
+    this.dataTable = this.dataTableService.create(this.data, this.columns);
   }
 }

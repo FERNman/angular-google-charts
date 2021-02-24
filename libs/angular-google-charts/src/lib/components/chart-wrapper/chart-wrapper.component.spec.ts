@@ -2,13 +2,13 @@ import { SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EMPTY, of } from 'rxjs';
 
-import { ChartType } from '../../models/chart-type.model';
-import { ChartErrorEvent, ChartReadyEvent, ChartSelectionChangedEvent } from '../../models/events.model';
-import { ScriptLoaderService } from '../../script-loader/script-loader.service';
+import { ScriptLoaderService } from '../../services/script-loader.service';
+import { ChartType } from '../../types/chart-type';
+import { ChartErrorEvent, ChartReadyEvent, ChartSelectionChangedEvent } from '../../types/events';
 
 import { ChartWrapperComponent } from './chart-wrapper.component';
 
-jest.mock('../../script-loader/script-loader.service');
+jest.mock('../../services/script-loader.service');
 
 const chartWrapperMock = {
   setChartType: jest.fn(),

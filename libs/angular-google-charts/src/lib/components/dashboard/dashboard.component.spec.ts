@@ -2,11 +2,12 @@ import { SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EMPTY, of, Subject } from 'rxjs';
 
-import { ScriptLoaderService } from '../../script-loader/script-loader.service';
+import { DataTableService } from '../../services/data-table.service';
+import { ScriptLoaderService } from '../../services/script-loader.service';
 
 import { DashboardComponent } from './dashboard.component';
 
-jest.mock('../../script-loader/script-loader.service');
+jest.mock('../../services/script-loader.service');
 
 const visualizationMock = {
   Dashboard: jest.fn(),
@@ -24,7 +25,7 @@ describe('DashboardComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [DashboardComponent],
-      providers: [ScriptLoaderService]
+      providers: [ScriptLoaderService, DataTableService]
     }).compileComponents();
   });
 

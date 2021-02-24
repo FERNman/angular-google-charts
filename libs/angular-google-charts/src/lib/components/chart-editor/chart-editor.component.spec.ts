@@ -1,13 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EMPTY, of } from 'rxjs';
 
-import { ScriptLoaderService } from '../../script-loader/script-loader.service';
+import { ScriptLoaderService } from '../../services/script-loader.service';
 import { ChartBase } from '../chart-base/chart-base.component';
 
 import { ChartEditorRef } from './chart-editor-ref';
 import { ChartEditorComponent } from './chart-editor.component';
 
-jest.mock('../../script-loader/script-loader.service');
+jest.mock('../../services/script-loader.service');
 jest.mock('./chart-editor-ref');
 
 const editorRefMock = {

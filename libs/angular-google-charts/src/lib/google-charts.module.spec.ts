@@ -1,9 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 
 import { GoogleChartsModule } from './google-charts.module';
-import { GoogleChartsConfig } from './models/google-charts-config.model';
-import { GOOGLE_CHARTS_CONFIG } from './models/injection-tokens.model';
-import { ScriptLoaderService } from './script-loader/script-loader.service';
+import { ScriptLoaderService } from './services/script-loader.service';
+import { GoogleChartsConfig, GOOGLE_CHARTS_CONFIG } from './types/google-charts-config';
 
 describe('GoogleChartsModule', () => {
   let service: ScriptLoaderService;

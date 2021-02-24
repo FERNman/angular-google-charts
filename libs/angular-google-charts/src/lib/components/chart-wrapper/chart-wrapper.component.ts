@@ -11,8 +11,8 @@ import {
 } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 
-import { ChartErrorEvent, ChartReadyEvent, ChartSelectionChangedEvent } from '../../models/events.model';
-import { ScriptLoaderService } from '../../script-loader/script-loader.service';
+import { ScriptLoaderService } from '../../services/script-loader.service';
+import { ChartErrorEvent, ChartReadyEvent, ChartSelectionChangedEvent } from '../../types/events';
 import { ChartBase } from '../chart-base/chart-base.component';
 
 @Component({

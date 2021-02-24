@@ -13,22 +13,19 @@ import {
 import { fromEvent, Observable, ReplaySubject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
-import { ChartType } from '../../models/chart-type.model';
+import { DataTableService } from '../../services/data-table.service';
+import { ScriptLoaderService } from '../../services/script-loader.service';
+import { ChartType } from '../../types/chart-type';
 import {
   ChartErrorEvent,
   ChartMouseLeaveEvent,
   ChartMouseOverEvent,
   ChartReadyEvent,
   ChartSelectionChangedEvent
-} from '../../models/events.model';
-import { ScriptLoaderService } from '../../script-loader/script-loader.service';
+} from '../../types/events';
+import { Formatter } from '../../types/formatter';
 import { ChartBase, Column, Row } from '../chart-base/chart-base.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
-
-export interface Formatter {
-  formatter: google.visualization.DefaultFormatter;
-  colIndex: number;
-}
 
 @Component({
   selector: 'google-chart',
@@ -137,6 +134,7 @@ export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
   constructor(
     private element: ElementRef,
     private scriptLoaderService: ScriptLoaderService,
+    private dataTableService: DataTableService,
     @Optional() private dashboard?: DashboardComponent
   ) {}
 
@@ -164,7 +162,7 @@ export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
   public ngOnInit() {
     // We don't need to load any chart packages, the chart wrapper will handle this for us
     this.scriptLoaderService.loadChartPackages().subscribe(() => {
-      this.createDataTable();
+      this.dataTable = this.dataTableService.create(this.data, this.columns, this.formatters);
 
       // Only ever create the wrapper once to allow animations to happen when someting changes.
       this.wrapper = new google.visualization.ChartWrapper({
@@ -191,7 +189,7 @@ export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
     if (this.initialized) {
       let shouldRedraw = false;
       if (changes.data || changes.columns || changes.formatters) {
-        this.createDataTable();
+        this.dataTable = this.dataTableService.create(this.data, this.columns, this.formatters);
         this.wrapper!.setDataTable(this.dataTable!);
         shouldRedraw = true;
       }
@@ -209,29 +207,6 @@ export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
       if (shouldRedraw) {
         this.drawChart();
       }
-    }
-  }
-
-  private createDataTable() {
-    if (this.data == null) {
-      this.dataTable = undefined;
-      return;
-    }
-
-    let firstRowIsData = true;
-    if (this.columns != null) {
-      firstRowIsData = false;
-    }
-
-    this.dataTable = google.visualization.arrayToDataTable(this.getDataAsTable(), firstRowIsData);
-    this.applyFormatters(this.dataTable);
-  }
-
-  private getDataAsTable(): (Row | Column[])[] {
-    if (this.columns) {
-      return [this.columns, ...this.data];
-    } else {
-      return this.data;
     }
   }
 
@@ -259,16 +234,6 @@ export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
       height: this.height,
       ...this.options
     };
-  }
-
-  private applyFormatters(dataTable: google.visualization.DataTable): void {
-    if (this.formatters == null) {
-      return;
-    }
-
-    for (const val of this.formatters) {
-      val.formatter.format(dataTable, val.colIndex);
-    }
   }
 
   private registerChartEvents() {

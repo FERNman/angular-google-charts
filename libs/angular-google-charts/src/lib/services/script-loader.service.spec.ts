@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { GOOGLE_CHARTS_CONFIG } from '../models/injection-tokens.model';
+import { GOOGLE_CHARTS_CONFIG } from '../types/google-charts-config';
 
 import { ScriptLoaderService } from './script-loader.service';
 

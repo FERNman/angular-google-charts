@@ -1,4 +1,4 @@
-import { ChartType } from '../models/chart-type.model';
+import { ChartType } from '../types/chart-type';
 
 const ChartTypesToPackages = {
   [ChartType.AnnotationChart]: 'annotationchart',

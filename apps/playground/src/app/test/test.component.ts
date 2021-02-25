@@ -74,4 +74,9 @@ export class TestComponent {
   public goBack() {
     this.location.back();
   }
+
+  public dashboardFormatters() {
+    const formatters = [{ colIndex: 1, formatter: new google.visualization.NumberFormat({ fractionDigits: 0, prefix: '$', suffix: '‰' }) }];
+    return formatters;
+  }
 }

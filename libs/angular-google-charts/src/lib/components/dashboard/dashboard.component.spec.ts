@@ -168,6 +168,23 @@ describe('DashboardComponent', () => {
       expect(visualizationMock.events.addListener).toHaveBeenCalledWith(dashboardMock, 'ready', expect.any(Function));
       expect(visualizationMock.events.addListener).toHaveBeenCalledWith(dashboardMock, 'error', expect.any(Function));
     });
+
+    it('should apply the provided formatters', () => {
+      const service = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
+      service.loadChartPackages.mockReturnValueOnce(of(null));
+
+      const formatter = { formatter: { format: jest.fn() }, colIndex: 1 };
+      component.formatters = [formatter];
+      component.data = [];
+
+      const dataTableMock = {};
+      visualizationMock.arrayToDataTable.mockReturnValueOnce(dataTableMock);
+
+      component.ngOnInit();
+
+      expect(formatter.formatter.format).toHaveBeenCalledWith(dataTableMock, formatter.colIndex);
+    });
+
     it('should draw the dashboard using the provided data', () => {
       const scriptLoaderService = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
       scriptLoaderService.loadChartPackages.mockReturnValueOnce(of(null));
@@ -230,6 +247,33 @@ describe('DashboardComponent', () => {
       const columns = ['test'];
       changeInput('columns', columns);
 
+      expect(visualizationMock.arrayToDataTable).toHaveBeenCalled();
+      expect(dashboardMock.draw).toHaveBeenCalled();
+    });
+
+    it('should redraw the chart if `formatters` changed', () => {
+      const dashboardMock = { draw: jest.fn() };
+      component['dashboard'] = dashboardMock as any;
+      component['initialized'] = true;
+
+      globalThis.google = { visualization: visualizationMock } as any;
+
+      const data = [
+        ['First Row', 10],
+        ['Second Row', 11]
+      ];
+      component.data = data;
+
+      const columns = ['Some label', 'Some values'];
+      component.columns = columns;
+
+      const dataTableMock = {};
+      visualizationMock.arrayToDataTable.mockReturnValueOnce(dataTableMock);
+
+      const formatter = { formatter: { format: jest.fn() }, colIndex: 1 };
+      changeInput('formatters', [formatter]);
+
+      expect(formatter.formatter.format).toHaveBeenCalled();
       expect(visualizationMock.arrayToDataTable).toHaveBeenCalled();
       expect(dashboardMock.draw).toHaveBeenCalled();
     });

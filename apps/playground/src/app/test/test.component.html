@@ -2,7 +2,7 @@
 <button (click)="goBack()">Back</button>
 
 <div class="inline">
-  <dashboard [columns]="['Name', 'Donuts eaten']" [data]="dashboardData">
+  <dashboard [columns]="['Name', 'Donuts eaten']" [data]="dashboardData" [formatters]="dashboardFormatters()">
     <control-wrapper
       [for]="myChart"
       [type]="filterType"
@@ -11,6 +11,8 @@
     ></control-wrapper>
     <google-chart #myChart type="PieChart" [width]="300" [height]="300" [options]="{ pieSliceText: 'value' }"> </google-chart>
   </dashboard>
+  <chart-editor></chart-editor>
+  <button (click)="edit(myChart)">Edit</button>
 
   <chart-wrapper [specs]="chartWrapperSpecs"></chart-wrapper>
 

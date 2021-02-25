@@ -270,7 +270,7 @@ A dashboard component can be instantiated, which can contain child controls and 
 </dashboard>
 ```
 
-When creating dashboards, the charts themselves are not responsible for drawing, which means their `columns` and `data` properties are unused. Instead, the dashboard is responsible for drawing. It therefore accepts data in the same format as charts do through the `columns` and `data` properties.
+When creating dashboards, the charts themselves are not responsible for drawing, which means their `columns`, `data`, and (optional) `formatter` properties are unused. Instead, the dashboard is responsible for drawing. It therefore accepts data in the same format as charts do through the `columns`, `data`, and `formatter` properties.
 
 Note that charts in a dashboard will not be visible if they are not referenced in at least one control.
 

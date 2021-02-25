@@ -76,12 +76,7 @@ export class TestComponent {
   }
 
   public dashboardFormatters() {
-    // const cf          = new google.visualization.ColorFormat ();
-    // cf.addRange('Ma','Mz', 'red', 'black');
-    const formatters = [
-      // { colIndex : 0, formatter : cf },
-      { colIndex: 1, formatter: new google.visualization.NumberFormat({ fractionDigits: 0, prefix: '$', suffix: '‰' }) }
-    ];
+    const formatters = [{ colIndex: 1, formatter: new google.visualization.NumberFormat({ fractionDigits: 0, prefix: '$', suffix: '‰' }) }];
     return formatters;
   }
 }

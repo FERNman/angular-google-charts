@@ -23,6 +23,7 @@ const visualizationMock = {
   arrayToDataTable: jest.fn(),
   events: {
     addListener: jest.fn(),
+    removeListener: jest.fn(),
     removeAllListeners: jest.fn()
   }
 };
@@ -543,6 +544,31 @@ describe('GoogleChartComponent', () => {
       selectCallback();
 
       expect(selectSpy).toHaveBeenCalledWith({ selection });
+    });
+
+    it('should add and remove custom event listeners', () => {
+      const chartMock = { draw: jest.fn() };
+      chartWrapperMock.getChart.mockReturnValue(chartMock);
+
+      component.ngOnInit();
+
+      visualizationMock.events.addListener.mockReturnValue('handle1');
+      const rollupCallback = () => {};
+      let handle = component.addEventListener('rollup', rollupCallback);
+      expect(handle).toBe('handle1');
+      expect(visualizationMock.events.addListener).lastCalledWith(chartMock, 'rollup', rollupCallback);
+
+      component.removeEventListener(handle);
+      expect(visualizationMock.events.removeListener).lastCalledWith(handle);
+
+      handle = component.addEventListener('rollup', rollupCallback);
+      visualizationMock.events.addListener.mockReturnValue('handle2');
+      const readyCallback = visualizationMock.events.addListener.mock.calls[0][2];
+      readyCallback();
+
+      component.removeEventListener(handle);
+      expect(visualizationMock.events.removeListener).not.lastCalledWith(handle);
+      expect(visualizationMock.events.removeListener).lastCalledWith('handle2');
     });
   });
 

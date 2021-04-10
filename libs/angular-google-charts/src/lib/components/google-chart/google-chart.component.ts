@@ -130,6 +130,7 @@ export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
   private wrapper: google.visualization.ChartWrapper | undefined;
   private wrapperReadySubject = new ReplaySubject<google.visualization.ChartWrapper>(1);
   private initialized = false;
+  private eventListeners = new Map<any, { eventName: string; callback: Function; handle: any }>();
 
   constructor(
     private element: ElementRef,
@@ -210,6 +211,27 @@ export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
     }
   }
 
+  /**
+   * For listening to events other than the most common ones (available via Output properties).
+   *
+   * Can be called after the chart emits that it's "ready".
+   *
+   * Returns a handle that can be used for `removeEventListener`.
+   */
+  public addEventListener(eventName: string, callback: Function): any {
+    const handle = this.registerChartEvent(this.chart, eventName, callback);
+    this.eventListeners.set(handle, { eventName, callback, handle });
+    return handle;
+  }
+
+  public removeEventListener(handle: any): void {
+    const entry = this.eventListeners.get(handle);
+    if (entry) {
+      google.visualization.events.removeListener(entry.handle);
+      this.eventListeners.delete(handle);
+    }
+  }
+
   private updateResizeListener() {
     if (this.resizeSubscription != null) {
       this.resizeSubscription.unsubscribe();
@@ -239,24 +261,25 @@ export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
   private registerChartEvents() {
     google.visualization.events.removeAllListeners(this.wrapper);
 
-    const registerChartEvent = (object: any, eventName: string, callback: Function) => {
-      google.visualization.events.addListener(object, eventName, callback);
-    };
-
-    registerChartEvent(this.wrapper, 'ready', () => {
+    this.registerChartEvent(this.wrapper, 'ready', () => {
       // This could also be done by checking if we already subscribed to the events
       google.visualization.events.removeAllListeners(this.chart);
-      registerChartEvent(this.chart, 'onmouseover', (event: ChartMouseOverEvent) => this.mouseover.emit(event));
-      registerChartEvent(this.chart, 'onmouseout', (event: ChartMouseLeaveEvent) => this.mouseleave.emit(event));
-      registerChartEvent(this.chart, 'select', () => {
+      this.registerChartEvent(this.chart, 'onmouseover', (event: ChartMouseOverEvent) => this.mouseover.emit(event));
+      this.registerChartEvent(this.chart, 'onmouseout', (event: ChartMouseLeaveEvent) => this.mouseleave.emit(event));
+      this.registerChartEvent(this.chart, 'select', () => {
         const selection = this.chart!.getSelection();
         this.select.emit({ selection });
       });
+      this.eventListeners.forEach(x => (x.handle = this.registerChartEvent(this.chart, x.eventName, x.callback)));
 
       this.ready.emit({ chart: this.chart! });
     });
 
-    registerChartEvent(this.wrapper, 'error', (error: ChartErrorEvent) => this.error.emit(error));
+    this.registerChartEvent(this.wrapper, 'error', (error: ChartErrorEvent) => this.error.emit(error));
+  }
+
+  private registerChartEvent(object: any, eventName: string, callback: Function): any {
+    return google.visualization.events.addListener(object, eventName, callback);
   }
 
   private drawChart() {

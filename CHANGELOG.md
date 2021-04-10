@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://github.com/FERNman/angular-google-charts/compare/v2.0.1...v2.1.0) (2021-04-10)
+
+### Features
+
+- added support for add/remove custom event listeners ([65c6836](https://github.com/FERNman/angular-google-charts/commit/65c6836ce85f8db9be1f213491ea3a1c646bcaf9))
+- add dashboard formatters ([9fbfefd](https://github.com/FERNman/angular-google-charts/commit/9fbfefd870f3e4b685433034e8ceed4f6ef9a3be))
+
+### Bug Fixes
+
+- get/set chartWrapper ([bf3a194](https://github.com/FERNman/angular-google-charts/commit/bf3a194e49a55fbbda2bef188e5bc02df44e89eb))
+
 ### [2.0.1](https://github.com/FERNman/angular-google-charts/compare/v2.0.0...v2.0.1) (2021-01-27)
 
 ## [2.0.0](https://github.com/FERNman/angular-google-charts/compare/v1.1.6...v2.0.0) (2021-01-16)

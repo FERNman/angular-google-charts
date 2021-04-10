@@ -9,7 +9,11 @@ import { TestComponent } from './test/test.component';
 
 @NgModule({
   declarations: [AppComponent, TestComponent, MainComponent],
-  imports: [BrowserModule, AppRoutingModule, GoogleChartsModule.forRoot({ mapsApiKey: 'AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY' })],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    GoogleChartsModule.forRoot({ mapsApiKey: 'AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY' })
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

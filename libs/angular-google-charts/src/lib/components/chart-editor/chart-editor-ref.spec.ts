@@ -28,7 +28,11 @@ describe('ChartEditorRef', () => {
 
   it('should register event listeners on create', () => {
     expect(visualizationMock.events.addOneTimeListener).toHaveBeenCalledWith(editorMock, 'ok', expect.any(Function));
-    expect(visualizationMock.events.addOneTimeListener).toHaveBeenCalledWith(editorMock, 'cancel', expect.any(Function));
+    expect(visualizationMock.events.addOneTimeListener).toHaveBeenCalledWith(
+      editorMock,
+      'cancel',
+      expect.any(Function)
+    );
   });
 
   describe('afterClosed', () => {

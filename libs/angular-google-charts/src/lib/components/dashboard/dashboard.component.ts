@@ -78,7 +78,11 @@ export class DashboardComponent implements OnInit, OnChanges {
   private dataTable?: google.visualization.DataTable;
   private initialized = false;
 
-  constructor(private element: ElementRef, private loaderService: ScriptLoaderService, private dataTableService: DataTableService) {}
+  constructor(
+    private element: ElementRef,
+    private loaderService: ScriptLoaderService,
+    private dataTableService: DataTableService
+  ) {}
 
   public ngOnInit() {
     this.loaderService.loadChartPackages('controls').subscribe(() => {

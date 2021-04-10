@@ -9,7 +9,8 @@
       [state]="{ lowValue: 3, highValue: 8 }"
       [options]="{ filterColumnLabel: 'Donuts eaten', minValue: 1, maxValue: 10 }"
     ></control-wrapper>
-    <google-chart #myChart type="PieChart" [width]="300" [height]="300" [options]="{ pieSliceText: 'value' }"> </google-chart>
+    <google-chart #myChart type="PieChart" [width]="300" [height]="300" [options]="{ pieSliceText: 'value' }">
+    </google-chart>
   </dashboard>
   <chart-editor></chart-editor>
   <button (click)="edit(myChart)">Edit</button>

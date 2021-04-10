@@ -140,7 +140,10 @@ describe('DashboardComponent', () => {
       component.ngOnInit();
 
       expect(dashboardMock.bind).toHaveBeenCalledWith(controlOne.controlWrapper, chartOne.chartWrapper);
-      expect(dashboardMock.bind).toHaveBeenCalledWith(controlTwo.controlWrapper, [chartOne.chartWrapper, chartTwo.chartWrapper]);
+      expect(dashboardMock.bind).toHaveBeenCalledWith(controlTwo.controlWrapper, [
+        chartOne.chartWrapper,
+        chartTwo.chartWrapper
+      ]);
     });
 
     it('should register dashboard wrapper event handlers', () => {

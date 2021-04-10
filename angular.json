@@ -39,7 +39,10 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["libs/angular-google-charts/tsconfig.lib.json", "libs/angular-google-charts/tsconfig.spec.json"],
+            "tsConfig": [
+              "libs/angular-google-charts/tsconfig.lib.json",
+              "libs/angular-google-charts/tsconfig.spec.json"
+            ],
             "exclude": ["**/node_modules/**"]
           }
         }

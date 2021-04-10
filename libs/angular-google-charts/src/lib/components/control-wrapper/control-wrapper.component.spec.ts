@@ -87,9 +87,21 @@ describe('ControlWrapperComponent', () => {
       component.ngOnInit();
 
       expect(visualizationMock.events.removeAllListeners).toHaveBeenCalledWith(controlWrapperMock);
-      expect(visualizationMock.events.addListener).toHaveBeenCalledWith(controlWrapperMock, 'ready', expect.any(Function));
-      expect(visualizationMock.events.addListener).toHaveBeenCalledWith(controlWrapperMock, 'error', expect.any(Function));
-      expect(visualizationMock.events.addListener).toHaveBeenCalledWith(controlWrapperMock, 'statechange', expect.any(Function));
+      expect(visualizationMock.events.addListener).toHaveBeenCalledWith(
+        controlWrapperMock,
+        'ready',
+        expect.any(Function)
+      );
+      expect(visualizationMock.events.addListener).toHaveBeenCalledWith(
+        controlWrapperMock,
+        'error',
+        expect.any(Function)
+      );
+      expect(visualizationMock.events.addListener).toHaveBeenCalledWith(
+        controlWrapperMock,
+        'statechange',
+        expect.any(Function)
+      );
     });
 
     it('should emit wrapper ready event', () => {

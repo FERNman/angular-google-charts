@@ -92,12 +92,20 @@ describe('ChartWrapperComponent', () => {
       const scriptLoaderService = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
       scriptLoaderService.loadChartPackages.mockReturnValue(of(null));
 
-      const specs = { chartType: ChartType.AreaChart, container: { innerHTML: '' } as HTMLElement, containerId: 'test' };
+      const specs = {
+        chartType: ChartType.AreaChart,
+        container: { innerHTML: '' } as HTMLElement,
+        containerId: 'test'
+      };
       component.specs = specs;
       component.ngOnInit();
 
-      expect(visualizationMock.ChartWrapper).not.toHaveBeenCalledWith(expect.objectContaining({ container: specs.container }));
-      expect(visualizationMock.ChartWrapper).not.toHaveBeenCalledWith(expect.objectContaining({ containerId: specs.containerId }));
+      expect(visualizationMock.ChartWrapper).not.toHaveBeenCalledWith(
+        expect.objectContaining({ container: specs.container })
+      );
+      expect(visualizationMock.ChartWrapper).not.toHaveBeenCalledWith(
+        expect.objectContaining({ containerId: specs.containerId })
+      );
     });
 
     it('should register chart wrapper event handlers', () => {
@@ -109,9 +117,21 @@ describe('ChartWrapperComponent', () => {
       component.ngOnInit();
 
       expect(visualizationMock.events.removeAllListeners).toHaveBeenCalled();
-      expect(visualizationMock.events.addListener).toHaveBeenCalledWith(chartWrapperMock, 'ready', expect.any(Function));
-      expect(visualizationMock.events.addListener).toHaveBeenCalledWith(chartWrapperMock, 'error', expect.any(Function));
-      expect(visualizationMock.events.addListener).toHaveBeenCalledWith(chartWrapperMock, 'select', expect.any(Function));
+      expect(visualizationMock.events.addListener).toHaveBeenCalledWith(
+        chartWrapperMock,
+        'ready',
+        expect.any(Function)
+      );
+      expect(visualizationMock.events.addListener).toHaveBeenCalledWith(
+        chartWrapperMock,
+        'error',
+        expect.any(Function)
+      );
+      expect(visualizationMock.events.addListener).toHaveBeenCalledWith(
+        chartWrapperMock,
+        'select',
+        expect.any(Function)
+      );
     });
 
     it('should emit ready event', () => {

@@ -1,6 +1,13 @@
 import { Location } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
-import { ChartBase, ChartEditorComponent, ChartType, FilterType, Formatter, ScriptLoaderService } from 'angular-google-charts';
+import {
+  ChartBase,
+  ChartEditorComponent,
+  ChartType,
+  FilterType,
+  Formatter,
+  ScriptLoaderService
+} from 'angular-google-charts';
 import { Observable } from 'rxjs';
 import { map, share } from 'rxjs/operators';
 
@@ -57,7 +64,9 @@ export class TestComponent {
 
   public readonly formatters$: Observable<Formatter[]> = this.scriptLoaderService.loadChartPackages().pipe(
     share(),
-    map(() => [{ colIndex: 1, formatter: new google.visualization.NumberFormat({ fractionDigits: 0, prefix: '$', suffix: '‰' }) }])
+    map(() => [
+      { colIndex: 1, formatter: new google.visualization.NumberFormat({ fractionDigits: 0, prefix: '$', suffix: '‰' }) }
+    ])
   );
 
   @ViewChild(ChartEditorComponent)

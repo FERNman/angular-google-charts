@@ -32,7 +32,13 @@ export class AppModule {}
 And create a `google-chart` component somewhere in your application:
 
 ```html
-<google-chart [title]="chart.title" [type]="chart.type" [data]="chart.data" [columns]="chart.columnNames" [options]="chart.options">
+<google-chart
+  [title]="chart.title"
+  [type]="chart.type"
+  [data]="chart.data"
+  [columns]="chart.columnNames"
+  [options]="chart.options"
+>
 </google-chart>
 ```
 

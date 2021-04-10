@@ -9,9 +9,21 @@ import { ScriptLoaderService } from './services/script-loader.service';
 import { GoogleChartsConfig, GOOGLE_CHARTS_CONFIG } from './types/google-charts-config';
 
 @NgModule({
-  declarations: [GoogleChartComponent, ChartWrapperComponent, DashboardComponent, ControlWrapperComponent, ChartEditorComponent],
+  declarations: [
+    GoogleChartComponent,
+    ChartWrapperComponent,
+    DashboardComponent,
+    ControlWrapperComponent,
+    ChartEditorComponent
+  ],
   providers: [ScriptLoaderService],
-  exports: [GoogleChartComponent, ChartWrapperComponent, DashboardComponent, ControlWrapperComponent, ChartEditorComponent]
+  exports: [
+    GoogleChartComponent,
+    ChartWrapperComponent,
+    DashboardComponent,
+    ControlWrapperComponent,
+    ChartEditorComponent
+  ]
 })
 export class GoogleChartsModule {
   public static forRoot(config: GoogleChartsConfig = {}): ModuleWithProviders<GoogleChartsModule> {

@@ -269,8 +269,16 @@ describe('GoogleChartComponent', () => {
 
       expect(visualizationMock.events.removeAllListeners).toHaveBeenCalled();
 
-      expect(visualizationMock.events.addListener).toHaveBeenCalledWith(chartWrapperMock, 'ready', expect.any(Function));
-      expect(visualizationMock.events.addListener).toHaveBeenCalledWith(chartWrapperMock, 'error', expect.any(Function));
+      expect(visualizationMock.events.addListener).toHaveBeenCalledWith(
+        chartWrapperMock,
+        'ready',
+        expect.any(Function)
+      );
+      expect(visualizationMock.events.addListener).toHaveBeenCalledWith(
+        chartWrapperMock,
+        'error',
+        expect.any(Function)
+      );
     });
   });
 
@@ -469,9 +477,21 @@ describe('GoogleChartComponent', () => {
 
       component.ngOnInit();
 
-      expect(visualizationMock.events.addListener).not.toHaveBeenCalledWith(chartWrapperMock, 'onmouseover', expect.any(Function));
-      expect(visualizationMock.events.addListener).not.toHaveBeenCalledWith(chartWrapperMock, 'onmouseout', expect.any(Function));
-      expect(visualizationMock.events.addListener).not.toHaveBeenCalledWith(chartWrapperMock, 'select', expect.any(Function));
+      expect(visualizationMock.events.addListener).not.toHaveBeenCalledWith(
+        chartWrapperMock,
+        'onmouseover',
+        expect.any(Function)
+      );
+      expect(visualizationMock.events.addListener).not.toHaveBeenCalledWith(
+        chartWrapperMock,
+        'onmouseout',
+        expect.any(Function)
+      );
+      expect(visualizationMock.events.addListener).not.toHaveBeenCalledWith(
+        chartWrapperMock,
+        'select',
+        expect.any(Function)
+      );
 
       const readyCallback = visualizationMock.events.addListener.mock.calls[0][2];
       readyCallback();

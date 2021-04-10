@@ -5,7 +5,11 @@ import { Formatter } from '../types/formatter';
 
 @Injectable({ providedIn: 'root' })
 export class DataTableService {
-  public create(data: Row[] | undefined, columns?: Column[], formatters?: Formatter[]): google.visualization.DataTable | undefined {
+  public create(
+    data: Row[] | undefined,
+    columns?: Column[],
+    formatters?: Formatter[]
+  ): google.visualization.DataTable | undefined {
     if (data == null) {
       return undefined;
     }

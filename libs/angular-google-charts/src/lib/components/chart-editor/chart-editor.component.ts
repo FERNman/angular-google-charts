@@ -46,10 +46,14 @@ export class ChartEditorComponent implements OnInit {
   public editChart(component: ChartBase, options: google.visualization.ChartEditorOptions): ChartEditorRef;
   public editChart(component: ChartBase, options?: google.visualization.ChartEditorOptions) {
     if (!component.chartWrapper) {
-      throw new Error('Chart wrapper is `undefined`. Please wait for the `initialized$` observable before trying to edit a chart.');
+      throw new Error(
+        'Chart wrapper is `undefined`. Please wait for the `initialized$` observable before trying to edit a chart.'
+      );
     }
     if (!this.editor) {
-      throw new Error('Chart editor is `undefined`. Please wait for the `initialized$` observable before trying to edit a chart.');
+      throw new Error(
+        'Chart editor is `undefined`. Please wait for the `initialized$` observable before trying to edit a chart.'
+      );
     }
 
     const handle = new ChartEditorRef(this.editor);

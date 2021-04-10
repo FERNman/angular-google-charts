@@ -163,8 +163,14 @@ export class ControlWrapperComponent implements OnInit, OnChanges {
   private addEventListeners() {
     google.visualization.events.removeAllListeners(this._controlWrapper);
 
-    google.visualization.events.addListener(this._controlWrapper, 'ready', (event: ChartReadyEvent) => this.ready.emit(event));
-    google.visualization.events.addListener(this._controlWrapper, 'error', (event: ChartErrorEvent) => this.error.emit(event));
-    google.visualization.events.addListener(this._controlWrapper, 'statechange', (event: unknown) => this.stateChange.emit(event));
+    google.visualization.events.addListener(this._controlWrapper, 'ready', (event: ChartReadyEvent) =>
+      this.ready.emit(event)
+    );
+    google.visualization.events.addListener(this._controlWrapper, 'error', (event: ChartErrorEvent) =>
+      this.error.emit(event)
+    );
+    google.visualization.events.addListener(this._controlWrapper, 'statechange', (event: unknown) =>
+      this.stateChange.emit(event)
+    );
   }
 }

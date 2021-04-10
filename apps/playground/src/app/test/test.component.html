@@ -1,8 +1,8 @@
 <h1>Test Component</h1>
 <button (click)="goBack()">Back</button>
 
-<div class="inline">
-  <dashboard [columns]="['Name', 'Donuts eaten']" [data]="dashboardData" [formatters]="dashboardFormatters()">
+<div class="inline" *ngIf="formatters$ | async as formatter">
+  <dashboard [columns]="['Name', 'Donuts eaten']" [data]="dashboardData" [formatters]="formatter">
     <control-wrapper
       [for]="myChart"
       [type]="filterType"
@@ -26,7 +26,7 @@
 
 <google-chart
   title="Resizing Chart"
-  style="width: 100%;"
+  style="width: 100%"
   type="BarChart"
   [data]="chart.data"
   [columns]="chart.columnNames"

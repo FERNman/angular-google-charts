@@ -1,4 +1,5 @@
 import { InjectionToken } from '@angular/core';
+import { Observable } from 'rxjs';
 
 export interface GoogleChartsConfig {
   /**
@@ -19,15 +20,15 @@ export interface GoogleChartsConfig {
    * Please note that this library does only work with Google Charts 45 or higher.
    *
    * @description
-   * Can be either a number specifying a
+   * You can provide either a literal string or an observable that emits a string. The value can be either a number specifying a
    * {@link https://developers.google.com/chart/interactive/docs/release_notes#current:-january-6,-2020 frozen version } of Google Charts
    * or one of the special versions `current` and `upcoming`.
    *
    * Defaults to `current`.
    *
-   * {@link https://developers.google.com/chart/interactive/docs/basic_load_libs#basic-library-loading Offical Documentation}
+   * {@link https://developers.google.com/chart/interactive/docs/basic_load_libs#basic-library-loading Official Documentation}
    */
-  version?: string;
+  version?: string | Observable<string>;
 
   /**
    * When set to true, all charts and tooltips that generate HTML from user-supplied data will sanitize it

@@ -1,6 +1,6 @@
 import { Inject, Injectable, LOCALE_ID, NgZone, Optional } from '@angular/core';
-import { Observable, of, Subject } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { isObservable, Observable, of, Subject } from 'rxjs';
+import { flatMap, switchMap } from 'rxjs/operators';
 
 import { GoogleChartsConfig, GOOGLE_CHARTS_CONFIG } from '../types/google-charts-config';
 
@@ -50,7 +50,8 @@ export class ScriptLoaderService {
    */
   public loadChartPackages(...packages: string[]): Observable<null> {
     return this.loadGoogleCharts().pipe(
-      switchMap(() => {
+      flatMap(() => (isObservable(this.config.version) ? this.config.version : of(this.config.version!))),
+      switchMap((chartVersion: string) => {
         return new Observable<null>(observer => {
           const config = {
             packages,
@@ -59,7 +60,7 @@ export class ScriptLoaderService {
             safeMode: this.config.safeMode
           };
 
-          google.charts.load(this.config.version!, config);
+          google.charts.load(chartVersion, config);
           google.charts.setOnLoadCallback(() => {
             this.zone.run(() => {
               observer.next();

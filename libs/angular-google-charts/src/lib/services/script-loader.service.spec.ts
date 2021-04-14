@@ -1,6 +1,6 @@
 import { LOCALE_ID } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
-import { throwError } from 'rxjs';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { Subject, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { GOOGLE_CHARTS_CONFIG } from '../types/google-charts-config';
@@ -230,6 +230,37 @@ describe('ScriptLoaderService', () => {
           safeMode
         });
       });
+
+      it('should use lazy loaded chart version', fakeAsync(() => {
+        globalThis.google = { charts: chartsMock } as any;
+
+        TestBed.resetTestingModule();
+
+        const chartVersionSubject = new Subject<string>();
+        const version = 'current';
+        const version$ = chartVersionSubject.asObservable();
+
+        TestBed.configureTestingModule({
+          providers: [ScriptLoaderService, { provide: GOOGLE_CHARTS_CONFIG, useValue: { version: version$ } }]
+        });
+        service = TestBed.inject(ScriptLoaderService);
+
+        const chart = 'corechart';
+
+        service.loadChartPackages(chart).subscribe();
+
+        tick(1000);
+
+        expect(chartsMock.load).not.toHaveBeenCalled();
+
+        chartVersionSubject.next(version);
+
+        expect(chartsMock.load).toHaveBeenCalledWith(version, {
+          packages: [chart],
+          language: 'en-US',
+          safeMode: false
+        });
+      }));
     });
   });
 });

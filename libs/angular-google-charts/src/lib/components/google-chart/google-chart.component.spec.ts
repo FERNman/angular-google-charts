@@ -280,6 +280,18 @@ describe('GoogleChartComponent', () => {
         expect.any(Function)
       );
     });
+
+    it('should create the chart with correct package', () => {
+      const service = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
+      service.loadChartPackages.mockReturnValueOnce(of(null));
+
+      const chartType = ChartType.Map;
+      component.type = chartType;
+
+      component.ngOnInit();
+
+      expect(service.loadChartPackages).toHaveBeenCalledWith('map');
+    });
   });
 
   describe('ngOnChanges', () => {

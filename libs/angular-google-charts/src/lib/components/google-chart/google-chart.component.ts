@@ -13,6 +13,7 @@ import {
 import { fromEvent, Observable, ReplaySubject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
+import { getPackageForChart } from '../../helpers/chart.helper';
 import { DataTableService } from '../../services/data-table.service';
 import { ScriptLoaderService } from '../../services/script-loader.service';
 import { ChartType } from '../../types/chart-type';
@@ -162,10 +163,10 @@ export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
 
   public ngOnInit() {
     // We don't need to load any chart packages, the chart wrapper will handle this for us
-    this.scriptLoaderService.loadChartPackages().subscribe(() => {
+    this.scriptLoaderService.loadChartPackages(getPackageForChart(this.type)).subscribe(() => {
       this.dataTable = this.dataTableService.create(this.data, this.columns, this.formatters);
 
-      // Only ever create the wrapper once to allow animations to happen when someting changes.
+      // Only ever create the wrapper once to allow animations to happen when something changes.
       this.wrapper = new google.visualization.ChartWrapper({
         container: this.element.nativeElement,
         chartType: this.type,

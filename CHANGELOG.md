@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.1.1](https://github.com/FERNman/angular-google-charts/compare/v2.1.0...v2.1.1) (2021-04-15)
+
+### Bug Fixes
+
+- loading correct package based on chart type ([#219](https://github.com/FERNman/angular-google-charts/issues/219)) ([d6e6922](https://github.com/FERNman/angular-google-charts/commit/d6e69226f80af3f7cd78cd925c562a99120f4ca5))
+
 ## [2.1.0](https://github.com/FERNman/angular-google-charts/compare/v2.0.1...v2.1.0) (2021-04-10)
 
 ### Features

@@ -1,4 +1,5 @@
-import { InjectionToken } from '@angular/core';
+import { inject, InjectionToken } from '@angular/core';
+import { Observable, of } from 'rxjs';
 
 export interface GoogleChartsConfig {
   /**
@@ -40,4 +41,18 @@ export interface GoogleChartsConfig {
   safeMode?: boolean;
 }
 
-export const GOOGLE_CHARTS_CONFIG = new InjectionToken<GoogleChartsConfig>('GOOGLE_CHARTS_CONFIG');
+export const DEFAULT_CONFIG: GoogleChartsConfig = {
+  version: 'current',
+  safeMode: false
+};
+
+export const GOOGLE_CHARTS_MODULE_CONFIG = new InjectionToken<Observable<GoogleChartsConfig>>(
+  'GOOGLE_CHARTS_MODULE_CONFIG'
+);
+export const GOOGLE_CHARTS_CONFIG = new InjectionToken<Observable<GoogleChartsConfig>>('GOOGLE_CHARTS_CONFIG', {
+  providedIn: 'root',
+  factory: () => {
+    const configFromModule = inject(GOOGLE_CHARTS_MODULE_CONFIG);
+    return of({ ...DEFAULT_CONFIG, ...(configFromModule || {}) });
+  }
+});

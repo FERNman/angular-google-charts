@@ -42,11 +42,57 @@ This will allow you to use all of the features provided by this library.
 For some use cases, it might be necessary to use some different config options than the default values.
 
 All config options for Angular Google Charts are provided through a config object, which
-can be passed to the library by importing the `GoogleChartsModule` using its `forRoot` method.
+can be passed to the library by importing the `GoogleChartsModule` using its `forRoot` method or by providing the `GOOGLE_CHARTS_CONFIG` injection token with an `Observable<GoogleChartsConfig>` value.
+
+##### Using forRoot
 
 ```typescript
 GoogleChartsModule.forRoot({ version: 'chart-version' }),
 ```
+
+##### Using lazy loading
+
+```typescript
+
+// Just an example of how to possibly provide a lazy loaded config object if you need to fetch
+// the values from an API or wherever.
+@Injectable()
+export class GoogleChartsConfigService {
+  private _configSubject = new ReplaySubject<GoogleChartsConfig>(1);
+  readonly config$ = this._configSubject.asObservable();
+
+  constructor(private _http: HttpClient) {}
+
+  loadLazyConfigValues(): void {
+    this._http.post('https://my.awesome.api.com/getchartsconfig', {})
+      .pipe(take(1))
+      .subscribe(config => this._configSubject.next(config));
+  }
+}
+
+// Factory function that provides the config$ observable from your GoogleChartsConfigService
+export function googleChartsConfigFactory(configService: GoogleChartsConfigService): Observable<GoogleChartsConfig> {
+  return configService.config$;
+}
+
+// Your app.module
+@NgModule({
+  imports: [
+    HttpClientModule
+  ],
+  providers: [
+    GoogleChartsConfigService,
+    {provide: GOOGLE_CHARTS_CONFIG, useFactory: googleChartsConfigFactory, deps: [GoogleChartsConfigService]}
+  ]
+})
+
+```
+
+**NOTE**
+
+- You can provide options through the `forRoot` function and the `GOOGLE_CHARTS_CONFIG` token interchangeably. However, anything provided through the `GOOGLE_CHARTS_CONFIG` token will override whatever has been provided in the `forRoot`
+  function.
+- If you choose to go down the lazy loading route then be aware that the charts will not render until you emit the config object.
 
 ## Charts
 

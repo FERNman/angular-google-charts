@@ -1,5 +1,7 @@
-import { inject, InjectionToken } from '@angular/core';
+import { inject, InjectFlags, InjectionToken } from '@angular/core';
 import { Observable, of } from 'rxjs';
+
+import { getDefaultConfig } from '../helpers/chart.helper';
 
 export interface GoogleChartsConfig {
   /**
@@ -41,18 +43,14 @@ export interface GoogleChartsConfig {
   safeMode?: boolean;
 }
 
-export const DEFAULT_CONFIG: GoogleChartsConfig = {
-  version: 'current',
-  safeMode: false
-};
-
-export const GOOGLE_CHARTS_MODULE_CONFIG = new InjectionToken<Observable<GoogleChartsConfig>>(
-  'GOOGLE_CHARTS_MODULE_CONFIG'
-);
-export const GOOGLE_CHARTS_CONFIG = new InjectionToken<Observable<GoogleChartsConfig>>('GOOGLE_CHARTS_CONFIG', {
-  providedIn: 'root',
-  factory: () => {
-    const configFromModule = inject(GOOGLE_CHARTS_MODULE_CONFIG);
-    return of({ ...DEFAULT_CONFIG, ...(configFromModule || {}) });
+export const GOOGLE_CHARTS_CONFIG = new InjectionToken<Observable<GoogleChartsConfig>>('GOOGLE_CHARTS_CONFIG');
+export const GOOGLE_CHARTS_LAZY_CONFIG = new InjectionToken<Observable<GoogleChartsConfig>>(
+  'GOOGLE_CHARTS_LAZY_CONFIG',
+  {
+    providedIn: 'root',
+    factory: () => {
+      const configFromModule = inject(GOOGLE_CHARTS_CONFIG, InjectFlags.Optional);
+      return of({ ...getDefaultConfig(), ...(configFromModule || {}) });
+    }
   }
-});
+);

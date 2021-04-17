@@ -16,7 +16,7 @@ export * from './lib/types/chart-type';
 export * from './lib/types/control-type';
 export * from './lib/types/events';
 export * from './lib/types/formatter';
-export { GoogleChartsConfig, GOOGLE_CHARTS_CONFIG } from './lib/types/google-charts-config';
+export * from './lib/types/google-charts-config';
 
 export * from './lib/services/script-loader.service';
 

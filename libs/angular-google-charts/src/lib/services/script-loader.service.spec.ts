@@ -1,9 +1,10 @@
 import { LOCALE_ID } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { throwError } from 'rxjs';
+import { Subject, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { GOOGLE_CHARTS_CONFIG } from '../types/google-charts-config';
+import { getDefaultConfig } from '../helpers/chart.helper';
+import { GoogleChartsConfig, GOOGLE_CHARTS_CONFIG, GOOGLE_CHARTS_LAZY_CONFIG } from '../types/google-charts-config';
 
 import { ScriptLoaderService } from './script-loader.service';
 
@@ -224,6 +225,41 @@ describe('ScriptLoaderService', () => {
         service.loadChartPackages(chart).subscribe();
 
         expect(chartsMock.load).toHaveBeenCalledWith(version, {
+          packages: [chart],
+          language: locale,
+          mapsApiKey,
+          safeMode
+        });
+      });
+
+      it('should use injected lazy config values', () => {
+        globalThis.google = { charts: chartsMock } as any;
+
+        TestBed.resetTestingModule();
+
+        const mapsApiKey = 'mapsApiKey';
+        const safeMode = false;
+        const locale = 'en-US';
+        const lazyConfigSubject = new Subject<GoogleChartsConfig>();
+
+        TestBed.configureTestingModule({
+          providers: [
+            ScriptLoaderService,
+            { provide: LOCALE_ID, useValue: locale },
+            { provide: GOOGLE_CHARTS_LAZY_CONFIG, useValue: lazyConfigSubject.asObservable() }
+          ]
+        });
+        service = TestBed.inject(ScriptLoaderService);
+
+        const chart = 'corechart';
+
+        service.loadChartPackages(chart).subscribe();
+
+        expect(chartsMock.load).not.toHaveBeenCalled();
+
+        lazyConfigSubject.next({ mapsApiKey, safeMode });
+
+        expect(chartsMock.load).toHaveBeenCalledWith(getDefaultConfig().version, {
           packages: [chart],
           language: locale,
           mapsApiKey,

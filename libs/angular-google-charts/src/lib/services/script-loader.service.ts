@@ -2,7 +2,8 @@ import { Inject, Injectable, LOCALE_ID, NgZone } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import { map, mergeMap, switchMap } from 'rxjs/operators';
 
-import { DEFAULT_CONFIG, GoogleChartsConfig, GOOGLE_CHARTS_CONFIG } from '../types/google-charts-config';
+import { getDefaultConfig } from '../helpers/chart.helper';
+import { GoogleChartsConfig, GOOGLE_CHARTS_LAZY_CONFIG } from '../types/google-charts-config';
 
 @Injectable()
 export class ScriptLoaderService {
@@ -12,7 +13,7 @@ export class ScriptLoaderService {
   constructor(
     private zone: NgZone,
     @Inject(LOCALE_ID) private localeId: string,
-    @Inject(GOOGLE_CHARTS_CONFIG) private readonly config$: Observable<GoogleChartsConfig>
+    @Inject(GOOGLE_CHARTS_LAZY_CONFIG) private readonly config$: Observable<GoogleChartsConfig>
   ) {}
 
   /**
@@ -44,7 +45,7 @@ export class ScriptLoaderService {
     return this.loadGoogleCharts().pipe(
       mergeMap(() => this.config$),
       map(config => {
-        return { ...DEFAULT_CONFIG, ...(config || {}) };
+        return { ...getDefaultConfig(), ...(config || {}) };
       }),
       switchMap((googleChartsConfig: GoogleChartsConfig) => {
         return new Observable<null>(observer => {

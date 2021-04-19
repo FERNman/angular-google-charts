@@ -1,27 +1,20 @@
-import { Inject, Injectable, LOCALE_ID, NgZone, Optional } from '@angular/core';
+import { Inject, Injectable, LOCALE_ID, NgZone } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { map, mergeMap, switchMap } from 'rxjs/operators';
 
-import { GoogleChartsConfig, GOOGLE_CHARTS_CONFIG } from '../types/google-charts-config';
-
-const DEFAULT_CONFIG: GoogleChartsConfig = {
-  version: 'current',
-  safeMode: false
-};
+import { getDefaultConfig } from '../helpers/chart.helper';
+import { GoogleChartsConfig, GOOGLE_CHARTS_LAZY_CONFIG } from '../types/google-charts-config';
 
 @Injectable()
 export class ScriptLoaderService {
   private readonly scriptSource = 'https://www.gstatic.com/charts/loader.js';
   private readonly scriptLoadSubject = new Subject<null>();
-  private readonly config: GoogleChartsConfig;
 
   constructor(
     private zone: NgZone,
     @Inject(LOCALE_ID) private localeId: string,
-    @Inject(GOOGLE_CHARTS_CONFIG) @Optional() config?: GoogleChartsConfig
-  ) {
-    this.config = { ...DEFAULT_CONFIG, ...(config || {}) };
-  }
+    @Inject(GOOGLE_CHARTS_LAZY_CONFIG) private readonly config$: Observable<GoogleChartsConfig>
+  ) {}
 
   /**
    * Checks whether `google.charts` is available.
@@ -50,16 +43,20 @@ export class ScriptLoaderService {
    */
   public loadChartPackages(...packages: string[]): Observable<null> {
     return this.loadGoogleCharts().pipe(
-      switchMap(() => {
+      mergeMap(() => this.config$),
+      map(config => {
+        return { ...getDefaultConfig(), ...(config || {}) };
+      }),
+      switchMap((googleChartsConfig: GoogleChartsConfig) => {
         return new Observable<null>(observer => {
           const config = {
             packages,
             language: this.localeId,
-            mapsApiKey: this.config.mapsApiKey,
-            safeMode: this.config.safeMode
+            mapsApiKey: googleChartsConfig.mapsApiKey,
+            safeMode: googleChartsConfig.safeMode
           };
 
-          google.charts.load(this.config.version!, config);
+          google.charts.load(googleChartsConfig.version!, config);
           google.charts.setOnLoadCallback(() => {
             this.zone.run(() => {
               observer.next();

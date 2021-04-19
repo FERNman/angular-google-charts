@@ -1,4 +1,5 @@
 import { ChartType } from '../types/chart-type';
+import { GoogleChartsConfig } from '../types/google-charts-config';
 
 const ChartTypesToPackages = {
   [ChartType.AnnotationChart]: 'annotationchart',
@@ -31,4 +32,11 @@ const ChartTypesToPackages = {
 
 export function getPackageForChart(type: ChartType): string {
   return ChartTypesToPackages[type];
+}
+
+export function getDefaultConfig(): GoogleChartsConfig {
+  return {
+    version: 'current',
+    safeMode: false
+  };
 }

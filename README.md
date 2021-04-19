@@ -42,11 +42,76 @@ This will allow you to use all of the features provided by this library.
 For some use cases, it might be necessary to use some different config options than the default values.
 
 All config options for Angular Google Charts are provided through a config object, which
-can be passed to the library by importing the `GoogleChartsModule` using its `forRoot` method.
+can be passed to the library by importing the `GoogleChartsModule` using its `forRoot` method
+or by providing the `GOOGLE_CHARTS_LAZY_CONFIG` injection token with an `Observable<GoogleChartsConfig>` value.
+
+##### Using forRoot
 
 ```typescript
 GoogleChartsModule.forRoot({ version: 'chart-version' }),
 ```
+
+##### Using lazy loading
+
+###### Option #1
+
+```typescript
+// Provide an observable through a service that fetches your chart configurations
+
+@Injectable()
+export class GoogleChartsConfigService {
+  private configSubject = new ReplaySubject<GoogleChartsConfig>(1);
+  readonly config$ = this.configSubject.asObservable();
+
+  constructor(private http: HttpClient) {}
+
+  loadLazyConfigValues(): void {
+    this.http.post('https://special.config.api.com/getchartsconfig', {})
+      .pipe(take(1))
+      .subscribe(config => this.configSubject.next(config));
+  }
+}
+
+// Factory function that provides the config$ observable from your GoogleChartsConfigService
+export function googleChartsConfigFactory(configService: GoogleChartsConfigService): Observable<GoogleChartsConfig> {
+  return configService.config$;
+}
+
+@NgModule({
+  ...
+  providers: [
+    GoogleChartsConfigService,
+    {provide: GOOGLE_CHARTS_LAZY_CONFIG, useFactory: googleChartsConfigFactory, deps: [GoogleChartsConfigService]}
+  ]
+})
+export class AppModule {}
+
+```
+
+###### Option #2
+
+```typescript
+// Use a global subject (whether this violates best practices in your case is up to you).
+// This is just to point out a more simple way of achieving a lazy-loaded config.
+export const googleChartsConfigSubject = new ReplaySubject<GoogleChartsConfig>(1);
+
+// Call this from anywhere you want
+googleChartsConfigSubject.next(config);
+
+// Your app.module
+@NgModule({
+  ...
+  providers: [
+    {provide: GOOGLE_CHARTS_LAZY_CONFIG, useValue: googleChartsConfigSubject.asObservable()}
+  ]
+})
+export class AppModule {}
+```
+
+#### NOTE
+
+- You can provide options through the `forRoot` function **OR** the `GOOGLE_CHARTS_LAZY_CONFIG` token. You cannot use them interchangeably.
+- If you provide a lazy-loaded config object then the charts will not render until the observable has a value for the subscriber.
 
 ## Charts
 

@@ -242,7 +242,7 @@ export class GoogleChartComponent implements ChartBase, OnInit, OnChanges, OnDes
     this.unsubscribeToResizeIfSubscribed();
 
     if (this.dynamicResize) {
-      this.resizeSubscription = fromEvent(window, 'resize')
+      this.resizeSubscription = fromEvent(window, 'resize', { passive: true })
         .pipe(debounceTime(100))
         .subscribe(() => {
           if (this.initialized) {

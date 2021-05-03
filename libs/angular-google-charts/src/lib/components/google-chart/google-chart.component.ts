@@ -5,6 +5,7 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
   Optional,
   Output,
@@ -36,7 +37,7 @@ import { DashboardComponent } from '../dashboard/dashboard.component';
   exportAs: 'googleChart',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
+export class GoogleChartComponent implements ChartBase, OnInit, OnChanges, OnDestroy {
   /**
    * The type of the chart to create.
    */
@@ -212,6 +213,10 @@ export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
     }
   }
 
+  public ngOnDestroy(): void {
+    this.unsubscribeToResizeIfSubscribed();
+  }
+
   /**
    * For listening to events other than the most common ones (available via Output properties).
    *
@@ -234,10 +239,7 @@ export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
   }
 
   private updateResizeListener() {
-    if (this.resizeSubscription != null) {
-      this.resizeSubscription.unsubscribe();
-      this.resizeSubscription = undefined;
-    }
+    this.unsubscribeToResizeIfSubscribed();
 
     if (this.dynamicResize) {
       this.resizeSubscription = fromEvent(window, 'resize')
@@ -247,6 +249,13 @@ export class GoogleChartComponent implements ChartBase, OnChanges, OnInit {
             this.drawChart();
           }
         });
+    }
+  }
+
+  private unsubscribeToResizeIfSubscribed() {
+    if (this.resizeSubscription != null) {
+      this.resizeSubscription.unsubscribe();
+      this.resizeSubscription = undefined;
     }
   }
 

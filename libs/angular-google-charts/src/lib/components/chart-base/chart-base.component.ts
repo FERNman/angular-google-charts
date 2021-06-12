@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { ChartErrorEvent, ChartReadyEvent, ChartSelectionChangedEvent } from '../../types/events';
 
 export type Column = string | google.visualization.ColumnSpec;
-export type Row = (string | number | Date)[];
+export type Row = (string | number | Date | null)[];
 
 export interface ChartBase {
   /**

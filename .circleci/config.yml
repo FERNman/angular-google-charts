@@ -15,6 +15,8 @@ jobs:
           key: node-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
+            - apps/playground/node_modules
+            - libs/angular-google-charts/node_modules
 
   test:
     working_directory: ~/angular-google-charts

@@ -19,5 +19,11 @@
       "angular-google-charts": ["libs/angular-google-charts/src/index.ts"]
     }
   },
+  "angularCompilerOptions": {
+    "skipTemplateCodegen": true,
+    "strictMetadataEmit": true,
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
+  },
   "exclude": ["dist/**/*"]
 }

@@ -4,7 +4,7 @@ jobs:
   install:
     working_directory: ~/angular-google-charts
     docker:
-      - image: node:12.16.1
+      - image: node:16.3
     steps:
       - checkout
       - restore_cache:
@@ -19,7 +19,7 @@ jobs:
   test:
     working_directory: ~/angular-google-charts
     docker:
-      - image: node:12.16.1
+      - image: node:16.3
     steps:
       - checkout
       - restore_cache:
@@ -36,7 +36,7 @@ jobs:
   deploy:
     working_directory: ~/angular-google-charts
     docker:
-      - image: node:12.16.1
+      - image: node:16.3
     steps:
       - checkout
       - restore_cache:

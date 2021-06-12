@@ -46,9 +46,16 @@ can be passed to the library by importing the `GoogleChartsModule` using its `fo
 or by providing the `GOOGLE_CHARTS_LAZY_CONFIG` injection token with an `Observable<GoogleChartsConfig>` value.
 
 ##### Using forRoot
+Here you will pass the options that are passed to the `google.charts.load` method in the normal JavaScript library.
+For instance, to change the [version](https://developers.google.com/chart/interactive/docs/basic_load_libs#load-version-name-or-number)
 
 ```typescript
 GoogleChartsModule.forRoot({ version: 'chart-version' }),
+```
+Another example, to specify the Google Maps API key, or any other [Settings](https://developers.google.com/chart/interactive/docs/basic_load_libs#load-settings):
+
+```typescript
+GoogleChartsModule.forRoot({ mapsApiKey: '<your Google Maps API Key here>' }),
 ```
 
 ##### Using lazy loading
@@ -130,7 +137,7 @@ It has a few important input properties, which are explained below.
 <google-chart [type]="myType"></google-chart>
 ```
 
-The type of chart you want to create. Must be of type `ChartType`.
+The type of chart you want to create. Must be of type `ChartType`. Check [this file](https://github.com/FERNman/angular-google-charts/blob/master/libs/angular-google-charts/src/lib/types/chart-type.ts) for a list of the supported types
 
 To see examples for all chart types and more information, visit the [google chart gallery](https://developers.google.com/chart/interactive/docs/gallery).
 
@@ -140,8 +147,9 @@ To see examples for all chart types and more information, visit the [google char
 <google-chart [data]="myData"></google-chart>
 ```
 
-The data property expects a two-dimensional array.
-How the array should look like in detail depends on the chart type you want to create and what you want to display.
+The data property expects an array of a certain shape, which depends on the chart type. Some chart types even support different data formats depending on the mode.
+
+Example with a chart that expects two-dimensional arrays:
 
 ```typescript
 myData = [
@@ -174,12 +182,28 @@ For further information, please see the official [documentation](https://develop
 <google-chart [columns]="chartColumns"></google-chart>
 ```
 
-The `columns` property expects an `Array<string>` containing the names for each column of the chart data. The number of entries must match the length of the inner array passed in the `data` property.
+The `columns` property expects an array describing the columns chart data array. The number of entries must match the length of the inner array passed in the `data` property.
 Some charts don't require columns. Whether your chart requires it can be check in the official documentation.
+
+Continuing with the simple two-dimensional example:
 
 ```typescript
 chartColumns = ['City', 'Inhabitants'];
 ```
+
+For more complex formats an array of objects can be passed. For instance, the GeoChart in markers mode expects 4 columns of type number:
+
+```typescript
+    chartColumns = [
+        { type: 'number', role: 'latitude' },
+        { type: 'number', role: 'longitude' },
+        { type: 'number', role: 'markerColor' },
+        { type: 'number', role: 'markerSize' }
+    ];
+```
+
+
+
 
 ### Title
 

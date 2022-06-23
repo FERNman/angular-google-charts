@@ -275,6 +275,21 @@ export class MainComponent implements OnInit {
         }
       }
     });
+
+    this.charts.push({
+      title: 'WordTree',
+      type: ChartType.WordTree,
+      // type: 'WordTree' as ChartType,
+      columns: ['Phrases'],
+      data: [['This is a test'], ['This is not a test'], ['This is an actual test']],
+      options: {
+        wordtree: {
+          format: 'implicit',
+          type: 'double',
+          word: 'test'
+        }
+      }
+    });
   }
 
   public onReady() {

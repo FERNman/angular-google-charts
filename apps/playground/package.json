@@ -2,28 +2,28 @@
   "name": "playground",
   "private": false,
   "dependencies": {
-    "@angular/common": "^13.3.6",
-    "@angular/compiler": "^13.3.6",
-    "@angular/core": "^13.3.6",
-    "@angular/platform-browser": "^13.3.6",
-    "@angular/platform-browser-dynamic": "^13.3.6",
-    "@angular/router": "^13.3.6",
-    "core-js": "^3.22.4",
+    "@angular/common": "^14.0.3",
+    "@angular/compiler": "^14.0.3",
+    "@angular/core": "^14.0.3",
+    "@angular/platform-browser": "^14.0.3",
+    "@angular/platform-browser-dynamic": "^14.0.3",
+    "@angular/router": "^14.0.3",
+    "core-js": "^3.23.3",
     "rxjs": "^7.5.5",
     "tslib": "^2.4.0",
-    "zone.js": "^0.11.5"
+    "zone.js": "^0.11.6"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^13.3.5",
-    "@angular-builders/jest": "13.0.4-beta.0",
-    "@angular/cli": "^13.3.5",
-    "@angular/compiler-cli": "^13.3.6",
-    "@types/node": "^17.0.31",
+    "@angular-devkit/build-angular": "^14.0.3",
+    "@angular-builders/jest": "14.0.0",
+    "@angular/cli": "^14.0.3",
+    "@angular/compiler-cli": "^14.0.3",
+    "@types/node": "^18.0.0",
     "codelyzer": "^6.0.2",
-    "ts-node": "^10.7.0",
+    "ts-node": "^10.8.1",
     "tslint": "^6.1.3",
     "tslint-angular": "^3.0.3",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "~4.6.4"
+    "typescript": "~4.7.4"
   }
 }

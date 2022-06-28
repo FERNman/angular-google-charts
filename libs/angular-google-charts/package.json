@@ -28,8 +28,8 @@
     "tslib": "^2.4.0"
   },
   "peerDependencies": {
-    "@angular/common": ">=6.0.0 <=13.x.x",
-    "@angular/core": ">=6.0.0 <=13.x.x"
+    "@angular/common": ">=6.0.0 <=14.x.x",
+    "@angular/core": ">=6.0.0 <=14.x.x"
   },
   "devDependencies": {
     "@angular-builders/jest": "14.0.0",

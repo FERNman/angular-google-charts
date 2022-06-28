@@ -99,10 +99,10 @@ describe('DashboardComponent', () => {
 
       globalThis.google = { visualization: visualizationMock } as any;
 
-      const chartOne = { wrapperReady$: new Subject() };
-      const chartTwo = { wrapperReady$: new Subject() };
-      const controlOne = { wrapperReady$: new Subject(), for: chartOne };
-      const controlTwo = { wrapperReady$: new Subject(), for: [chartOne, chartTwo] };
+      const chartOne = { wrapperReady$: new Subject<void>() };
+      const chartTwo = { wrapperReady$: new Subject<void>() };
+      const controlOne = { wrapperReady$: new Subject<void>(), for: chartOne };
+      const controlTwo = { wrapperReady$: new Subject<void>(), for: [chartOne, chartTwo] };
 
       component['controlWrappers'] = [controlOne, controlTwo] as any;
 

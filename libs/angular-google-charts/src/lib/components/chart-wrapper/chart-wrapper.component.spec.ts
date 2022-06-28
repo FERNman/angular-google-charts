@@ -294,7 +294,7 @@ describe('ChartWrapperComponent', () => {
     });
 
     it('should emit select event if a value was selected', () => {
-      const selection = [{ column: 1, row: 2 }] as google.visualization.VisualizationSelectionArray[];
+      const selection = [{ column: 1, row: 2 }] as google.visualization.ChartSelection[];
 
       const chartMock = { getSelection: jest.fn(() => selection) };
       chartWrapperMock.getChart.mockReturnValue(chartMock);

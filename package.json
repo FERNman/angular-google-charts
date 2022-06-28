@@ -7,7 +7,7 @@
     "ng": "ng",
     "start": "ng serve playground -o",
     "build": "ng build angular-google-charts --configuration production",
-    "test": "ng test angular-google-charts",
+    "test": "ng test angular-google-charts --coverage",
     "lint": "ng lint playground",
     "release": "standard-version"
   },

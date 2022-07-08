@@ -139,5 +139,17 @@ describe('ChartEditorComponent', () => {
 
       expect(setSpy).not.toHaveBeenCalled();
     });
+
+    it('should throw if the component\' chart wrapper is undefined', () => {
+      delete (chartComponent as any).chartWrapper;
+
+      expect(() => component.editChart(chartComponent)).toThrow();
+    });
+
+    it('should throw if the component\' editor is undefined', () => {
+      component['editor'] = undefined;
+
+      expect(() => component.editChart(chartComponent)).toThrow();
+    });
   });
 });

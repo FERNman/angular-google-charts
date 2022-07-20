@@ -8,13 +8,13 @@ import { GoogleChartsConfig, GOOGLE_CHARTS_LAZY_CONFIG } from '../types/google-c
 @Injectable()
 export class ScriptLoaderService {
   private readonly scriptSource = 'https://www.gstatic.com/charts/loader.js';
-  private readonly scriptLoadSubject = new Subject<null>();
+  private readonly scriptLoadSubject = new Subject<void>();
 
   constructor(
     private zone: NgZone,
     @Inject(LOCALE_ID) private localeId: string,
     @Inject(GOOGLE_CHARTS_LAZY_CONFIG) private readonly config$: Observable<GoogleChartsConfig>
-  ) {}
+  ) { }
 
   /**
    * Checks whether `google.charts` is available.
@@ -74,9 +74,9 @@ export class ScriptLoaderService {
    * @returns A stream emitting as soon as loading has completed.
    * If the google charts script is already loaded, the stream emits immediately.
    */
-  private loadGoogleCharts(): Observable<null> {
+  private loadGoogleCharts(): Observable<void> {
     if (this.isGoogleChartsAvailable()) {
-      return of(null);
+      return of(undefined);
     } else if (!this.isLoadingGoogleCharts()) {
       const script = this.createGoogleChartsScript();
       script.onload = () => {

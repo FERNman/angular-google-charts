@@ -75,6 +75,10 @@ describe('ControlWrapperComponent', () => {
       expect(component.controlWrapper).toBeTruthy();
     });
 
+    it('should throw if the control wrapper is accessed before being initialized', () => {
+      expect(() => component.controlWrapper).toThrow();
+    });
+
     it('should add event listeners', () => {
       const scriptLoaderService = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
       scriptLoaderService.loadChartPackages.mockReturnValueOnce(of(null));

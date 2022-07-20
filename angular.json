@@ -7,7 +7,6 @@
   },
   "version": 1,
   "newProjectRoot": "apps",
-  "defaultProject": "angular-google-charts",
   "projects": {
     "angular-google-charts": {
       "root": "libs/angular-google-charts",
@@ -34,16 +33,6 @@
             "configPath": "jest.config.js",
             "projects": ["libs/angular-google-charts"],
             "coverageDirectory": "../../coverage"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "libs/angular-google-charts/tsconfig.lib.json",
-              "libs/angular-google-charts/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -107,13 +96,6 @@
             "production": {
               "browserTarget": "playground:build:production"
             }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": ["apps/playground/tsconfig.app.json"],
-            "exclude": ["**/node_modules/**"]
           }
         }
       }

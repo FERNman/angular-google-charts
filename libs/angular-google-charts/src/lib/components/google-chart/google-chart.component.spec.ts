@@ -557,7 +557,7 @@ describe('GoogleChartComponent', () => {
     });
 
     it('should emit select event if a value was selected', () => {
-      const selection = [{ column: 1, row: 2 }] as google.visualization.VisualizationSelectionArray[];
+      const selection = [{ column: 1, row: 2 }] as google.visualization.ChartSelection[];
 
       const chartMock = { getSelection: jest.fn(() => selection) };
       chartWrapperMock.getChart.mockReturnValue(chartMock);
@@ -585,7 +585,7 @@ describe('GoogleChartComponent', () => {
       component.ngOnInit();
 
       visualizationMock.events.addListener.mockReturnValue('handle1');
-      const rollupCallback = () => {};
+      const rollupCallback = () => { };
       let handle = component.addEventListener('rollup', rollupCallback);
       expect(handle).toBe('handle1');
       expect(visualizationMock.events.addListener).lastCalledWith(chartMock, 'rollup', rollupCallback);

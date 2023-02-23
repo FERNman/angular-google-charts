@@ -10,7 +10,7 @@ jobs:
       - restore_cache:
           keys:
             - node-{{ checksum "package-lock.json" }}
-      - run: npm install
+      - run: npm install --no-save
       - save_cache:
           key: node-{{ checksum "package-lock.json" }}
           paths:

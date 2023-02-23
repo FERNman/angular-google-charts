@@ -24,5 +24,5 @@ export enum ChartType {
   Table = 'Table',
   Timeline = 'Timeline',
   TreeMap = 'TreeMap',
-  WordTree = 'wordtree'
+  WordTree = 'WordTree'
 }

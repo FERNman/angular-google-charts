@@ -271,7 +271,7 @@ myFormatters = [
 ];
 ```
 
-_Note: When you get the error "google is not defined" whilst using the formatter in your component, you probably didn't load the google charts script. Please read the chapter on using the [ScriptLoaderService](#using-the-scriptloaderservice`)._
+_Note: When you get the error "google is not defined" whilst using the formatter in your component, you probably didn't load the google charts script. Please read the chapter on using the [ScriptLoaderService](#using-the-scriptloaderservice)._
 
 ### Dynamic Resize
 

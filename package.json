@@ -36,12 +36,12 @@
     "npm": ">=7.0.0"
   },
   "devDependencies": {
-    "@angular/core": "^14.0.3",
-    "@angular/cli": "^14.0.3",
-    "@angular/compiler": "^14.0.3",
-    "@angular/compiler-cli": "^14.0.3",
-    "@angular/language-service": "^14.0.3",
-    "@angular-devkit/build-angular": "^14.0.3",
+    "@angular/core": "^15.2.10",
+    "@angular/cli": "^15.2.11",
+    "@angular/compiler": "^15.2.10",
+    "@angular/compiler-cli": "^15.2.10",
+    "@angular/language-service": "^15.2.10",
+    "@angular-devkit/build-angular": "^15.2.11",
     "@commitlint/cli": "^17.0.3",
     "@commitlint/config-conventional": "^17.0.3",
     "husky": "^8.0.1",

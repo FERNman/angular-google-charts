@@ -185,24 +185,24 @@ export class GoogleChartComponent implements ChartBase, OnInit, OnChanges, OnDes
   }
 
   public ngOnChanges(changes: SimpleChanges) {
-    if (changes.dynamicResize) {
+    if (changes['dynamicResize']) {
       this.updateResizeListener();
     }
 
     if (this.initialized) {
       let shouldRedraw = false;
-      if (changes.data || changes.columns || changes.formatters) {
+      if (changes['data'] || changes['columns'] || changes['formatters']) {
         this.dataTable = this.dataTableService.create(this.data, this.columns, this.formatters);
         this.wrapper!.setDataTable(this.dataTable!);
         shouldRedraw = true;
       }
 
-      if (changes.type) {
+      if (changes['type']) {
         this.wrapper!.setChartType(this.type);
         shouldRedraw = true;
       }
 
-      if (changes.options || changes.width || changes.height || changes.title) {
+      if (changes['options'] || changes['width'] || changes['height'] || changes['title']) {
         this.wrapper!.setOptions(this.mergeOptions());
         shouldRedraw = true;
       }

@@ -97,11 +97,17 @@
               "buildTarget": "playground:build:production"
             }
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": ["apps/playground/src/**/*.ts", "apps/playground/src/**/*.html"]
+          }
         }
       }
     }
   },
   "cli": {
-    "analytics": "d81f7890-056e-4fbd-90be-bc8fb5b6dfaf"
+    "schematicCollections": ["@angular-eslint/schematics"]
   }
 }

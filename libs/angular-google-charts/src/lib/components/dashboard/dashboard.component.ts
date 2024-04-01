@@ -97,7 +97,7 @@ export class DashboardComponent implements OnInit, OnChanges {
       return;
     }
 
-    if (changes.data || changes.columns || changes.formatters) {
+    if (changes['data'] || changes['columns'] || changes['formatters']) {
       this.dataTable = this.dataTableService.create(this.data, this.columns, this.formatters);
       this.dashboard!.draw(this.dataTable!);
     }

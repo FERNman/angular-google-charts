@@ -135,15 +135,15 @@ export class ControlWrapperComponent implements OnInit, OnChanges {
       return;
     }
 
-    if (changes.type) {
+    if (changes['type']) {
       this._controlWrapper.setControlType(this.type);
     }
 
-    if (changes.options) {
+    if (changes['options']) {
       this._controlWrapper.setOptions(this.options || {});
     }
 
-    if (changes.state) {
+    if (changes['state']) {
       this._controlWrapper.setState(this.state || {});
     }
   }

@@ -1,8 +1,11 @@
 # Angular-Google-Charts
-
+[TODO: fix/update these]
 ![CircleCI](https://img.shields.io/circleci/build/gh/FERNman/angular-google-charts) ![David](https://img.shields.io/david/FERNman/angular-google-charts) [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org) ![npm](https://img.shields.io/npm/dm/angular-google-charts)
 
 > A wrapper for the [Google Charts library](https://developers.google.com/chart/) written in Angular.
+**It appears that https://github.com/FERNman/angular-google-charts is unmaintained. We're active users of this library and are happy to provide a new place to collaborate and keep it updated.**
+
+17 May 24: Our first efforts are to get this library updated for Angular v17, set up automated tests etc.
 
 ## Setup
 

@@ -2,53 +2,31 @@ name: Test and build
 
 on:
   push:
-    branches:
-      - main
+    branches: ['master']
   pull_request:
-    branches:
-      - main
+    branches: ['master']
 
 jobs:
-  test-and-build:
+  build:
     runs-on: ubuntu-latest
-    needs: install
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '14.15'
-
-      - name: Restore npm cache
-        id: npm-cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.npm
-            node_modules
-            apps/playground/node_modules
-            libs/angular-google-charts/node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
-
-      - name: Install dependencies
-        run: npm install --no-save
-
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build
       - name: Run tests
         run: npm run test -- --ci --coverage --reporters default --reporters jest-junit
-
       - name: Upload test results
         uses: actions/upload-artifact@v2
         with:
           name: test-results
           path: test-results
-
       - name: Upload coverage report
         uses: actions/upload-artifact@v2
         with:
           name: coverage
           path: coverage
-
-      - name: Build
-        run: npm run build

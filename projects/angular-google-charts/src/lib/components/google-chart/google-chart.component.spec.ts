@@ -94,18 +94,15 @@ describe('GoogleChartComponent', () => {
       expect(service.loadChartPackages).toHaveBeenCalled();
     });
 
-    it(
-      'should not throw if only the type, but no data is provided',
-      waitForAsync(() => {
-        const service = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
-        service.loadChartPackages.mockReturnValueOnce(of(null));
+    it('should not throw if only the type, but no data is provided', waitForAsync(() => {
+      const service = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
+      service.loadChartPackages.mockReturnValueOnce(of(null));
 
-        component.ngOnInit();
+      component.ngOnInit();
 
-        expect(component['wrapper']).toBeDefined();
-        expect(chartWrapperMock.draw).toHaveBeenCalledTimes(1);
-      })
-    );
+      expect(component['wrapper']).toBeDefined();
+      expect(chartWrapperMock.draw).toHaveBeenCalledTimes(1);
+    }));
 
     it('should create the data table', () => {
       const service = TestBed.inject(ScriptLoaderService) as jest.Mocked<ScriptLoaderService>;
@@ -585,7 +582,7 @@ describe('GoogleChartComponent', () => {
       component.ngOnInit();
 
       visualizationMock.events.addListener.mockReturnValue('handle1');
-      const rollupCallback = () => { };
+      const rollupCallback = () => {};
       let handle = component.addEventListener('rollup', rollupCallback);
       expect(handle).toBe('handle1');
       expect(visualizationMock.events.addListener).lastCalledWith(chartMock, 'rollup', rollupCallback);

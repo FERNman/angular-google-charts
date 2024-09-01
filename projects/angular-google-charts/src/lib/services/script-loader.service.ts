@@ -14,7 +14,7 @@ export class ScriptLoaderService {
     private zone: NgZone,
     @Inject(LOCALE_ID) private localeId: string,
     @Inject(GOOGLE_CHARTS_LAZY_CONFIG) private readonly config$: Observable<GoogleChartsConfig>
-  ) { }
+  ) {}
 
   /**
    * Checks whether `google.charts` is available.

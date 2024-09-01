@@ -2,7 +2,7 @@
   "editor.formatOnSave": true,
   "[typescript]": {
     "editor.codeActionsOnSave": {
-      "source.fixAll.tslint": true
+      "source.fixAll.tslint": "explicit"
     }
   },
   "git.rebaseWhenSync": true

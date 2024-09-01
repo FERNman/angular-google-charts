@@ -1,0 +1,43 @@
+name: Build and deploy
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    needs: install
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14.15'
+
+      - name: Restore npm cache
+        id: npm-cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.npm
+            node_modules
+            apps/playground/node_modules
+            libs/angular-google-charts/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+
+      - name: Install dependencies
+        run: npm install --no-save
+
+      - name: Build
+        run: npm run build
+
+      - name: Publish to npm
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/angular-google-charts/dist/angular-google-charts/.npmrc
+          cd dist/angular-google-charts && npm publish

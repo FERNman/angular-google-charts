@@ -34,6 +34,12 @@
             "projects": ["libs/angular-google-charts"],
             "coverageDirectory": "../../coverage"
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": ["libs/angular-google-charts/**/*.ts", "libs/angular-google-charts/**/*.html"]
+          }
         }
       }
     },
@@ -97,11 +103,18 @@
               "browserTarget": "playground:build:production"
             }
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": ["apps/playground/**/*.ts", "apps/playground/**/*.html"]
+          }
         }
       }
     }
   },
   "cli": {
-    "analytics": "d81f7890-056e-4fbd-90be-bc8fb5b6dfaf"
+    "analytics": "d81f7890-056e-4fbd-90be-bc8fb5b6dfaf",
+    "schematicCollections": ["@angular-eslint/schematics"]
   }
 }

@@ -18,7 +18,6 @@
     }
   },
   "lint-staged": {
-    "*.ts": "tslint --fix",
     "*.{json,html,ts,js,scss,css,yml,md}": "prettier --write"
   },
   "jest-junit": {
@@ -29,43 +28,39 @@
     "packageFiles": "libs/angular-google-charts/package.json"
   },
   "engines": {
-    "npm": ">=6.0.0"
+    "npm": ">=8.0.0"
   },
   "dependencies": {
-    "@angular/common": "^12.0.4",
-    "@angular/compiler": "^12.0.4",
-    "@angular/core": "^12.0.4",
-    "@angular/platform-browser": "^12.0.4",
-    "@angular/platform-browser-dynamic": "^12.0.4",
-    "@angular/router": "^12.0.4",
+    "@angular/common": "^13.4.0",
+    "@angular/compiler": "^13.4.0",
+    "@angular/core": "^13.4.0",
+    "@angular/platform-browser": "^13.4.0",
+    "@angular/platform-browser-dynamic": "^13.4.0",
+    "@angular/router": "^13.4.0",
     "core-js": "^3.10.1",
     "rxjs": "^6.6.7",
     "tslib": "^2.2.0",
     "zone.js": "^0.11.4"
   },
   "devDependencies": {
-    "@angular-builders/jest": "^12.1.0",
-    "@angular-devkit/build-angular": "^12.0.4",
-    "@angular/cli": "^12.0.4",
-    "@angular/compiler-cli": "^12.0.4",
-    "@angular/language-service": "^12.0.4",
+    "@angular-builders/jest": "^13.0.4",
+    "@angular-devkit/build-angular": "^13.3.11",
+    "@angular/cli": "^13.3.11",
+    "@angular/compiler-cli": "^13.4.0",
+    "@angular/language-service": "^13.4.0",
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
     "@types/google.visualization": "0.0.74",
     "@types/jest": "^27.0.0",
     "@types/node": "^12.20.7",
-    "codelyzer": "^6.0.0",
     "jest": "^27.0.0",
     "jest-junit": "^12.2.0",
     "jest-preset-angular": "^9.0.3",
-    "ng-packagr": "^12.0.5",
+    "ng-packagr": "^13.3.1",
     "standard-version": "^9.2.0",
     "ts-jest": "^27.0.0",
     "ts-node": "^10.0.0",
-    "tslint": "^6.1.3",
-    "tslint-angular": "^3.0.3",
-    "tslint-config-prettier": "^1.18.0",
-    "typescript": "~4.2.4",
+    "typescript": "^4.4.4",
     "husky": "^4.3.8",
     "lint-staged": "^10.5.4",
     "prettier": "^2.2.1"

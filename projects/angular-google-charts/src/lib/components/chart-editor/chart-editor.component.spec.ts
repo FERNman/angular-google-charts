@@ -90,7 +90,7 @@ describe('ChartEditorComponent', () => {
       Object.defineProperty(chartComponent, 'chartWrapper', { get: () => chartWrapper });
 
       component['editor'] = editorMock;
-      ((ChartEditorRef as any) as jest.SpyInstance).mockReturnValue(editorRefMock);
+      (ChartEditorRef as any as jest.SpyInstance).mockReturnValue(editorRefMock);
       editorRefMock.afterClosed.mockReturnValue(EMPTY);
     });
 
@@ -140,13 +140,13 @@ describe('ChartEditorComponent', () => {
       expect(setSpy).not.toHaveBeenCalled();
     });
 
-    it('should throw if the component\' chart wrapper is undefined', () => {
+    it("should throw if the component' chart wrapper is undefined", () => {
       delete (chartComponent as any).chartWrapper;
 
       expect(() => component.editChart(chartComponent)).toThrow();
     });
 
-    it('should throw if the component\' editor is undefined', () => {
+    it("should throw if the component' editor is undefined", () => {
       component['editor'] = undefined;
 
       expect(() => component.editChart(chartComponent)).toThrow();

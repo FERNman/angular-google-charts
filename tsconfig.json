@@ -16,7 +16,7 @@
     "lib": ["es2017", "dom"],
     "noUnusedLocals": true,
     "paths": {
-      "angular-google-charts": ["libs/angular-google-charts/src/index.ts"]
+      "angular-google-charts": ["projects/angular-google-charts/src/index.ts"]
     }
   },
   "angularCompilerOptions": {

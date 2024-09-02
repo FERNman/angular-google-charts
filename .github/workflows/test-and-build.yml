@@ -7,16 +7,15 @@ on:
     branches: ['master']
 
 jobs:
-  build:
+  test-and-build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '14.15'
           cache: 'npm'
-      - run: npm ci
+      - run: npm install
       - run: npm run build
       - name: Run tests
         run: npm run test -- --ci --coverage --reporters default --reporters jest-junit

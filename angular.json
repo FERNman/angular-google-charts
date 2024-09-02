@@ -1,29 +1,24 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "schematics": {
-    "@schematics/angular:component": {
-      "style": "scss"
-    }
-  },
   "version": 1,
-  "newProjectRoot": "apps",
+  "newProjectRoot": "projects",
   "projects": {
     "angular-google-charts": {
-      "root": "libs/angular-google-charts",
-      "sourceRoot": "libs/angular-google-charts/src",
+      "root": "projects/angular-google-charts",
+      "sourceRoot": "projects/angular-google-charts/src",
       "projectType": "library",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "tsConfig": "libs/angular-google-charts/tsconfig.lib.json",
-            "project": "libs/angular-google-charts/ng-package.json"
+            "tsConfig": "projects/angular-google-charts/tsconfig.lib.json",
+            "project": "projects/angular-google-charts/ng-package.json"
           },
           "configurations": {
             "production": {
-              "project": "libs/angular-google-charts/ng-package.prod.json",
-              "tsConfig": "libs/angular-google-charts/tsconfig.lib.prod.json"
+              "project": "projects/angular-google-charts/ng-package.prod.json",
+              "tsConfig": "projects/angular-google-charts/tsconfig.lib.prod.json"
             }
           }
         },
@@ -31,7 +26,7 @@
           "builder": "@angular-builders/jest:run",
           "options": {
             "configPath": "jest.config.js",
-            "projects": ["libs/angular-google-charts"],
+            "projects": ["projects/angular-google-charts"],
             "coverageDirectory": "../../coverage"
           }
         }
@@ -40,8 +35,8 @@
     "playground": {
       "projectType": "application",
       "schematics": {},
-      "root": "apps/playground",
-      "sourceRoot": "apps/playground/src",
+      "root": "projects/playground",
+      "sourceRoot": "projects/playground/src",
       "prefix": "app",
       "architect": {
         "build": {
@@ -49,20 +44,20 @@
           "options": {
             "aot": true,
             "outputPath": "dist/playground",
-            "index": "apps/playground/src/index.html",
-            "main": "apps/playground/src/main.ts",
-            "polyfills": "apps/playground/src/polyfills.ts",
-            "tsConfig": "apps/playground/tsconfig.app.json",
-            "assets": ["apps/playground/src/favicon.ico", "apps/playground/src/assets"],
-            "styles": ["apps/playground/src/styles.scss"],
+            "index": "projects/playground/src/index.html",
+            "main": "projects/playground/src/main.ts",
+            "polyfills": "projects/playground/src/polyfills.ts",
+            "tsConfig": "projects/playground/tsconfig.app.json",
+            "assets": ["projects/playground/src/favicon.ico", "projects/playground/src/assets"],
+            "styles": ["projects/playground/src/styles.scss"],
             "scripts": []
           },
           "configurations": {
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "apps/playground/src/environments/environment.ts",
-                  "with": "apps/playground/src/environments/environment.prod.ts"
+                  "replace": "projects/playground/src/environments/environment.ts",
+                  "with": "projects/playground/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,

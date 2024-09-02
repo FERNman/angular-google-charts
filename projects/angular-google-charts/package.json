@@ -24,8 +24,8 @@
     "email": "gabriel.sperrer@gmail.com"
   },
   "peerDependencies": {
-    "@angular/common": ">=13.0.0 <=15.x.x",
-    "@angular/core": ">=13.0.0 <=15.x.x"
+    "@angular/common": ">=14.0.0 <=18.x.x",
+    "@angular/core": ">=14.0.0 <=18.x.x"
   },
   "dependencies": {
     "@types/google.visualization": "0.0.74",

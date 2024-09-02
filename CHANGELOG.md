@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.2.4](https://github.com/FERNman/angular-google-charts/compare/v2.2.3...v2.2.4) (2024-09-02)
+
+### Bug Fixes
+
+- [#248](https://github.com/FERNman/angular-google-charts/issues/248) fixed WordTree in chart-type.ts, added sample WordTree ([#277](https://github.com/FERNman/angular-google-charts/issues/277)) ([34575a1](https://github.com/FERNman/angular-google-charts/commit/34575a1f757cc451a0f055280172c5686610c816))
+
 ### [2.2.3](https://github.com/FERNman/angular-google-charts/compare/v2.2.2...v2.2.3) (2022-07-18)
 
 ### [2.2.2](https://github.com/FERNman/angular-google-charts/compare/v2.2.1...v2.2.2) (2021-06-12)

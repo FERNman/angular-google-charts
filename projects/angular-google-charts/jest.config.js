@@ -1,10 +1,7 @@
+/** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   resetMocks: true,
-  globals: {
-    'ts-jest': {
-      diagnostics: {
-        ignoreCodes: [151001]
-      }
-    }
+  transform: {
+    '^.+\\.ts?$': ['ts-jest', { diagnostics: { ignoreCodes: ['TS151001'] } }]
   }
 };

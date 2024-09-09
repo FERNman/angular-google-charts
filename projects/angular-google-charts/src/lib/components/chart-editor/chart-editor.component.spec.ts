@@ -84,23 +84,24 @@ describe('ChartEditorComponent', () => {
 
   describe('editChart', () => {
     const chartWrapper = { draw: jest.fn() } as any;
-    const chartComponent = {} as ChartBase;
 
     beforeEach(() => {
-      Object.defineProperty(chartComponent, 'chartWrapper', { get: () => chartWrapper });
-
       component['editor'] = editorMock;
       (ChartEditorRef as any as jest.SpyInstance).mockReturnValue(editorRefMock);
       editorRefMock.afterClosed.mockReturnValue(EMPTY);
     });
 
     it('should open the edit dialog', () => {
+      const chartComponent = { chartWrapper } as ChartBase;
+
       component.editChart(chartComponent);
 
       expect(editorMock.openDialog).toHaveBeenCalledWith(chartComponent.chartWrapper, {});
     });
 
     it('should pass the provided options', () => {
+      const chartComponent = { chartWrapper } as ChartBase;
+
       const options = {
         dataSourceInput: 'urlbox'
       } as google.visualization.ChartEditorOptions;
@@ -111,42 +112,42 @@ describe('ChartEditorComponent', () => {
     });
 
     it('should create an editor ref and return it', () => {
+      const chartComponent = { chartWrapper } as ChartBase;
       const handle = component.editChart(chartComponent);
 
       expect(ChartEditorRef).toHaveBeenCalledWith(editorMock);
       expect(handle).toBe(editorRefMock);
     });
 
-    it('should update the components chart wrapper with the edit result', () => {
-      const setSpy = jest.fn();
-      Object.defineProperty(chartComponent, 'chartWrapper', { get: () => chartWrapper, set: setSpy });
-
+    it('should update the components chart wrapper with the edit result', async () => {
+      const chartComponent = { chartWrapper } as ChartBase;
       const updatedWrapper = { draw: jest.fn() };
+
       editorRefMock.afterClosed.mockReturnValue(of(updatedWrapper));
 
       component.editChart(chartComponent);
 
-      expect(setSpy).toHaveBeenCalledWith(updatedWrapper);
+      expect(chartComponent.chartWrapper).toBe(updatedWrapper);
     });
 
     it('should not update the components wrapper if editing was cancelled', () => {
-      const setSpy = jest.fn();
-      Object.defineProperty(chartComponent, 'chartWrapper', { get: () => chartWrapper, set: setSpy });
+      const chartComponent = { chartWrapper } as ChartBase;
 
       editorRefMock.afterClosed.mockReturnValue(of(null));
 
       component.editChart(chartComponent);
 
-      expect(setSpy).not.toHaveBeenCalled();
+      expect(chartComponent.chartWrapper).toBe(chartWrapper);
     });
 
     it("should throw if the component' chart wrapper is undefined", () => {
-      delete (chartComponent as any).chartWrapper;
-
+      const chartComponent = {} as ChartBase;
       expect(() => component.editChart(chartComponent)).toThrow();
     });
 
     it("should throw if the component' editor is undefined", () => {
+      const chartComponent = { chartWrapper } as ChartBase;
+
       component['editor'] = undefined;
 
       expect(() => component.editChart(chartComponent)).toThrow();

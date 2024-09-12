@@ -2,12 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [12.0.0](https://github.com/FERNman/angular-google-charts/compare/v2.2.4...v12.0.0) (2024-09-12)
+## [16.0.0](https://github.com/FERNman/angular-google-charts/compare/v12.0.0...v16.0.0) (2024-09-12)
 
+### ⚠ BREAKING CHANGES
+
+- Angular 16 (#321)
+
+- Angular 16 ([#321](https://github.com/FERNman/angular-google-charts/issues/321)) ([d236480](https://github.com/FERNman/angular-google-charts/commit/d236480e92f1436b5539a4e8b67a86f2d1f183d3))
+
+## [12.0.0](https://github.com/FERNman/angular-google-charts/compare/v2.2.4...v12.0.0) (2024-09-12)
 
 ### Features
 
-* expand `row` type ([#313](https://github.com/FERNman/angular-google-charts/issues/313)) ([ea6456b](https://github.com/FERNman/angular-google-charts/commit/ea6456b0747a3e17e364faa04a06492af0a1ce59))
+- expand `row` type ([#313](https://github.com/FERNman/angular-google-charts/issues/313)) ([ea6456b](https://github.com/FERNman/angular-google-charts/commit/ea6456b0747a3e17e364faa04a06492af0a1ce59))
 
 ### [2.2.4](https://github.com/FERNman/angular-google-charts/compare/v2.2.3...v2.2.4) (2024-09-02)
 

@@ -1,4 +1,4 @@
-/// <reference path="./types.ts" />
+/// <reference path="./chart-editor.d.ts" />
 
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';

@@ -15,7 +15,7 @@ jobs:
           node-version: '14.15'
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
-      - run: npm install
+      - run: npm ci
       - run: npm run build
       - run: npm publish ./dist/angular-google-charts
         env:

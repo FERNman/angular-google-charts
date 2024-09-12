@@ -15,7 +15,7 @@ jobs:
         with:
           node-version: '14.15'
           cache: 'npm'
-      - run: npm install
+      - run: npm ci
       - run: npm run build
       - name: Run tests
         run: npm run test -- --ci --coverage --reporters default --reporters jest-junit

@@ -72,7 +72,10 @@ export class TestComponent {
   @ViewChild(ChartEditorComponent)
   public readonly editor!: ChartEditorComponent;
 
-  constructor(private location: Location, private scriptLoaderService: ScriptLoaderService) {}
+  constructor(
+    private location: Location,
+    private scriptLoaderService: ScriptLoaderService
+  ) {}
 
   public edit(chart: ChartBase) {
     this.editor

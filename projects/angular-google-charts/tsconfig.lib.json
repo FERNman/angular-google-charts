@@ -11,7 +11,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "types": [],
+    "types": ["google.visualization"],
     "lib": ["dom", "es2015"]
   },
   "angularCompilerOptions": {

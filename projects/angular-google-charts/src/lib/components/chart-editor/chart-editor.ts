@@ -1,5 +1,3 @@
-/// <reference types="@types/google.visualization" />
-
 declare namespace google {
   namespace visualization {
     export interface ChartEditorOptions {

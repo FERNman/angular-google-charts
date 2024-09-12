@@ -1,4 +1,4 @@
-/// <reference path="./chart-editor.d.ts" />
+/// <reference path="./chart-editor.ts" />
 
 import { Observable, Subject } from 'rxjs';
 

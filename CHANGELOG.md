@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [16.0.1](https://github.com/FERNman/angular-google-charts/compare/v16.0.0...v16.0.1) (2024-09-12)
+
+### Bug Fixes
+
+- include typings in production build ([39cf41b](https://github.com/FERNman/angular-google-charts/commit/39cf41bb5ed4b0c57bbbc77d315fee8ddf8338b2))
+
 ## [16.0.0](https://github.com/FERNman/angular-google-charts/compare/v12.0.0...v16.0.0) (2024-09-12)
 
 ### ⚠ BREAKING CHANGES

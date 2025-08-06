@@ -38,14 +38,14 @@
     "zone.js": "^0.13.3"
   },
   "devDependencies": {
-    "@angular-builders/jest": "^16.0.1",
-    "@angular-devkit/build-angular": "^16.2.15",
+    "@angular-builders/jest": "^20.0.0",
+    "@angular-devkit/build-angular": "^20.1.4",
     "@angular-eslint/builder": "16.3.1",
     "@angular-eslint/eslint-plugin": "16.3.1",
     "@angular-eslint/eslint-plugin-template": "16.3.1",
-    "@angular-eslint/schematics": "16.3.1",
+    "@angular-eslint/schematics": "20.1.1",
     "@angular-eslint/template-parser": "16.3.1",
-    "@angular/cli": "^16.2.15",
+    "@angular/cli": "^20.1.4",
     "@angular/compiler-cli": "^16.2.12",
     "@angular/language-service": "^16.2.12",
     "@types/google.visualization": "0.0.74",

@@ -1,10 +1,12 @@
-name: Test and build
+name: Pull Request
 
 on:
-  push:
-    branches: ['master']
   pull_request:
     branches: ['master']
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 jobs:
   test-and-build:
@@ -20,14 +22,9 @@ jobs:
       - name: Run lint
         run: npm run lint
       - name: Run tests
-        run: npm run test -- --ci --coverage --reporters default --reporters jest-junit
+        run: npm run test
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: test-results
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage
-          path: coverage

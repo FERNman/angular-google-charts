@@ -1,3 +1,0 @@
-- angular-google-charts is an npm package wrapping the google.charts library to ease integration by providing native Angular components
-- Aim for a single export per file (except for types and interfaces) to ensure code modularity
-- Filenames should correspond to their main export

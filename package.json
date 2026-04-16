@@ -9,7 +9,7 @@
     "build": "ng build angular-google-charts --configuration production",
     "test": "ng test",
     "lint": "ng lint",
-    "format": "prettier --write \"**/*.{json,html,ts,js,scss,css,yml,md}\"",
+    "format": "prettier --write .",
     "release": "standard-version",
     "prepare": "husky"
   },

@@ -20,11 +20,12 @@
     "outputDirectory": "test-results"
   },
   "standard-version": {
-    "bumpFiles": "libs/angular-google-charts/package.json",
-    "packageFiles": "libs/angular-google-charts/package.json"
+    "bumpFiles": "projects/angular-google-charts/package.json",
+    "packageFiles": "projects/angular-google-charts/package.json"
   },
   "engines": {
-    "npm": ">=8.0.0"
+    "npm": ">=10.0.0",
+    "node": ">=22.0.0"
   },
   "dependencies": {
     "@angular/common": "^16.2.12",

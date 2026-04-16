@@ -163,6 +163,18 @@ export class GoogleChartComponent implements ChartBase, OnInit, OnChanges, OnDes
   }
 
   public ngOnInit() {
+    if (!this.type) {
+      throw new Error(
+        '[GoogleChartComponent] Required input "type" is not set. Please set the type of the chart to create.'
+      );
+    }
+
+    if (!this.data) {
+      throw new Error(
+        '[GoogleChartComponent] Required input "data" is not set. Please set the data for the chart to create.'
+      );
+    }
+
     // We don't need to load any chart packages, the chart wrapper will handle this for us
     this.scriptLoaderService.loadChartPackages(getPackageForChart(this.type)).subscribe(() => {
       this.dataTable = createDataTable(this.data, this.columns, this.formatters);

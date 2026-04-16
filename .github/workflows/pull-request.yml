@@ -22,7 +22,7 @@ jobs:
       - name: Run lint
         run: npm run lint
       - name: Run tests
-        run: npm run test
+        run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadless
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:

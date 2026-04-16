@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "../../out-tsc/spec",
-    "types": ["jest", "node", "google.visualization"]
+    "types": ["jasmine", "node", "google.visualization", "@testing-library/jasmine-dom"]
   },
-  "include": ["**/*.spec.ts", "**/*.d.ts"]
+  "include": ["src/**/*.ts", "tests/**/*.ts", "**/*.d.ts"]
 }

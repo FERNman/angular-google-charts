@@ -23,11 +23,13 @@
           }
         },
         "test": {
-          "builder": "@angular-builders/jest:run",
+          "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "configPath": "jest.config.js",
-            "projects": ["projects/angular-google-charts"],
-            "coverageDirectory": "../../coverage"
+            "polyfills": ["zone.js", "zone.js/testing"],
+            "tsConfig": "projects/angular-google-charts/tsconfig.spec.json",
+            "karmaConfig": "projects/angular-google-charts/karma.conf.js",
+            "include": ["../tests/**/*.spec.ts"],
+            "main": "projects/angular-google-charts/tests/setup.ts"
           }
         },
         "lint": {
@@ -59,7 +61,6 @@
             "scripts": []
           },
           "configurations": {
-            "sourceMap": true,
             "legacy": {
               "main": "projects/playground/src/main.modules.ts",
               "tsConfig": "projects/playground/tsconfig.modules.json"

@@ -16,9 +16,6 @@
   "lint-staged": {
     "*.{json,html,ts,js,scss,css,yml,md}": "prettier --write"
   },
-  "jest-junit": {
-    "outputDirectory": "test-results"
-  },
   "standard-version": {
     "bumpFiles": "projects/angular-google-charts/package.json",
     "packageFiles": "projects/angular-google-charts/package.json"
@@ -40,29 +37,36 @@
     "zone.js": "^0.13.3"
   },
   "devDependencies": {
-    "@angular-builders/jest": "^16.0.1",
     "@angular-devkit/build-angular": "^16.2.15",
     "@angular-eslint/builder": "16.3.1",
     "@angular-eslint/eslint-plugin": "16.3.1",
     "@angular-eslint/eslint-plugin-template": "16.3.1",
     "@angular-eslint/schematics": "16.3.1",
     "@angular-eslint/template-parser": "16.3.1",
+    "@angular/animations": "^16.2.12",
     "@angular/cli": "^16.2.15",
     "@angular/compiler-cli": "^16.2.12",
     "@angular/language-service": "^16.2.12",
+    "@testing-library/angular": "^14.5.1",
+    "@testing-library/jasmine-dom": "^1.3.3",
     "@types/google.visualization": "0.0.74",
-    "@types/jest": "^29.5.12",
+    "@types/jasmine": "^5.1.4",
     "@types/node": "^16.18.106",
+    "@types/testing-library__jasmine-dom": "^1.3.4",
     "@typescript-eslint/eslint-plugin": "5.62.0",
     "@typescript-eslint/parser": "5.62.0",
     "eslint": "^8.51.0",
     "husky": "^9.1.5",
-    "jest": "^29.7.0",
-    "jest-junit": "^16.0.0",
+    "jasmine-core": "^5.1.2",
+    "karma": "^6.4.3",
+    "karma-chrome-launcher": "~3.2.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "2.1.0",
+    "lint-staged": "^15.2.10",
     "ng-packagr": "^16.2.3",
     "prettier": "^3.3.3",
     "standard-version": "^9.5.0",
-    "ts-jest": "^29.2.5",
     "typescript": "~5.1.0"
   }
 }

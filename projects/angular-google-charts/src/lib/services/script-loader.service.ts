@@ -41,14 +41,12 @@ export class ScriptLoaderService {
    * @param packages The packages to load.
    * @returns A stream emitting as soon as the chart packages are loaded.
    */
-  public loadChartPackages(...packages: string[]): Observable<null> {
-    return this.loadGoogleCharts().pipe(
+  public loadChartPackages(...packages: string[]): Observable<void> {
+    return this.loadScript().pipe(
       mergeMap(() => this.config$),
-      map(config => {
-        return { ...getDefaultConfig(), ...(config || {}) };
-      }),
+      map(config => ({ ...getDefaultConfig(), ...(config || {}) })),
       switchMap((googleChartsConfig: GoogleChartsConfig) => {
-        return new Observable<null>(observer => {
+        return new Observable<void>(observer => {
           const config = {
             packages,
             language: this.localeId,
@@ -56,10 +54,14 @@ export class ScriptLoaderService {
             safeMode: googleChartsConfig.safeMode
           };
 
-          google.charts.load(googleChartsConfig.version ?? 'current', config);
+          google.charts.load(googleChartsConfig.version ?? 'current', config).catch(err => {
+            this.zone.run(() => {
+              observer.error(new Error(`Failed to load Google Charts packages: ${err.message}`));
+            });
+          });
           google.charts.setOnLoadCallback(() => {
             this.zone.run(() => {
-              observer.next();
+              observer.next(void 0);
               observer.complete();
             });
           });
@@ -74,7 +76,7 @@ export class ScriptLoaderService {
    * @returns A stream emitting as soon as loading has completed.
    * If the google charts script is already loaded, the stream emits immediately.
    */
-  private loadGoogleCharts(): Observable<void> {
+  private loadScript(): Observable<void> {
     if (this.isGoogleChartsAvailable()) {
       return of(undefined);
     } else if (!this.isLoadingGoogleCharts()) {
